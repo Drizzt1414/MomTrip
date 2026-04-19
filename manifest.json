@@ -1,0 +1,19 @@
+{
+  "name": "טיול הקניונים 2026",
+  "short_name": "Canyon Trip",
+  "description": "Mom's US Canyon Trip Planner",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FFFDF8",
+  "theme_color": "#B54A32",
+  "dir": "rtl",
+  "lang": "he",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏜️</text></svg>",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

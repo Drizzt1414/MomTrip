@@ -1,0 +1,520 @@
+{
+  "generatedAt": "2026-04-19T16:14:52.418Z",
+  "stats": {
+    "totalDays": 24,
+    "totalStops": 161,
+    "verified": 131,
+    "warnings": 19,
+    "errors": 11
+  },
+  "issues": [
+    {
+      "dayNumber": 2,
+      "dayDate": "2026-05-06",
+      "dayTitle": "Arches National Park",
+      "stopId": "d2-s4",
+      "stopName": "Courthouse Towers Viewpoint",
+      "nameOriginal": "courthose towers viewpoint",
+      "severity": "warning",
+      "issues": [
+        "Spelling corrected: \"courthose towers viewpoint\" → \"Courthouse Towers Viewpoint\""
+      ],
+      "coordinates": {
+        "lat": 38.637181422611604,
+        "lng": -109.60019415637797
+      },
+      "suggestedCoords": null
+    },
+    {
+      "dayNumber": 5,
+      "dayDate": "2026-05-09",
+      "dayTitle": "Bentonite Hills",
+      "stopId": "d5-s3",
+      "stopName": "Cosmic Ash Hills Walk Utah",
+      "nameOriginal": "cosmic ash hills walk utah",
+      "severity": "error",
+      "issues": [
+        "Coordinates are missing or invalid (marked as \"?\")",
+        "No such trail exists. No coordinates available."
+      ],
+      "coordinates": null,
+      "suggestedCoords": null
+    },
+    {
+      "dayNumber": 5,
+      "dayDate": "2026-05-09",
+      "dayTitle": "Bentonite Hills",
+      "stopId": "d5-s4",
+      "stopName": "Rainbow Hills Loop Utah",
+      "nameOriginal": "rainbow hills loop utah",
+      "severity": "error",
+      "issues": [
+        "Coordinates ~80 mi from Hanksville area. Trail name is not well-established."
+      ],
+      "coordinates": {
+        "lat": 38.7884698341164,
+        "lng": -111.94144129774692
+      },
+      "suggestedCoords": null
+    },
+    {
+      "dayNumber": 5,
+      "dayDate": "2026-05-09",
+      "dayTitle": "Bentonite Hills",
+      "stopId": "d5-s6",
+      "stopName": "South Of Hanksville",
+      "nameOriginal": "south of hanksville",
+      "severity": "error",
+      "issues": [
+        "Coordinates are missing or invalid",
+        "Not a real place name. No navigable destination."
+      ],
+      "coordinates": null,
+      "suggestedCoords": null
+    },
+    {
+      "dayNumber": 6,
+      "dayDate": "2026-05-10",
+      "dayTitle": "Goblin Valley",
+      "stopId": "d6-s5",
+      "stopName": "Carmel Canyon Loop Utah",
+      "nameOriginal": "carmel canyon loop utah",
+      "severity": "error",
+      "issues": [
+        "Coordinates point to St. George (~170 mi off). Should be ~(38.57, -110.70) in Goblin Valley.",
+        "Distance from previous stop is 144 miles — check route"
+      ],
+      "coordinates": {
+        "lat": 37.67006908830461,
+        "lng": -113.09694839682456
+      },
+      "suggestedCoords": {
+        "lat": 38.57,
+        "lng": -110.7
+      }
+    },
+    {
+      "dayNumber": 6,
+      "dayDate": "2026-05-10",
+      "dayTitle": "Goblin Valley",
+      "stopId": "d6-s6",
+      "stopName": "Curtis Bench Trail Utah",
+      "nameOriginal": "curtis bench trail utah",
+      "severity": "warning",
+      "issues": [
+        "Distance from previous stop is 144 miles — check route"
+      ],
+      "coordinates": {
+        "lat": 38.565725325303276,
+        "lng": -110.71078956802137
+      },
+      "suggestedCoords": null
+    },
+    {
+      "dayNumber": 7,
+      "dayDate": "2026-05-11",
+      "dayTitle": "Little Horse Canyon",
+      "stopId": "d7-s4",
+      "stopName": "Farnsworth Canyon",
+      "nameOriginal": "farensworth canyon",
+      "severity": "warning",
+      "issues": [
+        "Spelling corrected: \"farensworth canyon\" → \"Farnsworth Canyon\""
+      ],
+      "coordinates": {
+        "lat": 38.669788734888165,
+        "lng": -110.61659778336669
+      },
+      "suggestedCoords": null
+    },
+    {
+      "dayNumber": 8,
+      "dayDate": "2026-05-12",
+      "dayTitle": "Capitol Reef",
+      "stopId": "d8-s4",
+      "stopName": "Sulphur Creek Route Utah",
+      "nameOriginal": "sulphur creek route utah",
+      "severity": "error",
+      "issues": [
+        "Coordinates point to Vernal, UT (~130 mi off). Should be ~(38.29, -111.25) in Capitol Reef.",
+        "Distance from previous stop is 125 miles — check route"
+      ],
+      "coordinates": {
+        "lat": 39.16622387016731,
+        "lng": -109.20338642865225
+      },
+      "suggestedCoords": {
+        "lat": 38.29,
+        "lng": -111.25
+      }
+    },
+    {
+      "dayNumber": 8,
+      "dayDate": "2026-05-12",
+      "dayTitle": "Capitol Reef",
+      "stopId": "d8-s5",
+      "stopName": "Goosenecks Overlook",
+      "nameOriginal": "goosenecks overlook",
+      "severity": "warning",
+      "issues": [
+        "Day 12 uses Canyonlands coords. Capitol Reef Goosenecks Overlook is at ~(38.21, -111.16). Check which one is intended for this day."
+      ],
+      "coordinates": {
+        "lat": 38.455676809773294,
+        "lng": -109.77184556801731
+      },
+      "suggestedCoords": {
+        "lat": 38.21,
+        "lng": -111.16
+      }
+    },
+    {
+      "dayNumber": 9,
+      "dayDate": "2026-05-13",
+      "dayTitle": "",
+      "stopId": "d9-s3",
+      "stopName": "Fremont Gorge Overlook",
+      "nameOriginal": "fermont gorge overlook",
+      "severity": "warning",
+      "issues": [
+        "Spelling corrected: \"fermont gorge overlook\" → \"Fremont Gorge Overlook\""
+      ],
+      "coordinates": {
+        "lat": 38.27984912404677,
+        "lng": -111.26252365266944
+      },
+      "suggestedCoords": null
+    },
+    {
+      "dayNumber": 11,
+      "dayDate": "2026-05-15",
+      "dayTitle": "",
+      "stopId": "d11-s1",
+      "stopName": "Cottonwood Wash Route Capitol Reef Utah",
+      "nameOriginal": "cottonwood wash route capitol reef utah",
+      "severity": "warning",
+      "issues": [
+        "Coordinates are missing or invalid (marked as \"?\")",
+        "No coordinates. Not a formally established trail. Approximate area: ~(38.25, -111.15)."
+      ],
+      "coordinates": null,
+      "suggestedCoords": {
+        "lat": 38.25,
+        "lng": -111.15
+      }
+    },
+    {
+      "dayNumber": 11,
+      "dayDate": "2026-05-15",
+      "dayTitle": "",
+      "stopId": "d11-s5",
+      "stopName": "Long Canyon Overlook Utah",
+      "nameOriginal": "long canyon overlook utah",
+      "severity": "warning",
+      "issues": [
+        "Distance from previous stop is 84 miles — check route"
+      ],
+      "coordinates": {
+        "lat": 38.543868638837715,
+        "lng": -109.70598878336206
+      },
+      "suggestedCoords": null
+    },
+    {
+      "dayNumber": 11,
+      "dayDate": "2026-05-15",
+      "dayTitle": "",
+      "stopId": "d11-s6",
+      "stopName": "Deer Creek",
+      "nameOriginal": "deer creek",
+      "severity": "error",
+      "issues": [
+        "Coordinates point to Provo/SLC area (~150 mi off). Does not belong on a Capitol Reef day.",
+        "Distance from previous stop is 162 miles — likely wrong coordinates"
+      ],
+      "coordinates": {
+        "lat": 40.40830842856382,
+        "lng": -111.53353594531639
+      },
+      "suggestedCoords": null
+    },
+    {
+      "dayNumber": 11,
+      "dayDate": "2026-05-15",
+      "dayTitle": "",
+      "stopId": "d11-s7",
+      "stopName": "Singing Canyon Utah",
+      "nameOriginal": "singing canyon utah",
+      "severity": "warning",
+      "issues": [
+        "Distance from previous stop is 176 miles — likely wrong coordinates"
+      ],
+      "coordinates": {
+        "lat": 37.8650511815837,
+        "lng": -111.30044251032533
+      },
+      "suggestedCoords": null
+    },
+    {
+      "dayNumber": 11,
+      "dayDate": "2026-05-15",
+      "dayTitle": "",
+      "stopId": "d11-s8",
+      "stopName": "Switchbacks Capitol Reef Utah",
+      "nameOriginal": "switchbacks capitol reef utah",
+      "severity": "warning",
+      "issues": [
+        "Coordinates are missing or invalid",
+        "No coordinates. Likely refers to Burr Trail switchbacks ~(37.84, -111.04)."
+      ],
+      "coordinates": null,
+      "suggestedCoords": {
+        "lat": 37.84,
+        "lng": -111.04
+      }
+    },
+    {
+      "dayNumber": 12,
+      "dayDate": "2026-05-16",
+      "dayTitle": "",
+      "stopId": "d12-s12",
+      "stopName": "Devil'S Garden( Hoodoos) Utah",
+      "nameOriginal": "devil's garden( hoodoos) utah",
+      "severity": "warning",
+      "issues": [
+        "Distance from previous stop is 119 miles — check route"
+      ],
+      "coordinates": {
+        "lat": 38.7872830698978,
+        "lng": -109.59944821220647
+      },
+      "suggestedCoords": null
+    },
+    {
+      "dayNumber": 12,
+      "dayDate": "2026-05-16",
+      "dayTitle": "",
+      "stopId": "d12-s13",
+      "stopName": "Zebra Slot Utah",
+      "nameOriginal": "zebra slot utah",
+      "severity": "warning",
+      "issues": [
+        "Distance from previous stop is 126 miles — check route"
+      ],
+      "coordinates": {
+        "lat": 37.658008190124,
+        "lng": -111.41869959867216
+      },
+      "suggestedCoords": null
+    },
+    {
+      "dayNumber": 14,
+      "dayDate": "2026-05-18",
+      "dayTitle": "",
+      "stopId": "d14-s7",
+      "stopName": "Intersection With Utah Highway 89",
+      "nameOriginal": "intersection with utah highway 89",
+      "severity": "warning",
+      "issues": [
+        "No coordinates provided"
+      ],
+      "coordinates": null,
+      "suggestedCoords": null
+    },
+    {
+      "dayNumber": 14,
+      "dayDate": "2026-05-18",
+      "dayTitle": "",
+      "stopId": "d14-s10",
+      "stopName": "Big Water Arizona",
+      "nameOriginal": "big water arizona",
+      "severity": "error",
+      "issues": [
+        "Big Water is in UTAH, not Arizona. Coordinates also wrong (~100 mi off). Should be ~(37.07, -111.66).",
+        "Distance from previous stop is 153 miles — likely wrong coordinates"
+      ],
+      "coordinates": {
+        "lat": 36.356764624235566,
+        "lng": -110.17301068897648
+      },
+      "suggestedCoords": {
+        "lat": 37.07,
+        "lng": -111.66
+      }
+    },
+    {
+      "dayNumber": 14,
+      "dayDate": "2026-05-18",
+      "dayTitle": "",
+      "stopId": "d14-s11",
+      "stopName": "Skylight Arch Arizona",
+      "nameOriginal": "skylight arch arizona",
+      "severity": "warning",
+      "issues": [
+        "Distance from previous stop is 91 miles — check route"
+      ],
+      "coordinates": {
+        "lat": 37.007272930370476,
+        "lng": -111.6082366679659
+      },
+      "suggestedCoords": null
+    },
+    {
+      "dayNumber": 14,
+      "dayDate": "2026-05-18",
+      "dayTitle": "",
+      "stopId": "d14-s12",
+      "stopName": "Stud Horse Point Arizona",
+      "nameOriginal": "stud horse point arizona",
+      "severity": "warning",
+      "issues": [
+        "Coordinates ~16 mi off. Should be ~(36.99, -111.87)."
+      ],
+      "coordinates": {
+        "lat": 36.99493925337393,
+        "lng": -111.61099319864876
+      },
+      "suggestedCoords": {
+        "lat": 36.99,
+        "lng": -111.87
+      }
+    },
+    {
+      "dayNumber": 14,
+      "dayDate": "2026-05-18",
+      "dayTitle": "",
+      "stopId": "d14-s15",
+      "stopName": "Glen Canyon Trail Arizona",
+      "nameOriginal": "glen canyon trail arizona",
+      "severity": "error",
+      "issues": [
+        "Coordinates are missing or invalid",
+        "No such trail exists near Glen Canyon."
+      ],
+      "coordinates": null,
+      "suggestedCoords": null
+    },
+    {
+      "dayNumber": 15,
+      "dayDate": "2026-05-19",
+      "dayTitle": "",
+      "stopId": "d15-s1",
+      "stopName": "White Hoodoos Arizona",
+      "nameOriginal": "white hoodoos arizona",
+      "severity": "error",
+      "issues": [
+        "Coordinates are missing or invalid (marked as \"?\")",
+        "Cannot be found. Possibly confused with White Pocket (which is on day 21)."
+      ],
+      "coordinates": null,
+      "suggestedCoords": null
+    },
+    {
+      "dayNumber": 15,
+      "dayDate": "2026-05-19",
+      "dayTitle": "",
+      "stopId": "d15-s6",
+      "stopName": "Spencer Trail",
+      "nameOriginal": "spencer trail",
+      "severity": "warning",
+      "issues": [
+        "No coordinates provided"
+      ],
+      "coordinates": null,
+      "suggestedCoords": null
+    },
+    {
+      "dayNumber": 15,
+      "dayDate": "2026-05-19",
+      "dayTitle": "",
+      "stopId": "d15-s7",
+      "stopName": "Spencer Bench Rim",
+      "nameOriginal": "spencer bench rim",
+      "severity": "warning",
+      "issues": [
+        "No coordinates provided"
+      ],
+      "coordinates": null,
+      "suggestedCoords": null
+    },
+    {
+      "dayNumber": 17,
+      "dayDate": "2026-05-21",
+      "dayTitle": "",
+      "stopId": "d17-s5",
+      "stopName": "Ponderosa Canyon Bryce Canyon",
+      "nameOriginal": "onderosa bryce canyon",
+      "severity": "warning",
+      "issues": [
+        "No coordinates provided",
+        "Spelling corrected: \"onderosa bryce canyon\" → \"Ponderosa Canyon Bryce Canyon\""
+      ],
+      "coordinates": null,
+      "suggestedCoords": null
+    },
+    {
+      "dayNumber": 21,
+      "dayDate": "2026-05-25",
+      "dayTitle": "Nevada",
+      "stopId": "d21-s2",
+      "stopName": "Valley Of Fire State Park",
+      "nameOriginal": "valley of fire state park",
+      "severity": "warning",
+      "issues": [
+        "Distance from previous stop is 105 miles — check route"
+      ],
+      "coordinates": {
+        "lat": 36.475866323877824,
+        "lng": -114.53836031027676
+      },
+      "suggestedCoords": null
+    },
+    {
+      "dayNumber": 21,
+      "dayDate": "2026-05-25",
+      "dayTitle": "Nevada",
+      "stopId": "d21-s4",
+      "stopName": "Petrified Logs Kanarra Falls",
+      "nameOriginal": "petrified logs kanarra falls",
+      "severity": "error",
+      "issues": [
+        "Coordinates are missing or invalid",
+        "Place does not exist. Petrified logs are at Escalante Petrified Forest, not Kanarra Falls."
+      ],
+      "coordinates": null,
+      "suggestedCoords": null
+    },
+    {
+      "dayNumber": 21,
+      "dayDate": "2026-05-25",
+      "dayTitle": "Nevada",
+      "stopId": "d21-s6",
+      "stopName": "Seven Wonders Kanarra Falls",
+      "nameOriginal": "seven wonders kanarra falls",
+      "severity": "error",
+      "issues": [
+        "Coordinates are missing or invalid",
+        "Place does not exist. \"Seven Wonders\" is at Valley of Fire State Park, not Kanarra Falls."
+      ],
+      "coordinates": null,
+      "suggestedCoords": null
+    },
+    {
+      "dayNumber": 24,
+      "dayDate": "2026-05-28",
+      "dayTitle": "",
+      "stopId": "d24-s1",
+      "stopName": "Las Vegas Airport (LAS)",
+      "nameOriginal": "sixst in las vagas airport",
+      "severity": "warning",
+      "issues": [
+        "Spelling corrected: \"sixst in las vagas airport\" → \"Las Vegas Airport (LAS)\""
+      ],
+      "coordinates": {
+        "lat": 36.06172055987714,
+        "lng": -115.16374186608564
+      },
+      "suggestedCoords": null
+    }
+  ]
+}

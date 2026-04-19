@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#ffffff">
+<meta name="description" content="טיול הקניונים 2026 — כל מה שצריך לדעת">
+<link rel="manifest" href="manifest.json">
+<title>טיול הקניונים 2026</title>
+<link rel="stylesheet" href="lib/leaflet.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="header">
+  <div class="header-row">
+    <button class="icon-btn" onclick="toggleAuditScreen()" aria-label="בדיקת מסלול">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+    </button>
+    <div class="header-center">
+      <div class="header-title" id="headerTitle">טיול הקניונים</div>
+      <div class="header-sub" id="headerSub"></div>
+    </div>
+    <div style="width:48px"></div>
+  </div>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+</header>
+
+<nav class="day-nav" id="dayPicker"></nav>
+
+<main class="main" id="app"></main>
+
+<div class="audio-bar" id="audioBar" hidden>
+  <div class="audio-inner">
+    <button class="audio-ctrl" id="audioPlayPause" onclick="toggleAudio()">⏸</button>
+    <div class="audio-label" id="audioText">מקשיבה...</div>
+    <button class="audio-ctrl" onclick="stopAudio()">⏹</button>
+  </div>
+</div>
+
+<nav class="nav-footer">
+  <button class="nav-btn prev" id="prevBtn" onclick="prevDay()"></button>
+  <button class="nav-btn next" id="nextBtn" onclick="nextDay()"></button>
+</nav>
+
+<script src="lib/leaflet.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script src="js/render.js"></script>
+<script src="js/guide.js"></script>
+<script>
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
+</script>
+</body>
+</html>
