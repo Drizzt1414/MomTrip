@@ -144,7 +144,7 @@ function render() {
     h += `<div class="section-label">☀️ ${UI.todayPlan} · ${stops.length} ${UI.stops}</div>`;
     stops.forEach((s, i) => {
       const nextStop = i < stops.length - 1 ? stops[i + 1] : null;
-      h += renderStop(s, nextStop);
+      h += renderStop(s, nextStop, i);
       if (nextStop) h += renderDirCard(s, nextStop);
     });
   } else {
@@ -186,7 +186,7 @@ function getReassuranceMessage(day, stops, errCount) {
   return msg;
 }
 
-function renderStop(s, nextStop) {
+function renderStop(s, nextStop, index) {
   const checked = state.checked[s.id];
   const expanded = state.expanded[s.id];
   const coords = getStopCoords(s);
@@ -209,7 +209,8 @@ function renderStop(s, nextStop) {
   if (s.audit.status === 'error') cls += ' has-error';
   else if (s.audit.status === 'warning') cls += ' has-warning';
 
-  let h = `<div class="${cls}">
+  const delay = Math.min((index || 0) * 40, 300);
+  let h = `<div class="${cls}" style="animation-delay:${delay}ms">
     <div class="stop-row">
       <button class="stop-check ${checked ? 'done' : ''}" onclick="toggleCheck('${s.id}')">${checked ? '✓' : ''}</button>
       <div class="stop-body">
@@ -326,6 +327,9 @@ function renderAuditScreen() {
   const errs = issues.filter(i => i.s.audit.status === 'error');
   const warns = issues.filter(i => i.s.audit.status === 'warning');
 
+  // Count how many errors still need wizard review
+  const unreviewedErrors = errs.filter(i => !wizardDecisions[i.s.id]).length;
+
   let h = `<div class="audit-overlay">
     <div class="audit-top">
       <h2>🔍 ${UI.auditDashboard}</h2>
@@ -335,8 +339,23 @@ function renderAuditScreen() {
       <div class="stat-card errors">${errs.length}<div class="stat-label">${UI.criticalIssues}</div></div>
       <div class="stat-card warnings">${warns.length}<div class="stat-label">${UI.warnings}</div></div>
       <div class="stat-card ok">${TRIP_DATA.stats.verified}<div class="stat-label">✅ ${UI.verified}</div></div>
-    </div>
-    <div class="audit-list">`;
+    </div>`;
+
+  // Wizard launch button
+  if (unreviewedErrors > 0) {
+    h += `<div style="padding:0 var(--sp-16) var(--sp-16);">
+      <button class="wizard-launch-btn" onclick="toggleAuditScreen();startWizard();">
+        🧙 בואי נעבור על ${unreviewedErrors} בעיות ביחד
+        <span class="wizard-launch-sub">נסביר כל בעיה ותחליטי מה לעשות</span>
+      </button>
+    </div>`;
+  } else if (errs.length > 0) {
+    h += `<div style="padding:0 var(--sp-16) var(--sp-16);">
+      <div class="wizard-done-banner">✅ כל הבעיות נבדקו! הטיול מוכן</div>
+    </div>`;
+  }
+
+  h += `<div class="audit-list">`;
 
   for (const item of [...errs, ...warns]) {
     const day = item.day;

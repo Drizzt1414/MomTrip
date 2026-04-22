@@ -271,6 +271,22 @@ function initSwipe() {
   }, { passive: true });
 }
 
+// --- Header scroll shadow ---
+function initScrollShadow() {
+  const header = document.querySelector('.header');
+  if (!header) return;
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(() => {
+        header.classList.toggle('scrolled', window.scrollY > 8);
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }, { passive: true });
+}
+
 // --- Init ---
 loadState();
-document.addEventListener('DOMContentLoaded', () => { render(); initSwipe(); });
+document.addEventListener('DOMContentLoaded', () => { render(); initSwipe(); initScrollShadow(); });
