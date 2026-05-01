@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 5 review — Cathedral Valley + Bentonite Hills</title>
+<style>
+  :root {
+    --bg: #FFFDF8;
+    --card: #fff;
+    --border: #E0D9C8;
+    --text: #1A1A2E;
+    --muted: #5f6368;
+    --accent: #B54A32;
+    --primary: #1a73e8;
+    --success: #1e8e3e;
+    --danger: #D93025;
+    --warning: #E37400;
+    --new-bg: #FEF3E0;
+    --new-ac: #B54A32;
+    --existing-bg: #F1F3F4;
+    --renamed-bg: #E3F2FD;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg); color: var(--text);
+    padding: 24px; line-height: 1.55;
+  }
+  .container { max-width: 1100px; margin: 0 auto; }
+  header {
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;
+    margin-bottom: 24px; padding: 20px;
+    background: var(--card); border: 2px solid var(--accent);
+    border-radius: 16px;
+  }
+  h1 { font-size: 22px; color: var(--accent); margin-bottom: 4px; }
+  .subtitle { font-size: 14px; color: var(--muted); }
+  .actions { display: flex; gap: 8px; }
+  button {
+    padding: 10px 18px; border-radius: 24px; border: 1px solid var(--border);
+    background: #fff; cursor: pointer; font-size: 14px; font-weight: 600;
+    color: var(--text); transition: all 150ms;
+  }
+  button:hover { transform: translateY(-1px); box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+  .btn-primary { background: var(--primary); color: #fff; border-color: var(--primary); }
+  .btn-success { background: var(--success); color: #fff; border-color: var(--success); }
+
+  .progress-bar {
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    padding: 12px 16px; margin-bottom: 16px;
+    display: flex; gap: 16px; flex-wrap: wrap; align-items: center;
+  }
+  .progress-stat { font-size: 14px; }
+  .progress-stat b { font-size: 17px; }
+
+  table {
+    width: 100%; border-collapse: collapse;
+    background: var(--card); border-radius: 12px; overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  }
+  thead { background: #2C3E50; color: #fff; }
+  th, td { padding: 12px 14px; text-align: right; vertical-align: top; }
+  th { font-weight: 700; font-size: 13px; }
+  tbody tr { border-bottom: 1px solid var(--border); transition: background 100ms; }
+  tbody tr:hover { background: #FFF8F2; }
+  tbody tr.agreed { background: #E6F4EA; }
+  tbody tr.disagreed { background: #FCE8E6; }
+
+  .row-time { font-family: "Courier New", monospace; font-weight: 700; color: var(--muted); white-space: nowrap; font-size: 14px; }
+  .kind-chip {
+    display: inline-block; padding: 3px 10px; border-radius: 100px;
+    font-size: 12px; font-weight: 700; white-space: nowrap;
+  }
+  .k-driving { background: #EDE7F6; color: #6A1B9A; }
+  .k-stop    { background: #DDEEFF; color: #0B52A6; }
+  .k-walk    { background: #E8F5E9; color: #1B5E20; }
+  .k-hike    { background: #C8E6C9; color: #1B5E20; }
+  .k-keep    { background: #FFF8DC; color: #8B5A00; }
+  .k-note    { background: #FFFDE7; color: #9A7800; }
+
+  .row-name { font-weight: 700; font-size: 16px; margin-bottom: 4px; direction: ltr; text-align: left; }
+  .row-text { font-size: 13px; color: var(--muted); direction: ltr; text-align: left; }
+  .row-dur  { font-size: 12px; color: var(--muted); white-space: nowrap; direction: ltr; text-align: left; }
+
+  .status-badge {
+    display: inline-block; padding: 3px 10px; border-radius: 100px;
+    font-size: 11px; font-weight: 700; white-space: nowrap;
+  }
+  .s-new      { background: var(--new-bg); color: var(--new-ac); }
+  .s-existing { background: var(--existing-bg); color: var(--muted); }
+  .s-renamed  { background: var(--renamed-bg); color: #0B52A6; }
+  .s-changed  { background: #FFF3E0; color: #C24B00; }
+
+  .row-actions { display: flex; gap: 6px; flex-direction: column; }
+  .row-actions button {
+    padding: 6px 12px; font-size: 12px; min-width: 70px;
+  }
+  .btn-agree    { background: #fff; border-color: var(--success); color: var(--success); }
+  .btn-agree.active { background: var(--success); color: #fff; }
+  .btn-disagree { background: #fff; border-color: var(--danger); color: var(--danger); }
+  .btn-disagree.active { background: var(--danger); color: #fff; }
+  .btn-comment  { background: #fff; border-color: var(--muted); color: var(--muted); }
+
+  .comment-box {
+    width: 100%; min-height: 60px;
+    border: 1px solid var(--border); border-radius: 8px;
+    padding: 8px; font-family: inherit; font-size: 13px;
+    margin-top: 6px;
+  }
+  .comment-box:focus { outline: 2px solid var(--primary); }
+
+  .questions {
+    background: var(--card); border: 2px solid #FDD663; border-radius: 16px;
+    padding: 20px; margin-top: 24px;
+  }
+  .questions h2 { font-size: 18px; color: #9A7800; margin-bottom: 12px; }
+  .q-block { margin-bottom: 16px; padding: 12px; background: #FFFDE7; border-radius: 8px; }
+  .q-title { font-weight: 700; margin-bottom: 8px; }
+  .q-options { display: flex; flex-direction: column; gap: 6px; }
+  .q-options label { display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 4px; }
+  .q-options label:hover { background: #FFF8DC; border-radius: 4px; }
+  .q-comment {
+    width: 100%; min-height: 50px;
+    border: 1px solid var(--border); border-radius: 8px;
+    padding: 6px; font-family: inherit; font-size: 13px; margin-top: 8px;
+  }
+
+  .footer-actions {
+    margin-top: 24px; padding: 20px;
+    background: var(--card); border: 2px solid var(--success); border-radius: 16px;
+    text-align: center;
+  }
+  .footer-actions button { font-size: 16px; padding: 14px 32px; margin: 0 6px; }
+
+  pre.export {
+    background: #1A1A2E; color: #A0FFA0; padding: 16px;
+    border-radius: 8px; font-size: 12px; overflow: auto; max-height: 300px;
+    direction: ltr; text-align: left;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div>
+      <h1>Day 5 — Cathedral Valley + Bentonite Hills</h1>
+      <div class="subtitle">May 9, 2026 · Friday · Wake 6:30 · Leave 7:30 · Sleep Cathedral Valley Inn</div>
+    </div>
+    <div class="actions">
+      <button onclick="agreeAll()">✅ Agree all</button>
+      <button class="btn-primary" onclick="saveLocal()">💾 Save</button>
+      <button class="btn-success" onclick="exportJSON()">📤 Export JSON</button>
+    </div>
+  </header>
+
+  <div class="progress-bar">
+    <div class="progress-stat"><b id="agreedCount">0</b> / <span id="totalCount">0</span> agreed</div>
+    <div class="progress-stat" style="color:var(--danger)"><b id="disagreedCount">0</b> disagreed</div>
+    <div class="progress-stat" style="color:var(--warning)"><b id="commentCount">0</b> commented</div>
+    <div class="progress-stat">Open questions: <b id="answeredCount">0</b> / 3 answered</div>
+  </div>
+
+  <table id="rowTable">
+    <thead>
+      <tr>
+        <th>Time</th>
+        <th>Type</th>
+        <th>Name + Description</th>
+        <th>Duration</th>
+        <th>Status</th>
+        <th>Decision</th>
+      </tr>
+    </thead>
+    <tbody id="rowBody"></tbody>
+  </table>
+
+  <div class="questions">
+    <h2>⚠️ Open questions — need mom's answer</h2>
+
+    <div class="q-block" data-qid="A">
+      <div class="q-title">Q-A: "Pink hills south of Hanksville" — what did mom mean?</div>
+      <div class="q-options">
+        <label><input type="radio" name="qa" value="same"> Same as Bentonite Hills (consolidates the 3 names)</label>
+        <label><input type="radio" name="qa" value="different"> Something different — describe in the box</label>
+        <label><input type="radio" name="qa" value="skip"> Skip this item</label>
+      </div>
+      <textarea class="q-comment" placeholder="If 'different' — describe what mom saw…"></textarea>
+    </div>
+
+    <div class="q-block" data-qid="B">
+      <div class="q-title">Q-B: Factory Butte + Neilson Wash — combine into one row, or keep separate?</div>
+      <div class="q-options">
+        <label><input type="radio" name="qb" value="separate"> Keep separate (current — different times of day)</label>
+        <label><input type="radio" name="qb" value="combine"> Combine into one longer afternoon block</label>
+      </div>
+      <textarea class="q-comment" placeholder="Optional comment…"></textarea>
+    </div>
+
+    <div class="q-block" data-qid="C">
+      <div class="q-title">Q-C: Swing Arm City — include?</div>
+      <div class="q-options">
+        <label><input type="radio" name="qc" value="skip"> Skip (it's OHV-only, not drivable in her rental car)</label>
+        <label><input type="radio" name="qc" value="drive-past"> Add as drive-past view note</label>
+      </div>
+      <textarea class="q-comment" placeholder="Optional comment…"></textarea>
+    </div>
+  </div>
+
+  <div class="footer-actions">
+    <button class="btn-primary" onclick="saveLocal()">💾 Save my decisions</button>
+    <button class="btn-success" onclick="exportJSON()">📤 Export JSON for Claude</button>
+    <div id="exportArea" style="margin-top:16px; display:none;"></div>
+  </div>
+</div>
+
+<script>
+const ROWS = [
+  // ── Existing rows ──
+  { id:'r1',  time:'7:30 AM',   kind:'driving', name:'Drive 30 min into Cathedral Valley', text:'Drive 30 minutes north from the hotel on Hartnet Road into Cathedral Valley.', dur:'30 min', status:'existing' },
+  { id:'r2',  time:'8:00 AM',   kind:'hike',    name:'Temple of the Sun', text:'A 400-foot tall isolated red sandstone monolith. Walk to the base and around it.', dur:'1.5 hrs', status:'existing' },
+  { id:'r3',  time:'9:30 AM',   kind:'walk',    name:'Temple of the Moon', text:'Companion formation just minutes further along the same road.', dur:'30 min', status:'existing' },
+  { id:'r4',  time:'10:05 AM',  kind:'walk',    name:'Gypsum Sinkhole', text:'Massive open crater in the middle of the flat valley.', dur:'30 min', status:'existing' },
+
+  // ── NEW: Cow Dung Road detour ──
+  { id:'r5a', time:'10:40 AM',  kind:'driving', name:'Drive to Hanksville → north on Cow Dung Road', text:'Drive south on Hartnet, west on Hwy 24 to Hanksville. Then a short detour NORTH on Cow Dung Road for two side-trips.', dur:'30 min', status:'renamed', note:'Renamed from generic "drive west toward Factory Butte" — now describes the actual route' },
+  { id:'r6',  time:'11:00 AM',  kind:'stop',    name:'Mars Desert Research Station (drive-by)', text:'Real research facility where scientists simulate Mars missions. Drive past — you cannot enter, but you can stop on the road and see it.', dur:'10 min', status:'new', note:'NEW ROW — mom asked for this' },
+  { id:'r7',  time:'11:15 AM',  kind:'walk',    name:'Bentonite Hills / Rainbow Hills', text:'Rainbow-striped clay badlands, also called Rainbow Hills, Rainbow Mountains, or "the pink hills" — all the same place. No official trails: walk where others have walked. Famously Mars-like landscape.', dur:'30 min', status:'new', note:'NEW ROW — consolidates 3 of mom\'s items' },
+
+  // ── Drive back, west loop ──
+  { id:'r5b', time:'11:50 AM',  kind:'driving', name:'Drive back through Hanksville, west on Hwy 24', text:'Back south to Hwy 24, then west out of Hanksville toward Factory Butte / Coal Mine Road.', dur:'15 min', status:'new', note:'NEW ROW — needed because of the Cow Dung Road detour' },
+  { id:'r8',  time:'12:10 PM',  kind:'driving', name:'Coal Mine Road through Factory Butte area', text:'Drive slowly through a moonscape of banded clay hills in grey, purple, and red. Pull over whenever you see something beautiful.', dur:'20–40 min', status:'existing' },
+  { id:'r9',  time:'12:40 PM',  kind:'stop',    name:'Factory Butte Overlook', text:'Designated pullout where you stop, look at Factory Butte mesa rising 1,500 ft above the desert floor, take photos. The most iconic landmark in the area.', dur:'10 min', status:'new', note:'NEW ROW — mom asked where Factory Butte was; it was only mentioned in body text before' },
+  { id:'r10', time:'12:55 PM',  kind:'stop',    name:'Long Dong Silver Spire', text:'350-foot solo rock spire (also called Blue Valley Spire). 7.6 mi west of Hanksville, ~20 min drive on dirt road. Worth a photo stop.', dur:'20 min', status:'new', note:'NEW ROW — mom asked for this' },
+  { id:'r11', time:'1:20 PM',   kind:'stop',    name:'Skyline Rim Overlook', text:'Pullout on Hwy 24 for a wide view over the badlands below.', dur:'10 min', status:'existing' },
+  { id:'r12', time:'1:35 PM',   kind:'driving', name:'Hwy 24 south of Hanksville', text:'Dramatic badland views on both sides. Drive slowly and look out the window.', dur:'scenic drive', status:'existing' },
+  { id:'r13', time:'2:00 PM',   kind:'walk',    name:'Neilson Wash', text:'Walk along this desert canyon wash through colorful layered rock.', dur:'30–45 min', status:'existing' },
+  { id:'r14', time:'~2:55 PM',  kind:'keep',    name:'Cathedral Valley Inn — Caineville, UT', text:'Sleep tonight (second night, same hotel).', dur:'', status:'changed', note:'⏰ Time shifts ~1:30 PM → ~2:55 PM (longer afternoon)' },
+];
+
+const decisions = JSON.parse(localStorage.getItem('day5-review') || '{}');
+
+function render() {
+  const tbody = document.getElementById('rowBody');
+  tbody.innerHTML = '';
+  let agreed = 0, disagreed = 0, commented = 0;
+  for (const row of ROWS) {
+    const d = decisions[row.id] || {};
+    if (d.decision === 'agree') agreed++;
+    if (d.decision === 'disagree') disagreed++;
+    if (d.comment) commented++;
+    const tr = document.createElement('tr');
+    tr.id = 'tr-' + row.id;
+    if (d.decision === 'agree') tr.classList.add('agreed');
+    if (d.decision === 'disagree') tr.classList.add('disagreed');
+    tr.innerHTML = `
+      <td class="row-time">${row.time}</td>
+      <td><span class="kind-chip k-${row.kind}">${kindLabel(row.kind)}</span></td>
+      <td>
+        <div class="row-name">${row.name}</div>
+        <div class="row-text">${row.text}</div>
+        ${row.note ? `<div class="row-text" style="color:var(--accent);font-weight:600;margin-top:4px;">📝 ${row.note}</div>` : ''}
+        ${d.comment ? `<div style="margin-top:8px;padding:6px;background:#FFF8DC;border-radius:4px;font-size:12px;">💬 ${escape(d.comment)}</div>` : ''}
+      </td>
+      <td class="row-dur">${row.dur || '—'}</td>
+      <td><span class="status-badge s-${row.status}">${statusLabel(row.status)}</span></td>
+      <td>
+        <div class="row-actions">
+          <button class="btn-agree ${d.decision==='agree'?'active':''}" onclick="setDecision('${row.id}','agree')">✅ Agree</button>
+          <button class="btn-disagree ${d.decision==='disagree'?'active':''}" onclick="setDecision('${row.id}','disagree')">❌ Disagree</button>
+          <button class="btn-comment" onclick="toggleComment('${row.id}')">💬 ${d.comment ? 'Edit' : 'Comment'}</button>
+        </div>
+      </td>`;
+    tbody.appendChild(tr);
+  }
+  document.getElementById('agreedCount').textContent = agreed;
+  document.getElementById('disagreedCount').textContent = disagreed;
+  document.getElementById('commentCount').textContent = commented;
+  document.getElementById('totalCount').textContent = ROWS.length;
+
+  // Restore questions
+  for (const q of ['A','B','C']) {
+    const ans = (decisions['Q-'+q] || {}).answer;
+    if (ans) {
+      const r = document.querySelector(`[data-qid="${q}"] input[value="${ans}"]`);
+      if (r) r.checked = true;
+    }
+    const com = (decisions['Q-'+q] || {}).comment;
+    if (com) document.querySelector(`[data-qid="${q}"] .q-comment`).value = com;
+  }
+  let answered = 0;
+  for (const q of ['A','B','C']) if ((decisions['Q-'+q] || {}).answer) answered++;
+  document.getElementById('answeredCount').textContent = answered;
+}
+
+function kindLabel(k) {
+  return { driving:'Drive', stop:'Stop', walk:'Walk', hike:'Hike', keep:'Sleep', note:'Note' }[k] || k;
+}
+function statusLabel(s) {
+  return { new:'🆕 NEW', existing:'Existing', renamed:'✏️ Renamed', changed:'⏰ Changed' }[s] || s;
+}
+function escape(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function setDecision(id, choice) {
+  decisions[id] = decisions[id] || {};
+  decisions[id].decision = decisions[id].decision === choice ? null : choice;
+  saveLocal();
+  render();
+}
+function toggleComment(id) {
+  const current = (decisions[id] || {}).comment || '';
+  const v = prompt('Comment for this row:', current);
+  if (v === null) return;
+  decisions[id] = decisions[id] || {};
+  decisions[id].comment = v.trim();
+  saveLocal();
+  render();
+}
+function agreeAll() {
+  for (const row of ROWS) {
+    decisions[row.id] = decisions[row.id] || {};
+    decisions[row.id].decision = 'agree';
+  }
+  saveLocal();
+  render();
+}
+function saveLocal() {
+  // Capture question answers
+  for (const q of ['A','B','C']) {
+    const checked = document.querySelector(`[data-qid="${q}"] input:checked`);
+    const com = document.querySelector(`[data-qid="${q}"] .q-comment`).value.trim();
+    decisions['Q-'+q] = { answer: checked ? checked.value : null, comment: com || null };
+  }
+  localStorage.setItem('day5-review', JSON.stringify(decisions));
+}
+function exportJSON() {
+  saveLocal();
+  const out = {
+    day: 5,
+    date: '2026-05-09',
+    rows: {},
+    questions: {},
+  };
+  for (const row of ROWS) {
+    out.rows[row.id] = {
+      name: row.name,
+      decision: (decisions[row.id] || {}).decision || 'pending',
+      comment: (decisions[row.id] || {}).comment || null,
+    };
+  }
+  for (const q of ['A','B','C']) out.questions['Q-'+q] = decisions['Q-'+q] || { answer:null, comment:null };
+  const json = JSON.stringify(out, null, 2);
+  const area = document.getElementById('exportArea');
+  area.style.display = 'block';
+  area.innerHTML = `<pre class="export">${escape(json)}</pre>
+    <button class="btn-primary" onclick="copyJSON()">📋 Copy to clipboard</button>`;
+  area.dataset.json = json;
+}
+function copyJSON() {
+  const json = document.getElementById('exportArea').dataset.json;
+  navigator.clipboard.writeText(json).then(() => alert('Copied — paste into chat with Claude'));
+}
+
+document.querySelectorAll('.q-comment, input[type="radio"]').forEach(el => {
+  el.addEventListener('change', () => { saveLocal(); render(); });
+  el.addEventListener('input',  () => { saveLocal(); });
+});
+
+render();
+</script>
+</body>
+</html>

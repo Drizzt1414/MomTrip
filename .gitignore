@@ -1,3 +1,33 @@
 node_modules/
 .claude/
 *.output
+
+# Local backup files (created by manual saves and merge-schedule.js)
+*.bak
+*.session-backup
+js/data.js.pre-merge.bak
+
+# Old / interim xlsx builds (regenerable from tools/create-excel.js)
+mom-trip-days-1-5.xlsx
+mom-trip-days-1-5-v2.xlsx
+mom-trip-days-1-6.xlsx
+mom-trip-days-1-7.xlsx
+mom-trip-days-1-8.xlsx
+mom-trip-days-1-9.xlsx
+mom-trip-days-1-10.xlsx
+mom-trip-days-1-11.xlsx
+mom-trip-days-1-12.xlsx
+mom-trip-days-1-13.xlsx
+mom-trip-days-1-14.xlsx
+mom-trip-days-1-15.xlsx
+mom-trip-days-1-16.xlsx
+mom-trip-days-1-17.xlsx
+mom-trip-days-1-18.xlsx
+mom-trip-days-1-19.xlsx
+mom-trip-days-1-20.xlsx
+mom-trip-days-1-21.xlsx
+mom-trip-days-1-22.xlsx
+mom-trip-days-1-23.xlsx
+
+# Timestamped recommendation exports
+mom-trip-recommendations-[0-9]*.xlsx

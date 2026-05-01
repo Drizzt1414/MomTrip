@@ -48,7 +48,50 @@ const UI = {
   auditMode: 'מצב בדיקה',
   hideCompleted: 'הסתירי שהושלמו',
   resetProgress: 'אפסי התקדמות',
+  wakeUp: 'השכמה',
+  leaveBy: 'יציאה',
+  totalDrive: 'נסיעה',
+  totalWalk: 'הליכה',
+  recommendationsTitle: 'המלצות חשובות ליום הזה',
+  recsOpen: 'פתחי המלצות',
+  recsClose: 'סגרי המלצות',
+  // Activity-kind labels (match xlsx legend)
+  kindDriving: 'בנסיעה',
+  kindStop:    'עצירה קצרה',
+  kindWalk:    'הליכה קצרה',
+  kindHike:    'טיול רגלי',
+  kindTour:    'סיור מודרך',
+  kindSleep:   'לילה במלון',
+  kindAdd:     'להוסיף לתוכנית',
+  kindNote:    'שימי לב',
+  kindCancel:  'לבטל',
+  priorityHigh:   'דחוף',
+  priorityMedium: 'בינוני',
+  priorityLow:    'לשיקול',
+  priorityFix:    'לתיקון',
+  voicePickerTitle: 'קול הקראה',
+  voiceTest: 'שמעי טעימה',
+  voiceSystemDefault: 'קול ברירת מחדל',
+  voiceLoading: 'טוען קולות…',
 };
+
+// Rotating praise lines for mom — shown at the top of every day.
+const MOM_PRAISE = [
+  'היי אמא, את מדריכת טיולים מדהימה ✨',
+  'היי אמא, תכננת טיול חלומות 💛',
+  'את גאון של תכנון, אמא 🌟',
+  'אמא, הטיול הזה הוא יצירת מופת 🎨',
+  'אמא, את עושה את זה — ואת עושה את זה נפלא 🌵',
+  'היי אמא, כל התחנות מחכות לך 🌞',
+  'אמא, אני גאה בך על כל התכנון ❤️',
+  'היי אמא, את מהטובות שיש — תהני מהיום 🌄',
+  'את מדהימה ומאורגנת, אמא. יופי של תכנית 👏',
+  'אמא, כל פרט כאן הוא בזכותך 🌸',
+];
+function praiseForDay(dayNumber) {
+  if (!dayNumber) return MOM_PRAISE[0];
+  return MOM_PRAISE[(dayNumber - 1) % MOM_PRAISE.length];
+}
 
 // Hebrew month names
 const HE_MONTHS = [

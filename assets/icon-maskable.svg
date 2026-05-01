@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="sky2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFE9C8"/>
+      <stop offset="1" stop-color="#FFC98C"/>
+    </linearGradient>
+    <linearGradient id="rock2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#C7512F"/>
+      <stop offset="1" stop-color="#8B2F1E"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" fill="url(#sky2)"/>
+  <circle cx="256" cy="256" r="56" fill="#F5B24E"/>
+  <path d="M156 356
+           L156 296
+           C156 244 198 216 256 216
+           C314 216 356 244 356 296
+           L356 356
+           L320 356
+           L320 300
+           C320 268 294 248 256 248
+           C218 248 192 268 192 300
+           L192 356 Z"
+        fill="url(#rock2)" fill-rule="evenodd"/>
+  <rect y="356" width="512" height="36" fill="#7A2818"/>
+</svg>
