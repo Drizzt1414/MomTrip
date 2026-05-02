@@ -427,9 +427,10 @@ a { color: var(--primary); text-decoration: none; }
   box-shadow: var(--shadow-2);
   animation: fadeInUp var(--t-slow) var(--ease-out) 200ms both;
 }
-.map-container { height: 260px; }
+.map-container { height: 260px; touch-action: none; }
 .map-container .leaflet-control-zoom { display: block; }
 .map-container .leaflet-control-attribution { font-size: 9px; opacity: 0.4; }
+.stop-map { touch-action: none; }
 
 /* === Day timeline === */
 .timeline-card {
@@ -1605,6 +1606,59 @@ a:focus-visible,
 .conditions-tmin { color: #475569; font-size: 16px; }
 .conditions-cond { color: var(--text-primary); font-size: var(--fs-base); }
 .conditions-precip { color: #1e40af; font-weight: 600; font-size: var(--fs-sm); }
+
+/* Live clock + Today button in header */
+.live-clock {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 14px; font-weight: 700;
+  background: rgba(255,255,255,0.18); color: #fff;
+  padding: 2px 8px; border-radius: 8px;
+  margin-inline-end: 6px;
+}
+.today-btn {
+  background: rgba(255,255,255,0.18); color: #fff;
+  padding: 2px 10px; border-radius: 8px;
+  font-size: 12px; font-weight: 700;
+  margin-inline-end: 6px;
+}
+.today-btn:active { background: rgba(255,255,255,0.3); }
+
+/* Hotel head row: title + arrival check button on the right */
+.hotel-head-row {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 6px;
+}
+.hotel-head-row .hotel-label { flex: 1; }
+.hotel-card.arrived { opacity: 0.85; }
+.hotel-card.arrived::after {
+  content: '✓ Checked in';
+  display: inline-block;
+  background: #16a34a; color: #fff;
+  padding: 2px 10px; border-radius: 12px;
+  font-size: 12px; font-weight: 700;
+  margin-top: 6px;
+}
+
+/* Wake-up mandatory vs flexible visual distinction */
+.time-chip.wake.mandatory { background: #FEE2E2; color: #991B1B; border: 1px solid #FCA5A5; }
+.time-chip.wake.flexible  { background: #ECFEFF; color: #0E7490; border: 1px solid #67E8F9; }
+.wake-badge {
+  margin-inline-start: 6px;
+  padding: 1px 6px;
+  font-size: 10px; font-weight: 700;
+  border-radius: 8px;
+}
+.wake-badge.mand { background: #DC2626; color: #fff; }
+.wake-badge.flex { background: #06B6D4; color: #fff; }
+.wake-note {
+  font-size: 12px; line-height: 1.4;
+  color: var(--text-secondary);
+  margin-top: 6px;
+  padding: 6px 10px;
+  background: #F8FAFC;
+  border-radius: 6px;
+  border-inline-start: 3px solid #CBD5E1;
+}
 
 /* Hotel — primary call button (large, contrasting, always-visible phone) */
 .hotel-call-primary {

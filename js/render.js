@@ -2,6 +2,18 @@
 // Designed for an anxious mom who needs reassurance
 
 const DEFAULT_AUDIT = { status:'verified', issues:[], suggestedCoords:null };
+
+// Days where the wake-up time is NON-NEGOTIABLE (timed permits, mandatory shuttles,
+// guided tour pickups). Every other day, the wake-up is just a suggestion for a
+// relaxed pace — mom decides whether to sleep in.
+const WAKEUP_MANDATORY = {
+  3:  { reason: 'Fiery Furnace permit starts at 08:00 sharp. Late arrival = permit canceled.' },
+  16: { reason: 'Antelope Canyon guided tour booking — arrive 30 min before tour time.' },
+  17: { reason: 'Dreamland Safari pickup time is fixed — confirm with operator.' },
+  19: { reason: 'Zion shuttle queues form by 07:00. Late = parking fills, less time in canyon.' },
+  20: { reason: 'Same Zion shuttle situation — early start protects your day.' },
+  21: { reason: 'Kanarra Falls permit + long drive to Las Vegas. Tight day.' },
+};
 function sAudit(s) { return s.audit || DEFAULT_AUDIT; }
 
 let _lastRenderedDay = null;
@@ -13,8 +25,8 @@ function render() {
     console.error('render failed', err);
     const app = document.getElementById('app');
     if (app) app.innerHTML = `<div class="empty"><div class="big-icon">💛</div>
-      <p style="font-size:17px;line-height:1.5;">משהו השתבש בהצגת היום.<br>נסי לטעון מחדש את הדף.</p>
-      <button class="listen-btn" style="margin-top:16px" onclick="location.reload()">🔄 טעני מחדש</button></div>`;
+      <p style="font-size:17px;line-height:1.5;">Something went wrong loading today.<br>Try reloading the page.</p>
+      <button class="listen-btn" style="margin-top:16px" onclick="location.reload()">🔄 Reload</button></div>`;
   }
 }
 
@@ -98,9 +110,9 @@ function _render() {
   if (!state.bannerDismissed && day.dayNumber <= 2) {
     h += `<div class="tip-banner">
       <button class="tip-close" onclick="dismissBanner()">✕</button>
-      <h3>📱 לפני הטיול</h3>
-      <p>פתחי <b>Google Maps</b> → חפשי את האזור → לחצי <b>"הורדה"</b><br>
-      הניווט יעבוד <b>גם בלי אינטרנט!</b></p>
+      <h3>📱 Before the trip</h3>
+      <p>Open <b>Google Maps</b> → search for the area → tap <b>"Download"</b><br>
+      Navigation will work <b>even without internet!</b></p>
     </div>`;
   }
 
@@ -109,7 +121,7 @@ function _render() {
   const warnStops = stops.filter(s => sAudit(s).status === 'warning');
   const errCount = errStops.length;
   h += `<div class="reassurance">
-    <h3>💛 ${day.titleHe || day.title || `יום ${day.dayNumber}`}</h3>
+    <h3>💛 ${day.title || `Day ${day.dayNumber}`}</h3>
     <p>${getReassuranceMessage(day, stops, errCount)}</p>
   </div>`;
 
@@ -118,7 +130,7 @@ function _render() {
     h += `<div class="day-issues">`;
     if (errStops.length > 0) {
       h += `<div class="day-issue-section error-section">
-        <div class="day-issue-title">❌ ${errStops.length} תחנות עם בעיות קריטיות</div>`;
+        <div class="day-issue-title">❌ ${errStops.length} stops with critical issues</div>`;
       for (const s of errStops) {
         h += `<div class="day-issue-item">
           <div class="day-issue-name ltr">${s.emoji} ${s.name}</div>`;
@@ -128,9 +140,9 @@ function _render() {
         if (sAudit(s).suggestedCoords) {
           const sc = sAudit(s).suggestedCoords;
           const d = s.coordinates ? Math.round(haversine(s.coordinates.lat, s.coordinates.lng, sc.lat, sc.lng)) : null;
-          h += `<div class="day-issue-fix">💡 ${d != null ? `הקואורדינטות הנוכחיות רחוקות ${d} מייל מהמיקום הנכון.` : 'הקואורדינטות אינן מדויקות.'} לחצי על התחנה למטה כדי לתקן.</div>`;
+          h += `<div class="day-issue-fix">💡 ${d != null ? `Current coordinates are about ${Math.round(d * 1.609)} km from the correct location.` : 'Coordinates are not accurate.'} Tap the stop below to fix.</div>`;
         } else if (!s.coordinates) {
-          h += `<div class="day-issue-fix">📍 אין קואורדינטות — לא ניתן לנווט למקום הזה.</div>`;
+          h += `<div class="day-issue-fix">📍 No coordinates — cannot navigate to this place.</div>`;
         }
         h += `</div>`;
       }
@@ -138,7 +150,7 @@ function _render() {
     }
     if (warnStops.length > 0) {
       h += `<div class="day-issue-section warning-section">
-        <div class="day-issue-title">⚠️ ${warnStops.length} תחנות שכדאי לבדוק</div>`;
+        <div class="day-issue-title">⚠️ ${warnStops.length} stops to double-check</div>`;
       for (const s of warnStops) {
         h += `<div class="day-issue-item">
           <div class="day-issue-name ltr">${s.emoji} ${s.name}</div>`;
@@ -154,18 +166,29 @@ function _render() {
 
   // Day hero — Hebrew primary (mom's first language), English as subtitle,
   // plus wake-up / leave-by badges, totals line (drive + walk), and weather chip.
-  const heroHe = day.titleHe || (day.title ? '' : `יום ${day.dayNumber}`);
+  const heroHe = day.title || `Day ${day.dayNumber}`;
   const totals = computeDayTotals(day);
   const weather = (typeof getWeatherForDay === 'function') ? getWeatherForDay(day.dayNumber) : null;
   h += `<div class="day-hero">
     ${heroHe ? `<h2>${heroHe}</h2>` : ''}
     ${day.title ? `<div class="day-en ltr">${day.title}</div>` : ''}
     <div class="day-date">${formatDateHe(day.date)}</div>
-    ${(day.wakeup || day.depart) ? `
-      <div class="day-times">
-        ${day.wakeup ? `<span class="time-chip wake"><span class="time-ico">🌅</span> ${UI.wakeUp} <b>${day.wakeup}</b></span>` : ''}
+    ${(day.wakeup || day.depart) ? (function(){
+      // Mom rule: she dislikes early wake-ups unless the day truly demands it.
+      // We tag mandatory days based on tour permits and shuttle locks.
+      const mand = WAKEUP_MANDATORY[day.dayNumber];  // {reason} when forced, undefined otherwise
+      const wakeClass = mand ? 'wake mandatory' : 'wake flexible';
+      const wakeBadge = mand
+        ? `<span class="wake-badge mand">⚠ Mandatory</span>`
+        : `<span class="wake-badge flex">Flexible</span>`;
+      const wakeNote = mand
+        ? `<div class="wake-note">${escapeForText(mand.reason)}</div>`
+        : `<div class="wake-note">Suggested for a relaxed pace — you can sleep later if you prefer.</div>`;
+      return `<div class="day-times">
+        ${day.wakeup ? `<span class="time-chip ${wakeClass}"><span class="time-ico">🌅</span> ${UI.wakeUp} <b>${day.wakeup}</b> ${wakeBadge}</span>` : ''}
         ${day.depart ? `<span class="time-chip leave"><span class="time-ico">🚗</span> ${UI.leaveBy} <b>${day.depart}</b></span>` : ''}
-      </div>` : ''}
+      </div>${day.wakeup ? wakeNote : ''}`;
+    })() : ''}
     ${renderWeatherChip(weather)}
     ${(totals.driveMin || totals.walkMin) ? `
       <div class="day-totals">
@@ -188,8 +211,8 @@ function _render() {
       ${UI.listenSummary}
     </button>
     <div class="voice-status">
-      <span class="vs-chip ${heN ? 'ok' : 'bad'}">🇮🇱 ${heN ? `${heN} קולות` : 'לא מותקן'}</span>
-      <span class="vs-chip ${enN ? 'ok' : 'bad'}">🇺🇸 ${enN ? `${enN} voices` : 'not installed'}</span>
+      <span class="vs-chip ${heN ? 'ok' : 'bad'}">🇮🇱 ${heN ? `${heN} Hebrew voices` : 'no Hebrew voice'}</span>
+      <span class="vs-chip ${enN ? 'ok' : 'bad'}">🇺🇸 ${enN ? `${enN} English voices` : 'no English voice'}</span>
     </div>
     ${renderVoicePicker()}
   </div>`;
@@ -202,18 +225,23 @@ function _render() {
     h += `<div class="map-wrap"><div class="map-container" id="routeMap-${day.dayNumber}"></div></div>`;
   }
 
-  // Hotel — call button is primary action, always shown first when phone exists
+  // Hotel — call button is primary action, plus a "checked in" check so mom can
+  // mark arriving at the hotel like any other stop completion.
   if (day.hotel) {
     const ht = day.hotel, hc = ht.coordinates;
-    // Format phone for display (visible to mom even before tapping the button)
     const phoneDisplay = ht.phone ? String(ht.phone).replace(/^\+?1\s*/, '').replace(/[^\d]+/g, '-').replace(/^-|-$/g, '') : '';
-    h += `<div class="hotel-card">
-      <div class="hotel-label">🏨 ${UI.hotelTonight}</div>
+    const hotelCheckId = `hotel-d${day.dayNumber}`;
+    const arrived = state.checked[hotelCheckId];
+    h += `<div class="hotel-card ${arrived ? 'arrived' : ''}">
+      <div class="hotel-head-row">
+        <div class="hotel-label">🏨 ${UI.hotelTonight}</div>
+        <button class="stop-check ${arrived ? 'done' : ''}" onclick="toggleCheck('${hotelCheckId}')" aria-label="Mark as arrived">${arrived ? '✓' : ''}</button>
+      </div>
       <div class="hotel-name">${ht.name}</div>
       ${ht.address ? `<div class="hotel-addr">${ht.address}</div>` : ''}
       ${ht.phone ? `<a class="hotel-call-primary" href="${phoneUrl(ht.phone)}">
         <span class="hotel-call-icon">📞</span>
-        <span class="hotel-call-label">${UI.call} למלון</span>
+        <span class="hotel-call-label">${UI.call} the hotel</span>
         <span class="hotel-call-num ltr">${phoneDisplay}</span>
       </a>` : ''}
       <div class="hotel-actions">
@@ -285,15 +313,15 @@ function _render() {
 // Reassurance message — calms anxiety, praises her planning
 function getReassuranceMessage(day, stops, errCount) {
   const count = stops.length;
-  if (count === 0) return 'יום חופשי! אפשר לנוח ולהתפנק. מגיע לך 💛';
-  let msg = `תכננת יום מדהים עם ${count} תחנות! `;
-  if (day.hotel) msg += `המלון מוכן ומחכה לך. `;
+  if (count === 0) return 'A free day! Time to rest. You deserve it 💛';
+  let msg = `You planned an amazing day with ${count} stops! `;
+  if (day.hotel) msg += `The hotel is ready and waiting. `;
   if (errCount > 0) {
-    msg += `יש ${errCount} תחנות שכדאי לבדוק — לחצי עליהן לפרטים. `;
+    msg += `${errCount} stops to double-check — tap them for details. `;
   } else {
-    msg += `כל התחנות מאומתות ומוכנות. `;
+    msg += `All stops are verified and ready. `;
   }
-  msg += `את מטיילת מדהימה! 🌟`;
+  msg += `You're an amazing traveler! 🌟`;
   return msg;
 }
 
@@ -321,8 +349,8 @@ function driveMinFromDist(distMi) {
 }
 
 function fmtMin(m) {
-  if (m < 60) return `${m} דק׳`;
-  return `${Math.floor(m/60)}ש׳ ${m%60 > 0 ? m%60 + 'ד' : ''}`.trim();
+  if (m < 60) return `${m} min`;
+  return `${Math.floor(m/60)}h ${m%60 > 0 ? m%60 + 'm' : ''}`.trim();
 }
 
 function renderDayTimeline(stops) {
@@ -348,10 +376,10 @@ function renderDayTimeline(stops) {
 
   let h = `<div class="timeline-card">
     <div class="timeline-header">
-      <span class="timeline-title">🗺️ סדר היום</span>
+      <span class="timeline-title">🗺️ Day at a glance</span>
       <div class="timeline-totals">
-        <span>🚗 ~${fmtMin(totalDriveMin)} נסיעה</span>
-        ${totalWalkMin > 0 ? `<span>🥾 ~${fmtMin(totalWalkMin)} הליכה · ${Math.round(totalWalkMi * 10) / 10} mi</span>` : ''}
+        <span>🚗 ~${fmtMin(totalDriveMin)} drive</span>
+        ${totalWalkMin > 0 ? `<span>🥾 ~${fmtMin(totalWalkMin)} walking · ${Math.round(totalWalkMi * 1.609 * 10) / 10} km</span>` : ''}
       </div>
     </div>
     <div class="timeline-body">`;
@@ -365,7 +393,7 @@ function renderDayTimeline(stops) {
     if (drv) {
       h += `<div class="tl-drive">
         <div class="tl-drive-line"></div>
-        <span class="tl-drive-label">🚗 ~${fmtMin(drv.min)} · ${drv.mi} mi</span>
+        <span class="tl-drive-label">🚗 ~${fmtMin(drv.min)} · ${Math.round(drv.mi * 1.609 * 10) / 10} km</span>
       </div>`;
     }
 
@@ -374,8 +402,8 @@ function renderDayTimeline(stops) {
       <div class="tl-info">
         <div class="tl-name">${s.emoji} ${s.name}</div>
         ${walk
-          ? `<div class="tl-walk">🅿️ חנה בטריילהד ← 🥾 ~${fmtMin(walk.min)} · ${walk.mi} mi${s.difficulty ? ` · ${s.difficulty}` : ''}</div>`
-          : `<div class="tl-walk tl-quick">🅿️ חנייה קצרה ליד האתר</div>`
+          ? `<div class="tl-walk">🅿️ Park at trailhead → 🥾 ~${fmtMin(walk.min)} · ${Math.round(walk.mi * 1.609 * 10) / 10} km${s.difficulty ? ` · ${s.difficulty}` : ''}</div>`
+          : `<div class="tl-walk tl-quick">🅿️ Quick parking near the site</div>`
         }
       </div>
     </div>`;
@@ -400,10 +428,10 @@ function renderStop(s, nextStop, index, total) {
   let navLabel = UI.navigate;
   if (nextCoords) {
     navUrl = mapsNavUrl(nextCoords);
-    navLabel = isHike ? `🅿️ נווטי לטריילהד` : `📍 נווטי ל${nextStop.name.substring(0, 20)}`;
+    navLabel = isHike ? `🅿️ Navigate to trailhead` : `📍 Navigate to ${nextStop.name.substring(0, 20)}`;
   } else if (coords) {
     navUrl = mapsNavUrl(coords);
-    navLabel = isHike ? `🅿️ נווטי לטריילהד` : `📍 ${UI.navigate}`;
+    navLabel = isHike ? `🅿️ Navigate to trailhead` : `📍 ${UI.navigate}`;
   }
 
   let cls = 'stop-card';
@@ -460,7 +488,7 @@ function renderAuditPanel(s) {
     if (audit.suggestedCoords) {
       const sc = audit.suggestedCoords;
       const d = haversine(s.coordinates.lat, s.coordinates.lng, sc.lat, sc.lng);
-      h += `<br>💡 מוצע: ${sc.lat.toFixed(4)}, ${sc.lng.toFixed(4)} (${Math.round(d)} מייל הפרש)`;
+      h += `<br>💡 Suggested: ${sc.lat.toFixed(4)}, ${sc.lng.toFixed(4)} (${Math.round(d * 1.609)} km off)`;
     }
     h += `</div>`;
   }
@@ -475,7 +503,7 @@ function renderAuditPanel(s) {
 }
 
 function renderGuidePanel(s) {
-  return `<div class="guide-box"><div class="guide-text placeholder">🎧 תיאור המקום יתווסף בקרוב</div></div>`;
+  return `<div class="guide-box"><div class="guide-text placeholder">🎧 Description coming soon</div></div>`;
 }
 
 function renderDirCard(from, to) {
@@ -493,7 +521,7 @@ function renderDirCard(from, to) {
     <span>🚗</span>
     <span class="dir-label">${time ? `${time} · ${fmtDist(dist)}` : '—'}</span>
     ${sanity ? '<span>⚠️</span>' : ''}
-    <span class="dir-sub">לחצי לניווט</span>
+    <span class="dir-sub">Tap to navigate</span>
   </div>`;
   if (open && fc && tc) {
     h += `<div class="dir-expand">
@@ -510,13 +538,13 @@ function playDailyBriefing(dayNum) {
   const day = TRIP_DATA.days.find(d => d.dayNumber === dayNum);
   if (!day) return;
   const stops = getDayStops(day);
-  let b = `בוקר טוב! היום יום ${day.dayNumber} בטיול, ${formatDateHe(day.date)}. `;
-  if (day.titleHe) b += `אנחנו ב${day.titleHe}. `;
-  b += `תכננת יום נפלא עם ${stops.length} תחנות! `;
-  if (stops[0]) b += `נתחיל ב${stops[0].name}. `;
-  if (day.hotel) b += `הלילה ישנים ב${day.hotel.name}. הכל מוכן. `;
-  b += `את מטיילת מדהימה, יום נפלא מחכה לך!`;
-  speakHebrew(b, `סיכום יום ${day.dayNumber}`);
+  let b = `Good morning! Today is day ${day.dayNumber} of the trip, ${formatDateHe(day.date)}. `;
+  if (day.title) b += `We are at ${day.title}. `;
+  b += `You planned a wonderful day with ${stops.length} stops! `;
+  if (stops[0]) b += `We start at ${stops[0].name}. `;
+  if (day.hotel) b += `Tonight we sleep at ${day.hotel.name}. Everything is ready. `;
+  b += `You're an amazing traveler — a wonderful day is waiting for you!`;
+  speakHebrew(b, `Day ${day.dayNumber} summary`);
 }
 
 // Audit screen
@@ -548,13 +576,13 @@ function renderAuditScreen() {
   if (unreviewedErrors > 0) {
     h += `<div style="padding:0 var(--sp-16) var(--sp-16);">
       <button class="wizard-launch-btn" onclick="toggleAuditScreen();startWizard();">
-        🧙 בואי נעבור על ${unreviewedErrors} בעיות ביחד
-        <span class="wizard-launch-sub">נסביר כל בעיה ותחליטי מה לעשות</span>
+        🧙 Let's review ${unreviewedErrors} issues together
+        <span class="wizard-launch-sub">We'll explain each issue so you can decide what to do</span>
       </button>
     </div>`;
   } else if (errs.length > 0) {
     h += `<div style="padding:0 var(--sp-16) var(--sp-16);">
-      <div class="wizard-done-banner">✅ כל הבעיות נבדקו! הטיול מוכן</div>
+      <div class="wizard-done-banner">✅ All issues reviewed! Trip is ready</div>
     </div>`;
   }
 
@@ -671,14 +699,14 @@ function renderAddedInline(s, dayNumber) {
   const checked = state.checked[s.id];
   return `<div class="sched-row added-inline ${checked ? 'done' : ''}">
     <div class="added-inline-head">
-      <span class="added-marker">✨ נוסף ע"י אמא</span>
+      <span class="added-marker">✨ Added by mom</span>
       <span class="added-inline-name ltr">${escapeForText(s.name)}</span>
     </div>
     ${s.tip ? `<div class="sched-text">${escapeForText(s.tip)}</div>` : ''}
     <div class="sched-actions">
       <button class="stop-check ${checked ? 'done' : ''}" onclick="toggleCheck('${s.id}')">${checked ? '✓' : ''}</button>
       ${navUrl ? `<a class="stop-btn navigate" href="${navUrl}" target="_blank" rel="noopener noreferrer">📍 ${UI.navigate}</a>` : ''}
-      <button class="stop-btn remove-added" onclick="removeAddedFromDay(${dayNumber},'${s.id}')">🗑️ הסירי</button>
+      <button class="stop-btn remove-added" onclick="removeAddedFromDay(${dayNumber},'${s.id}')">🗑️ Remove</button>
     </div>
   </div>`;
 }
@@ -739,13 +767,13 @@ function renderScheduleRow(row, index, stopNumber, byId, rows, hotel) {
   // Action row: only for coord-bearing items.
   if (stop && coords) {
     h += `<div class="sched-actions">
-      <button class="stop-check ${checked ? 'done' : ''}" onclick="toggleCheck('${stop.id}')" aria-label="סמני כהושלם">${checked ? '✓' : ''}</button>
+      <button class="stop-check ${checked ? 'done' : ''}" onclick="toggleCheck('${stop.id}')" aria-label="Mark as done">${checked ? '✓' : ''}</button>
       <button class="stop-btn listen" onclick="toggleExpanded('${stop.id}')">🎧 ${expanded ? UI.close : UI.tellMeMore}</button>
-      <a class="stop-btn navigate" href="${navUrl}" target="_blank" rel="noopener noreferrer">📍 ${navTargetName ? `${UI.navigate} ל${navTargetName.substring(0, 22)}` : UI.navigate}</a>
+      <a class="stop-btn navigate" href="${navUrl}" target="_blank" rel="noopener noreferrer">📍 ${navTargetName ? `${UI.navigate} to ${navTargetName.substring(0, 22)}` : UI.navigate}</a>
       ${stop && coords ? `<a class="stop-btn mapy" href="${mapyShowUrl(coords)}" target="_blank" rel="noopener noreferrer" title="Open in Mapy.com (offline maps)">🗺️ Mapy</a>` : ''}
       ${stop && alltrailsTrailUrl(stop.id)
         ? `<a class="stop-btn alltrails" href="${alltrailsTrailUrl(stop.id)}" target="_blank" rel="noopener noreferrer" title="Open trail in AllTrails">🥾 AllTrails</a>`
-        : (stop && isHikeStop(stop) ? `<a class="stop-btn alltrails-search" href="${alltrailsSearchUrl(stop.name)}" target="_blank" rel="noopener noreferrer" title="Search AllTrails">🔍 חפשי ב-AllTrails</a>` : '')
+        : (stop && isHikeStop(stop) ? `<a class="stop-btn alltrails-search" href="${alltrailsSearchUrl(stop.name)}" target="_blank" rel="noopener noreferrer" title="Search AllTrails">🔍 Search AllTrails</a>` : '')
       }
     </div>`;
   }
@@ -776,14 +804,14 @@ function escapeForText(s) {
 // ─── Day-level recommendations panel ─────────────────────────────────────────
 
 const REC_KIND_HE = {
-  'Add Stop':        'להוסיף עצירה',
-  'Fix Coords':      'תיקון קואורדינטות',
-  'Add Coords':      'להוסיף קואורדינטות',
-  'Remove':          'להסיר',
-  'Removed':         'הוסר',
-  'Renamed':         'שינוי שם',
-  'Sleeping Change': 'שינוי מלון',
-  'Fill Empty Day':  'מילוי יום ריק',
+  'Add Stop':        'Add stop',
+  'Fix Coords':      'Fix coordinates',
+  'Add Coords':      'Add coordinates',
+  'Remove':          'Remove',
+  'Removed':         'Removed',
+  'Renamed':         'Renamed',
+  'Sleeping Change': 'Hotel change',
+  'Fill Empty Day':  'Fill empty day',
 };
 function recKindLabel(kind) { return REC_KIND_HE[kind] || kind; }
 
@@ -832,7 +860,7 @@ function renderDayRecommendations(day) {
         <div class="rec-head"><span class="rec-prio-chip ${prio}">${r.priority}</span><span class="rec-kind">${recKindLabel(r.kind)}</span></div>
         <div class="rec-name">${escapeForText(r.name)}</div>
         ${r.why ? `<div class="rec-why">${escapeForText(r.why)}</div>` : ''}
-        ${r.action ? `<div class="rec-action"><b>מה לעשות:</b> ${escapeForText(r.action)}</div>` : ''}
+        ${r.action ? `<div class="rec-action"><b>What to do:</b> ${escapeForText(r.action)}</div>` : ''}
         ${(r.lat && r.lng) ? `<a class="stop-btn navigate" href="https://www.google.com/maps/dir/?api=1&destination=${r.lat},${r.lng}&travelmode=driving" target="_blank" rel="noopener noreferrer">📍 ${UI.navigate}</a>` : ''}
       </div>`;
     }
@@ -852,11 +880,11 @@ function renderPretripChecklist() {
 
   let h = `<div class="pretrip-screen">
     <div class="pretrip-head">
-      <h2 class="pretrip-title">📋 הכנות לפני הטיול</h2>
-      <button class="pretrip-close" onclick="togglePretripChecklist()" aria-label="סגרי">✕</button>
+      <h2 class="pretrip-title">📋 Pre-trip checklist</h2>
+      <button class="pretrip-close" onclick="togglePretripChecklist()" aria-label="Close">✕</button>
     </div>
     <div class="pretrip-progress">
-      <div class="pretrip-progress-text">${doneUrgent} מתוך ${totalUrgent} פריטים דחופים סומנו</div>
+      <div class="pretrip-progress-text">${doneUrgent} of ${totalUrgent} urgent items checked</div>
       <div class="pretrip-progress-bar">
         <div class="pretrip-progress-fill" style="width: ${totalUrgent ? (doneUrgent/totalUrgent*100) : 0}%"></div>
       </div>
@@ -865,12 +893,12 @@ function renderPretripChecklist() {
   for (const it of items) {
     const isDone = !!done[it.id];
     h += `<div class="pretrip-item ${isDone ? 'done' : ''} ${it.urgent ? 'urgent' : ''}">
-      <button class="pretrip-check ${isDone ? 'on' : ''}" onclick="togglePretripItem('${it.id}')" aria-label="סמני כבוצע">${isDone ? '✓' : ''}</button>
+      <button class="pretrip-check ${isDone ? 'on' : ''}" onclick="togglePretripItem('${it.id}')" aria-label="Mark as done">${isDone ? '✓' : ''}</button>
       <div class="pretrip-body">
         <div class="pretrip-item-head">
           <span class="pretrip-icon">${it.icon}</span>
           <span class="pretrip-name">${escapeForText(it.title)}</span>
-          ${it.urgent && !isDone ? '<span class="pretrip-urgent">דחוף</span>' : ''}
+          ${it.urgent && !isDone ? '<span class="pretrip-urgent">Urgent</span>' : ''}
         </div>
         <div class="pretrip-detail">${escapeForText(it.detail)}</div>
       </div>
@@ -904,8 +932,8 @@ function renderDayPrep(day) {
 
   let h = `<div class="day-prep-card">
     <div class="day-prep-head">
-      <span class="day-prep-title">🌅 הכנה ליום</span>
-      ${urgent.length ? `<span class="day-prep-urgent-chip">⚠️ ${urgent.length} דחוף</span>` : ''}
+      <span class="day-prep-title">🌅 Prep for today</span>
+      ${urgent.length ? `<span class="day-prep-urgent-chip">⚠️ ${urgent.length} urgent</span>` : ''}
     </div>
     <ul class="day-prep-list">`;
   for (const p of urgent) {
@@ -943,53 +971,53 @@ function renderDayPrep(day) {
 // etc.). Source: research agent + NPS coverage maps.
 const DEAD_ZONE_DAYS = {
   3: {
-    note: 'Fiery Furnace ראש המסלול (Arches): קליטה חלשה. צילום מסך של ההיתר וההוראות חיוני.',
+    note: 'Fiery Furnace trailhead (Arches): weak signal. Screenshot of the permit and instructions is essential.',
     downloads: [
       { app: 'AllTrails', name: 'Mesa Arch + Grand View Point', url: 'https://www.alltrails.com/trail/us/utah/grand-view-trail' },
-      { app: 'Mapy.com',  name: 'אזור Moab + Arches',           url: 'https://mapy.com/fnc/v1/showmap?mapset=outdoor&center=-109.59,38.62&zoom=11' },
+      { app: 'Mapy.com',  name: 'Moab + Arches area',           url: 'https://mapy.com/fnc/v1/showmap?mapset=outdoor&center=-109.59,38.62&zoom=11' },
     ],
   },
   4: {
-    note: 'Needles District (Canyonlands): קליטה חלשה בקניונים.',
+    note: 'Needles District (Canyonlands): weak signal in the canyons.',
     downloads: [
       { app: 'AllTrails', name: 'Chesler Park Loop',            url: 'https://www.alltrails.com/trail/us/utah/chesler-park-loop-via-elephant-hill' },
       { app: 'AllTrails', name: 'Pothole Point',                url: 'https://www.alltrails.com/trail/us/utah/pothole-point-trail' },
-      { app: 'Mapy.com',  name: 'אזור Needles + Hanksville',    url: 'https://mapy.com/fnc/v1/showmap?mapset=outdoor&center=-109.78,38.16&zoom=10' },
+      { app: 'Mapy.com',  name: 'Needles + Hanksville area',    url: 'https://mapy.com/fnc/v1/showmap?mapset=outdoor&center=-109.78,38.16&zoom=10' },
     ],
   },
   5: {
-    note: 'לולאת Cathedral Valley: אפס קליטה ל-5-7 שעות. ספרי למישהו את התוכנית.',
+    note: 'Cathedral Valley loop: zero signal for 5-7 hours. Tell someone your plan.',
     downloads: [
-      { app: 'Mapy.com',  name: 'אזור Capitol Reef + Cathedral Valley', url: 'https://mapy.com/fnc/v1/showmap?mapset=outdoor&center=-111.26,38.36&zoom=10' },
+      { app: 'Mapy.com',  name: 'Capitol Reef + Cathedral Valley area', url: 'https://mapy.com/fnc/v1/showmap?mapset=outdoor&center=-111.26,38.36&zoom=10' },
     ],
-    note2: 'AllTrails בקושי מכסה את Cathedral Valley. תסמכי על Mapy.com למסלול הלולאה.',
+    note2: 'AllTrails barely covers Cathedral Valley. Rely on Mapy.com for the loop route.',
   },
   10: {
-    note: 'Notom-Bullfrog + Burr Trail: אפס קליטה לרוב הלולאה.',
+    note: 'Notom-Bullfrog + Burr Trail: zero signal for most of the loop.',
     downloads: [
-      { app: 'Mapy.com', name: 'אזור Capitol Reef South + Burr Trail', url: 'https://mapy.com/fnc/v1/showmap?mapset=outdoor&center=-111.05,37.85&zoom=10' },
+      { app: 'Mapy.com', name: 'Capitol Reef South + Burr Trail area', url: 'https://mapy.com/fnc/v1/showmap?mapset=outdoor&center=-111.05,37.85&zoom=10' },
     ],
   },
   13: {
-    note: 'כביש Hole-in-the-Rock: אפס קליטה אחרי הקילומטרים הראשונים. הקניונים הצרים מנותקים לחלוטין.',
+    note: 'Hole-in-the-Rock road: zero signal after the first kilometers. The slot canyons are completely cut off.',
     downloads: [
       { app: 'AllTrails', name: 'Peek-a-Boo + Spooky Slot Canyons',    url: 'https://www.alltrails.com/trail/us/utah/peek-a-boo-and-spooky-slot-canyons-via-upper-dry-fork-narrows' },
-      { app: 'Mapy.com',  name: 'אזור Escalante + Grand Staircase',    url: 'https://mapy.com/fnc/v1/showmap?mapset=outdoor&center=-111.42,37.55&zoom=10' },
+      { app: 'Mapy.com',  name: 'Escalante + Grand Staircase area',    url: 'https://mapy.com/fnc/v1/showmap?mapset=outdoor&center=-111.42,37.55&zoom=10' },
     ],
   },
   14: {
-    note: 'Cottonwood Canyon Road: קליטה נופלת באמצע. חוזרת ב-Big Water.',
+    note: 'Cottonwood Canyon Road: signal drops in the middle. Comes back in Big Water.',
     downloads: [
       { app: 'AllTrails', name: 'Toadstool Hoodoos',                   url: 'https://www.alltrails.com/trail/us/utah/toadstool-hoodoos-trail' },
-      { app: 'Mapy.com',  name: 'אזור Grand Staircase + Page',         url: 'https://mapy.com/fnc/v1/showmap?mapset=outdoor&center=-111.66,37.10&zoom=10' },
+      { app: 'Mapy.com',  name: 'Grand Staircase + Page area',         url: 'https://mapy.com/fnc/v1/showmap?mapset=outdoor&center=-111.66,37.10&zoom=10' },
     ],
   },
   17: {
-    note: 'White Pocket: אפס קליטה. הסיור המודרך מצויד ברדיו לוויני.',
+    note: 'White Pocket: zero signal. The guided tour is equipped with satellite radio.',
     downloads: [
-      { app: 'Mapy.com', name: 'אזור Vermilion Cliffs', url: 'https://mapy.com/fnc/v1/showmap?mapset=outdoor&center=-112.00,36.96&zoom=10' },
+      { app: 'Mapy.com', name: 'Vermilion Cliffs area', url: 'https://mapy.com/fnc/v1/showmap?mapset=outdoor&center=-112.00,36.96&zoom=10' },
     ],
-    note2: 'הסיור עם Dreamland Safari מספק ניווט. את לא צריכה להיות אחראית למפה היום.',
+    note2: 'The Dreamland Safari tour provides navigation. You don\'t need to be responsible for the map today.',
   },
 };
 
@@ -1007,7 +1035,7 @@ function renderDeadZoneChip(day) {
     </div>`;
 
   if (dz.downloads && dz.downloads.length) {
-    h += `<div class="deadzone-downloads-head">${downloaded ? '✓ סימנת שהמפות מורדות' : '📥 ודאי שהמפות הבאות מורדות לפני היציאה:'}</div>`;
+    h += `<div class="deadzone-downloads-head">${downloaded ? '✓ You marked the maps as downloaded' : '📥 Make sure these maps are downloaded before leaving:'}</div>`;
     h += `<div class="deadzone-downloads">`;
     for (const d of dz.downloads) {
       h += `<a class="deadzone-download" href="${d.url}" target="_blank" rel="noopener noreferrer">
@@ -1021,7 +1049,7 @@ function renderDeadZoneChip(day) {
     h += `<div class="deadzone-note2">${escapeForText(dz.note2)}</div>`;
   }
   h += `<button class="deadzone-toggle" onclick="toggleDeadzoneDownloaded(${day.dayNumber})">
-    ${downloaded ? '↺ סמני כלא-מוכן' : '✓ הורדתי הכל'}
+    ${downloaded ? '↺ Mark as not ready' : '✓ I downloaded everything'}
   </button>`;
   h += `</div>`;
   return h;
@@ -1033,10 +1061,10 @@ function renderDeadZoneChip(day) {
 function getDayTimezone(day) {
   // Match by day number for the trip's known TZ transitions.
   const n = day.dayNumber;
-  if (n >= 21) return { code: 'PDT', label: 'שעון נבדה', note: 'שעה אחורה ממאונטיין' };
-  if (n === 14 || n === 15) return { code: 'MST', label: 'שעון Page (אריזונה)', note: 'שעה אחורה משעון יוטה — אבל Antelope על שעון Navajo = שעון יוטה' };
-  if (n === 16) return { code: 'MIX', label: 'מעבר Page → Kanab', note: 'בוקר ב-AZ MST. אחה"צ ב-UT MDT (שעה קדימה).' };
-  return { code: 'MDT', label: 'שעון יוטה', note: '' };
+  if (n >= 21) return { code: 'PDT', label: 'Nevada time', note: 'One hour behind Mountain time' };
+  if (n === 14 || n === 15) return { code: 'MST', label: 'Page (Arizona) time', note: 'One hour behind Utah time — but Antelope tours run on Navajo = Utah time' };
+  if (n === 16) return { code: 'MIX', label: 'Page → Kanab transition', note: 'Morning in Arizona time. Afternoon in Utah time (one hour ahead).' };
+  return { code: 'MDT', label: 'Utah time', note: '' };
 }
 
 function renderTimezoneChip(day) {
@@ -1060,15 +1088,15 @@ function renderConditionsCard(day) {
     // Kick a background fetch and show "activating..." state.
     const triggered = (typeof ensureWeatherForDay === 'function') ? ensureWeatherForDay(day.dayNumber) : false;
     return `<div class="conditions-card pending">
-      <span class="conditions-title">🌦️ מזג אוויר</span>
-      <span class="conditions-status">${triggered ? 'בודק עכשיו...' : 'לא נטען'}</span>
-      <button class="conditions-refresh" onclick="refreshWeatherForDay(${day.dayNumber})">הפעילי</button>
+      <span class="conditions-title">🌦️ Weather</span>
+      <span class="conditions-status">${triggered ? 'Checking now…' : 'Not loaded'}</span>
+      <button class="conditions-refresh" onclick="refreshWeatherForDay(${day.dayNumber})">Activate</button>
     </div>`;
   }
   if (w.outOfRange) {
     return `<div class="conditions-card out-of-range">
-      <span class="conditions-title">🌦️ מזג אוויר</span>
-      <span class="conditions-status">תחזית זמינה רק 16 ימים מראש</span>
+      <span class="conditions-title">🌦️ Weather</span>
+      <span class="conditions-status">Forecast only available 16 days ahead</span>
     </div>`;
   }
   const tmaxC = w.tmax != null ? Math.round((w.tmax - 32) * 5 / 9) : null;
@@ -1082,7 +1110,7 @@ function renderConditionsCard(day) {
       <span class="conditions-temps">${tmaxC != null ? `${tmaxC}°` : '—'}<span class="conditions-sep">/</span><span class="conditions-tmin">${tminC != null ? `${tminC}°` : '—'}</span></span>
       <span class="conditions-cond">${cond}</span>
       ${w.precipProb ? `<span class="conditions-precip">💧 ${w.precipProb}%</span>` : ''}
-      <button class="conditions-refresh small" onclick="refreshWeatherForDay(${day.dayNumber})" title="רענני">↻</button>
+      <button class="conditions-refresh small" onclick="refreshWeatherForDay(${day.dayNumber})" title="Refresh">↻</button>
     </div>
   </div>`;
 }
@@ -1090,10 +1118,10 @@ function renderConditionsCard(day) {
 // ─── Per-day "what's around" panel ──────────────────────────────────────────
 
 const NEARBY_SECTIONS = [
-  { key: 'food',         icon: '🍽️', label: 'אוכל' },
-  { key: 'gas',          icon: '⛽', label: 'דלק' },
-  { key: 'alternatives', icon: '✨', label: 'אופציות נוספות' },
-  { key: 'practical',    icon: '🛒', label: 'מעשי (סופר/שירותים/בית מרקחת)' },
+  { key: 'food',         icon: '🍽️', label: 'Food' },
+  { key: 'gas',          icon: '⛽', label: 'Gas' },
+  { key: 'alternatives', icon: '✨', label: 'Other options' },
+  { key: 'practical',    icon: '🛒', label: 'Practical (supermarket / restrooms / pharmacy)' },
 ];
 
 function renderDayNearby(day) {
@@ -1113,8 +1141,8 @@ function renderDayNearby(day) {
 
   let h = `<div class="nearby-card ${open ? 'open' : ''}">
     <button class="nearby-toggle" onclick="toggleNearbyOpen(${day.dayNumber})" aria-expanded="${open?'true':'false'}">
-      <span class="nearby-title">📍 מה יש באזור</span>
-      <span class="nearby-summary">${totals} מקומות${data.region ? ` · ${escapeForText(data.region)}` : ''}</span>
+      <span class="nearby-title">📍 What's nearby</span>
+      <span class="nearby-summary">${totals} places${data.region ? ` · ${escapeForText(data.region)}` : ''}</span>
       <span class="nearby-chev">${open ? '▴' : '▾'}</span>
     </button>`;
 
@@ -1144,15 +1172,15 @@ function renderDayNearby(day) {
             <div class="nearby-item-head">
               <span class="nearby-item-name ltr">${escapeForText(it.name)}</span>
               ${it.type ? `<span class="nearby-item-type">${escapeForText(it.type)}</span>` : ''}
-              ${isAdded ? `<span class="nearby-added-chip">✓ נוסף לתוכנית</span>` : ''}
+              ${isAdded ? `<span class="nearby-added-chip">✓ Added to plan</span>` : ''}
             </div>
             ${it.desc ? `<div class="nearby-item-desc">${escapeForText(it.desc)}</div>` : ''}
             <div class="nearby-item-actions">
               ${navUrl ? `<a class="nearby-item-nav" href="${navUrl}" target="_blank" rel="noopener noreferrer">📍 ${UI.navigate}</a>` : ''}
               ${(it.lat && it.lng) ? `<a class="nearby-item-mapy" href="${mapyShowUrl({lat: it.lat, lng: it.lng})}" target="_blank" rel="noopener noreferrer">🗺️ Mapy</a>` : ''}
               ${!isAdded ? `
-                <button class="nearby-item-add" onclick="addNearbyToDay(${day.dayNumber}, '${sourceKey}', 'now')">➕ הוסיפי עכשיו (אחרי המקום הנוכחי)</button>
-                <button class="nearby-item-add-end" onclick="addNearbyToDay(${day.dayNumber}, '${sourceKey}', 'end')">📌 לסוף היום</button>
+                <button class="nearby-item-add" onclick="addNearbyToDay(${day.dayNumber}, '${sourceKey}', 'now')">➕ Add now (after current stop)</button>
+                <button class="nearby-item-add-end" onclick="addNearbyToDay(${day.dayNumber}, '${sourceKey}', 'end')">📌 To end of day</button>
               ` : ''}
             </div>
           </div>`;
@@ -1168,7 +1196,7 @@ function renderDayNearby(day) {
       const secOpen = !state.nearbyOpen || state.nearbyOpen[secKey] !== false;
       h += `<div class="nearby-section removed ${secOpen ? 'open' : ''}">
         <button class="nearby-sec-head" onclick="toggleNearbyOpen(${day.dayNumber}, 'removed')">
-          <span class="nearby-sec-label">🗑️ הוסרו (אפשר להחזיר)</span>
+          <span class="nearby-sec-label">🗑️ Removed (can be restored)</span>
           <span class="nearby-sec-count">${removedToday.length}</span>
           <span class="nearby-sec-chev">${secOpen ? '▴' : '▾'}</span>
         </button>`;
@@ -1185,7 +1213,7 @@ function renderDayNearby(day) {
             ${s.tip ? `<div class="nearby-item-desc">${escapeForText(s.tip)}</div>` : ''}
             <div class="nearby-item-actions">
               ${navUrl ? `<a class="nearby-item-nav" href="${navUrl}" target="_blank" rel="noopener noreferrer">📍 ${UI.navigate}</a>` : ''}
-              <button class="nearby-item-revive" onclick="reviveStop('${s.id}')">↩️ החזירי לתוכנית</button>
+              <button class="nearby-item-revive" onclick="reviveStop('${s.id}')">↩️ Restore to plan</button>
             </div>
           </div>`;
         }
@@ -1203,13 +1231,13 @@ function renderDayNearby(day) {
 // Daily fuel chip — granular levels so she can report exactly what she sees on
 // the gauge. We treat anything 1/3 or below as "should refuel soon".
 const FUEL_LEVELS = [
-  { key: 'full', label: 'מלא',  pct: 1.00 },
+  { key: 'full', label: 'Full', pct: 1.00 },
   { key: '3_4',  label: '3/4',  pct: 0.75 },
   { key: '2_3',  label: '2/3',  pct: 0.66 },
   { key: 'half', label: '1/2',  pct: 0.50 },
   { key: '1_3',  label: '1/3',  pct: 0.33 },
   { key: '1_4',  label: '1/4',  pct: 0.25 },
-  { key: 'low',  label: 'נמוך', pct: 0.10 },
+  { key: 'low',  label: 'Low',  pct: 0.10 },
 ];
 function fuelPct(level) {
   const f = FUEL_LEVELS.find(x => x.key === level);
@@ -1239,7 +1267,7 @@ function renderFuelChip(day) {
 
   let h = `<div class="fuel-chip ${cls}">`;
   h += `<div class="fuel-row">
-    <span class="fuel-q">⛽ הדלק:</span>
+    <span class="fuel-q">⛽ Fuel:</span>
     <div class="fuel-opts">`;
   for (const f of FUEL_LEVELS) {
     const isOn = level === f.key;
@@ -1247,12 +1275,12 @@ function renderFuelChip(day) {
     h += `<button class="fuel-opt ${lowCls} ${isOn ? 'on' : ''}" onclick="setFuelLevel(${day.dayNumber},'${f.key}')">${f.label}</button>`;
   }
   h += `</div>
-    ${level ? `<button class="fuel-clear" onclick="clearFuelLevel(${day.dayNumber})" title="אפסי">↺</button>` : ''}
+    ${level ? `<button class="fuel-clear" onclick="clearFuelLevel(${day.dayNumber})" title="Reset">↺</button>` : ''}
   </div>`;
   if (alertGas && alertGas.lat && alertGas.lng) {
     const navUrl = mapsNavUrl({ lat: alertGas.lat, lng: alertGas.lng });
     h += `<div class="fuel-alert">
-      🚨 <b>תדלקי קודם</b> — ${escapeForText(alertGas.name)}.
+      🚨 <b>Refuel first</b> — ${escapeForText(alertGas.name)}.
       <a class="fuel-nav" href="${navUrl}" target="_blank" rel="noopener noreferrer">📍 ${UI.navigate}</a>
     </div>`;
   }
@@ -1282,18 +1310,18 @@ function renderVoicePicker() {
 
   // Hebrew picker (the primary one — mom's content is Hebrew now).
   if (heVoices.length) {
-    const heCurrent = getSelectedVoice('שלום אמא');
+    const heCurrent = getSelectedVoice('Hi');
     const heCurrentName = heCurrent ? heCurrent.name : '';
     const heOpts = heVoices.slice().sort((a, b) => a.name.localeCompare(b.name)).map(v => opt(v, heCurrentName)).join('');
     html += `<div class="voice-row">
-      <label class="voice-label">🇮🇱 קול בעברית:</label>
+      <label class="voice-label">🇮🇱 Hebrew voice:</label>
       <select class="voice-select ltr" onchange="setHebrewVoice(this.value)">${heOpts}</select>
-      <button class="voice-test" onclick="speakText('שלום אמא, ככה אני נשמע.','דוגמה')">🎧</button>
+      <button class="voice-test" onclick="speakText('Hello mom, this is how I sound.','Sample')">🎧</button>
     </div>`;
   } else {
     html += `<div class="voice-row">
-      <label class="voice-label">🇮🇱 קול בעברית:</label>
-      <div class="voice-note">לא מותקן — באנדרואיד: הגדרות → שפות → טקסט-לדיבור → התקנת חבילת עברית.</div>
+      <label class="voice-label">🇮🇱 Hebrew voice:</label>
+      <div class="voice-note">Not installed — on Android: Settings → Languages → Text-to-speech → install Hebrew voice pack.</div>
     </div>`;
   }
 
@@ -1310,7 +1338,7 @@ function renderVoicePicker() {
     html += `<div class="voice-row">
       <label class="voice-label ltr">🇺🇸 English voice:</label>
       <select class="voice-select ltr" onchange="setVoice(this.value)">${enOpts}</select>
-      <button class="voice-test" onclick="speakText('Hi mom, this is how I sound.','דוגמה')">🎧</button>
+      <button class="voice-test" onclick="speakText('Hi mom, this is how I sound.','Sample')">🎧</button>
     </div>`;
   }
 
@@ -1325,7 +1353,7 @@ function renderWeatherChip(w) {
   if (w.outOfRange) {
     return `<div class="weather-chip out-of-range">
       <span class="weather-ico">🌤️</span>
-      <span class="weather-text">תחזית תטען קרוב יותר לתאריך (עד 16 ימים מראש)</span>
+      <span class="weather-text">Forecast will load closer to the date (up to 16 days ahead)</span>
     </div>`;
   }
   const icon = (typeof weatherEmoji === 'function') ? weatherEmoji(w.code) : '🌤️';
@@ -1352,20 +1380,20 @@ function renderRoutePicker(day, weather) {
 
   let suggestion = '';
   if (rainy === true) {
-    suggestion = `התחזית מראה גשם (${weather ? weather.precipProb : '?'}%) — הומלץ <b>OPTION 2</b> (כביש סלול).`;
+    suggestion = `Forecast shows rain (${weather ? weather.precipProb : '?'}%) — recommended: <b>OPTION 2</b> (paved road).`;
   } else if (rainy === false) {
-    suggestion = `התחזית יבשה — הומלץ <b>OPTION 1</b> (כביש עפר נופי).`;
+    suggestion = `Forecast is dry — recommended: <b>OPTION 1</b> (scenic dirt road).`;
   } else {
-    suggestion = `התחזית טרם נטענה. בחרי לפי הידוע לך.`;
+    suggestion = `Forecast not loaded yet. Choose what you know.`;
   }
 
   return `<div class="route-picker">
-    <div class="route-title">📍 שני נתיבים היום — איזה לוקחים?</div>
+    <div class="route-title">📍 Two routes today — which one?</div>
     <div class="route-suggest">${suggestion}</div>
     <div class="route-buttons">
-      <button class="route-btn ${pref==='auto'?'active':''}" onclick="setDayRoute(${day.dayNumber},'auto')">🤖 לפי תחזית <span class="route-active-label">${pref==='auto' ? `(פעיל: ${eff==='dry'?'יבש':'גשום'})` : ''}</span></button>
-      <button class="route-btn ${pref==='dry'?'active':''}" onclick="setDayRoute(${day.dayNumber},'dry')">☀️ יבש — Cottonwood Canyon</button>
-      <button class="route-btn ${pref==='wet'?'active':''}" onclick="setDayRoute(${day.dayNumber},'wet')">🌧️ גשום — כביש סלול</button>
+      <button class="route-btn ${pref==='auto'?'active':''}" onclick="setDayRoute(${day.dayNumber},'auto')">🤖 By forecast <span class="route-active-label">${pref==='auto' ? `(active: ${eff==='dry'?'dry':'rainy'})` : ''}</span></button>
+      <button class="route-btn ${pref==='dry'?'active':''}" onclick="setDayRoute(${day.dayNumber},'dry')">☀️ Dry — Cottonwood Canyon</button>
+      <button class="route-btn ${pref==='wet'?'active':''}" onclick="setDayRoute(${day.dayNumber},'wet')">🌧️ Rainy — paved road</button>
     </div>
   </div>`;
 }

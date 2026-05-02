@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="he" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="theme-color" content="#B54A32">
-<meta name="description" content="טיול הקניונים 2026 — כל מה שצריך לדעת">
+<meta name="description" content="Mom's Canyon Trip 2026 — everything you need to know">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <link rel="apple-touch-icon" href="assets/icon.svg">
-<title>טיול הקניונים 2026</title>
+<title>Mom's Canyon Trip 2026</title>
 <link rel="stylesheet" href="lib/leaflet.css">
 <link rel="stylesheet" href="css/style.css">
 </head>
@@ -18,14 +18,18 @@
 
 <header class="header">
   <div class="header-row">
-    <button class="icon-btn" onclick="toggleAuditScreen()" aria-label="בדיקת מסלול">
+    <button class="icon-btn" onclick="toggleAuditScreen()" aria-label="Trip audit">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
     </button>
     <div class="header-center">
-      <div class="header-title" id="headerTitle">טיול הקניונים</div>
-      <div class="header-sub" id="headerSub"></div>
+      <div class="header-title" id="headerTitle">Canyon Trip</div>
+      <div class="header-sub">
+        <span id="liveClock" class="live-clock">—</span>
+        <button class="today-btn" onclick="goToToday()" aria-label="Go to today">Today</button>
+        <span id="headerSub"></span>
+      </div>
     </div>
-    <button class="icon-btn checklist-btn" onclick="togglePretripChecklist()" aria-label="רשימת הכנות לטיול">
+    <button class="icon-btn checklist-btn" onclick="togglePretripChecklist()" aria-label="Pre-trip checklist">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12l2 2 4-4"/></svg>
       <span class="checklist-badge" id="checklistBadge" hidden></span>
     </button>
@@ -33,21 +37,21 @@
   <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
 </header>
 
-<nav class="day-nav" id="dayPicker" aria-label="בחירת יום"></nav>
+<nav class="day-nav" id="dayPicker" aria-label="Day picker"></nav>
 
 <main class="main" id="app"></main>
 
 <div class="audio-bar" id="audioBar" hidden>
   <div class="audio-inner">
-    <button class="audio-ctrl" id="audioPlayPause" onclick="toggleAudio()" aria-label="השהה או המשך הקראה">⏸</button>
-    <div class="audio-label" id="audioText">מקשיבה...</div>
-    <button class="audio-ctrl" onclick="stopAudio()" aria-label="עצור הקראה">⏹</button>
+    <button class="audio-ctrl" id="audioPlayPause" onclick="toggleAudio()" aria-label="Pause or resume">⏸</button>
+    <div class="audio-label" id="audioText">Listening…</div>
+    <button class="audio-ctrl" onclick="stopAudio()" aria-label="Stop">⏹</button>
   </div>
 </div>
 
-<nav class="nav-footer" aria-label="מעבר בין ימים">
-  <button class="nav-btn prev" id="prevBtn" onclick="prevDay()" aria-label="יום קודם"></button>
-  <button class="nav-btn next" id="nextBtn" onclick="nextDay()" aria-label="יום הבא"></button>
+<nav class="nav-footer" aria-label="Day navigation">
+  <button class="nav-btn prev" id="prevBtn" onclick="prevDay()" aria-label="Previous day"></button>
+  <button class="nav-btn next" id="nextBtn" onclick="nextDay()" aria-label="Next day"></button>
 </nav>
 
 <script defer src="lib/leaflet.js"></script>

@@ -1,115 +1,115 @@
-// Hebrew UI strings and date formatting
+// English UI strings and date formatting.
 const UI = {
-  appTitle: 'טיול הקניונים',
+  appTitle: 'Canyon Trip',
   appSubtitle: 'US Canyon Trip 2026',
-  day: 'יום',
-  stops: 'תחנות',
-  hotel: 'מלון',
-  hotelTonight: 'הלילה במלון',
-  call: 'חייגי',
-  navigate: 'נווטי',
-  booking: 'הזמנה',
-  todayPlan: 'התחנות להיום',
-  whatToday: 'מה בתוכנית היום?',
-  listenSummary: 'הקשיבי לסיכום',
-  tellMeMore: 'ספרי לי על המקום',
-  askGuide: 'שאלי את המדריכה',
-  nextDay: 'היום הבא',
-  prevDay: 'היום הקודם',
-  verified: 'מאומת',
-  warning: 'אזהרה',
-  error: 'שגיאה',
-  auditDashboard: 'בדיקת מסלול',
-  criticalIssues: 'בעיות קריטיות',
-  warnings: 'אזהרות',
-  allVerified: 'הכל מאומת',
-  fix: 'תקני',
-  removeStop: 'הסירי תחנה',
-  suggestedCoords: 'קואורדינטות מוצעות',
-  distance: 'מרחק',
-  minutes: 'דק\'',
-  miles: 'מייל',
-  offline: 'מצב לא מקוון',
-  offlineMsg: 'הכיוונים והמפות עובדים גם בלי אינטרנט',
-  downloadMaps: 'הורידי מפות אופליין',
-  downloadMapsGuide: 'פתחי Google Maps → חפשי את האזור → לחצי "הורדה"',
-  addHomeScreen: 'הוסיפי למסך הבית',
-  noStops: 'אין תחנות ליום הזה',
-  tripComplete: 'הטיול הושלם!',
-  completed: 'הושלם',
-  progress: 'התקדמות',
-  checkCoords: 'בדקי קואורדינטות',
-  impossibleDist: 'מרחק לא הגיוני — קואורדינטות שגויות?',
-  suspiciousDist: 'מרחק גדול — בדקי את המסלול',
-  placeNotExist: 'המקום לא קיים',
-  openInMaps: 'פתחי במפות',
-  close: 'סגרי',
-  settings: 'הגדרות',
-  auditMode: 'מצב בדיקה',
-  hideCompleted: 'הסתירי שהושלמו',
-  resetProgress: 'אפסי התקדמות',
-  wakeUp: 'השכמה',
-  leaveBy: 'יציאה',
-  totalDrive: 'נסיעה',
-  totalWalk: 'הליכה',
-  recommendationsTitle: 'המלצות חשובות ליום הזה',
-  recsOpen: 'פתחי המלצות',
-  recsClose: 'סגרי המלצות',
+  day: 'Day',
+  stops: 'stops',
+  hotel: 'Hotel',
+  hotelTonight: 'Tonight at',
+  call: 'Call',
+  navigate: 'Navigate',
+  booking: 'Booking',
+  todayPlan: "Today's stops",
+  whatToday: "What's on today?",
+  listenSummary: 'Listen to summary',
+  tellMeMore: 'Tell me about this place',
+  askGuide: 'Ask the guide',
+  nextDay: 'Next day',
+  prevDay: 'Previous day',
+  verified: 'Verified',
+  warning: 'Warning',
+  error: 'Error',
+  auditDashboard: 'Trip audit',
+  criticalIssues: 'Critical issues',
+  warnings: 'Warnings',
+  allVerified: 'All verified',
+  fix: 'Fix',
+  removeStop: 'Remove stop',
+  suggestedCoords: 'Suggested coordinates',
+  distance: 'Distance',
+  minutes: 'min',
+  miles: 'km',
+  offline: 'Offline mode',
+  offlineMsg: 'Directions and maps work without internet',
+  downloadMaps: 'Download offline maps',
+  downloadMapsGuide: 'Open Google Maps → search the area → tap "Download"',
+  addHomeScreen: 'Add to Home Screen',
+  noStops: 'No stops scheduled today',
+  tripComplete: 'Trip complete!',
+  completed: 'completed',
+  progress: 'Progress',
+  checkCoords: 'Check coordinates',
+  impossibleDist: 'Impossible distance — wrong coordinates?',
+  suspiciousDist: 'Long distance — check the route',
+  placeNotExist: 'Place does not exist',
+  openInMaps: 'Open in Maps',
+  close: 'Close',
+  settings: 'Settings',
+  auditMode: 'Audit mode',
+  hideCompleted: 'Hide completed',
+  resetProgress: 'Reset progress',
+  wakeUp: 'Wake up',
+  leaveBy: 'Leave by',
+  totalDrive: 'Drive',
+  totalWalk: 'Walk',
+  recommendationsTitle: 'Important recommendations for today',
+  recsOpen: 'Open recommendations',
+  recsClose: 'Close recommendations',
   // Activity-kind labels (match xlsx legend)
-  kindDriving: 'בנסיעה',
-  kindStop:    'עצירה קצרה',
-  kindWalk:    'הליכה קצרה',
-  kindHike:    'טיול רגלי',
-  kindTour:    'סיור מודרך',
-  kindSleep:   'לילה במלון',
-  kindAdd:     'להוסיף לתוכנית',
-  kindNote:    'שימי לב',
-  kindCancel:  'לבטל',
-  priorityHigh:   'דחוף',
-  priorityMedium: 'בינוני',
-  priorityLow:    'לשיקול',
-  priorityFix:    'לתיקון',
-  voicePickerTitle: 'קול הקראה',
-  voiceTest: 'שמעי טעימה',
-  voiceSystemDefault: 'קול ברירת מחדל',
-  voiceLoading: 'טוען קולות…',
+  kindDriving: 'Driving',
+  kindStop:    'Quick stop',
+  kindWalk:    'Short walk',
+  kindHike:    'Hike',
+  kindTour:    'Guided tour',
+  kindSleep:   'Hotel for the night',
+  kindAdd:     'Add to plan',
+  kindNote:    'Heads up',
+  kindCancel:  'Cancel',
+  priorityHigh:   'Urgent',
+  priorityMedium: 'Medium',
+  priorityLow:    'Optional',
+  priorityFix:    'To fix',
+  voicePickerTitle: 'Voice',
+  voiceTest: 'Test voice',
+  voiceSystemDefault: 'Default voice',
+  voiceLoading: 'Loading voices…',
 };
 
-// Rotating praise lines for mom — shown at the top of every day.
+// Rotating warm lines for mom — shown at the top of every day.
 const MOM_PRAISE = [
-  'היי אמא, את מדריכת טיולים מדהימה ✨',
-  'היי אמא, תכננת טיול חלומות 💛',
-  'את גאון של תכנון, אמא 🌟',
-  'אמא, הטיול הזה הוא יצירת מופת 🎨',
-  'אמא, את עושה את זה — ואת עושה את זה נפלא 🌵',
-  'היי אמא, כל התחנות מחכות לך 🌞',
-  'אמא, אני גאה בך על כל התכנון ❤️',
-  'היי אמא, את מהטובות שיש — תהני מהיום 🌄',
-  'את מדהימה ומאורגנת, אמא. יופי של תכנית 👏',
-  'אמא, כל פרט כאן הוא בזכותך 🌸',
+  'Hi mom, you planned an amazing trip ✨',
+  'Hi mom, this trip is going to be wonderful 💛',
+  "You're a planning genius, mom 🌟",
+  "Mom, this trip is a masterpiece 🎨",
+  "Mom, you're doing it — and you're doing it beautifully 🌵",
+  'Hi mom, every stop is waiting for you 🌞',
+  "Mom, I'm proud of you for all the planning ❤️",
+  'Hi mom, you are one of the best — enjoy today 🌄',
+  "You're amazing and organized, mom. Beautiful plan 👏",
+  'Mom, every detail here is thanks to you 🌸',
 ];
 function praiseForDay(dayNumber) {
   if (!dayNumber) return MOM_PRAISE[0];
   return MOM_PRAISE[(dayNumber - 1) % MOM_PRAISE.length];
 }
 
-// Hebrew month names
-const HE_MONTHS = [
-  'ינואר', 'פברואר', 'מרץ', 'אפריל', 'מאי', 'יוני',
-  'יולי', 'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר'
+// English month + weekday names.
+const EN_MONTHS = [
+  'January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December'
 ];
-
-const HE_DAYS = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'];
+const EN_DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 function formatDateHe(dateStr) {
+  // Name kept for backward compat — now formats English.
   const d = new Date(dateStr + 'T12:00:00');
   const day = d.getDate();
-  const month = HE_MONTHS[d.getMonth()];
-  const weekday = HE_DAYS[d.getDay()];
-  return `יום ${weekday}, ${day} ב${month}`;
+  const month = EN_MONTHS[d.getMonth()];
+  const weekday = EN_DAYS[d.getDay()];
+  return `${weekday}, ${month} ${day}`;
 }
 
 function formatDateShort(dateStr) {
   const d = new Date(dateStr + 'T12:00:00');
-  return `${d.getDate()}/${d.getMonth() + 1}`;
+  return `${d.getMonth() + 1}/${d.getDate()}`;
 }

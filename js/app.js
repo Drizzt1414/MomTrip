@@ -33,6 +33,22 @@ const AVG_DRIVE_MPH = 25;
 const ROAD_WINDINESS = 1.35;
 const EARTH_RADIUS_MI = 3959;
 
+// --- Auto-detect today's day from trip dates ---
+// On boot, if mom hasn't manually picked a day, jump to today's trip-day.
+// Trip dates are in TRIP_DATA.days[i].date as 'YYYY-MM-DD'.
+function todayTripDay() {
+  if (!window.TRIP_DATA || !TRIP_DATA.days) return null;
+  const today = new Date(); today.setHours(12, 0, 0, 0);
+  const todayStr = today.toISOString().slice(0, 10);
+  const match = TRIP_DATA.days.find(d => d.date === todayStr);
+  if (match) return match.dayNumber;
+  // Before trip starts → Day 1; after trip ends → last day.
+  const first = new Date(TRIP_DATA.days[0].date + 'T12:00:00');
+  if (today < first) return TRIP_DATA.days[0].dayNumber;
+  const last = TRIP_DATA.days[TRIP_DATA.days.length - 1];
+  return last.dayNumber;
+}
+
 // --- Persistence ---
 function saveState() {
   try { localStorage.setItem(STATE_KEY, JSON.stringify(state)); } catch(e) {}
@@ -159,12 +175,12 @@ function showStopDoneModal(stopId) {
   overlay.innerHTML = `
     <div class="modal-card">
       <div class="modal-icon">✓</div>
-      <div class="modal-title">סימנת ${escName} כהושלם</div>
-      <div class="modal-sub">${allDone ? 'סיימת את כל היום! 🎉' : 'מה הלאה?'}</div>
+      <div class="modal-title">${escName} marked as done</div>
+      <div class="modal-sub">${allDone ? "You finished the entire day! 🎉" : "What's next?"}</div>
       <div class="modal-actions">
-        ${allDone ? '' : `<button class="modal-btn primary" onclick="closeModal()">✅ ממשיכה לפי התוכנית</button>`}
-        <button class="modal-btn" onclick="closeModal();openNearbyForDay(${day.dayNumber})">✨ הציעי מקום חדש</button>
-        <button class="modal-btn" onclick="closeModal()">🏁 ${allDone ? 'מעולה' : 'סיימתי להיום'}</button>
+        ${allDone ? '' : `<button class="modal-btn primary" onclick="closeModal()">✅ Continue with the plan</button>`}
+        <button class="modal-btn" onclick="closeModal();openNearbyForDay(${day.dayNumber})">✨ Suggest a new place</button>
+        <button class="modal-btn" onclick="closeModal()">🏁 ${allDone ? 'Great!' : 'Done for today'}</button>
       </div>
     </div>`;
   overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
@@ -221,21 +237,21 @@ function showSlotWarning(stopName) {
   overlay.innerHTML = `
     <div class="modal-card slot-warning-card">
       <div class="modal-icon flood">🌊</div>
-      <div class="modal-title">קניון צר — סכנת שיטפון פתאומי</div>
+      <div class="modal-title">Slot canyon — flash flood danger</div>
       <div class="modal-sub">${safe}</div>
       <div class="slot-warning-body">
-        <p><b>לפני שנכנסים לסלוט:</b></p>
+        <p><b>Before entering the slot:</b></p>
         <ul>
-          <li>בדקי תחזית גשם ל-24 שעות הבאות לכל אזור הניקוז של הקניון (לא רק במקום שאת בו).</li>
-          <li>אם יש <b>אפילו עננים</b> במעלה הזרם — לסגת מיד.</li>
-          <li>שיטפון יכול להגיע מגשם <b>שלא ירד עליך</b>, מ-100+ ק"מ הלאה.</li>
-          <li>סימן אזהרה: בולי עץ תקועים גבוה בקירות = כך גבוה הגיע השיטפון הקודם.</li>
-          <li>אם שומעת רעם רחוק או רואה עכירות במים — צאי <b>מיד</b> לפינה גבוהה.</li>
+          <li>Check the 24-hour rain forecast for the entire drainage of the canyon (not just where you are).</li>
+          <li>If there are <b>even clouds</b> upstream — turn back immediately.</li>
+          <li>A flash flood can come from rain that <b>didn't fall on you</b>, 100+ km away.</li>
+          <li>Warning sign: logs jammed high in the walls = that's how high the previous flood reached.</li>
+          <li>If you hear distant thunder or see murky water — get <b>immediately</b> to high ground.</li>
         </ul>
-        <p class="slot-warning-stat">בקטעים האלה היו מקרי מוות: Buckskin (4, 2023), Lower Antelope (11, 1997).</p>
+        <p class="slot-warning-stat">Fatal incidents in this region: Buckskin (4, 2023), Lower Antelope (11, 1997).</p>
       </div>
       <div class="modal-actions">
-        <button class="modal-btn primary" onclick="closeModal()">הבנתי, ממשיכה</button>
+        <button class="modal-btn primary" onclick="closeModal()">Got it, continuing</button>
       </div>
     </div>`;
   overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
@@ -292,8 +308,13 @@ function effectiveRoute(day) {
 }
 function goToDay(dayNum) {
   state.currentDay = dayNum;
+  state.lastUserPickedAt = Date.now();
   saveState(); render();
   window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+function goToToday() {
+  const t = todayTripDay();
+  if (t) goToDay(t);
 }
 function nextDay() {
   const idx = TRIP_DATA.days.findIndex(d => d.dayNumber === state.currentDay);
@@ -311,26 +332,26 @@ function dismissBanner() {
 // Pre-trip verification checklist — accessed from header. 9 items mom must
 // confirm BEFORE flying. Each persists in state.pretripDone.
 const PRETRIP_ITEMS = [
-  { id: 'antelope',   icon: '🎫', urgent: true,  title: 'אישור הזמנת Antelope Canyon',
-    detail: 'יום 16. מוכר מראש 3-4 שבועות. בלי זה — אין כניסה. אשרי שם המפעיל, שעה (זמן יוטה במאי), ומספר הזמנה.' },
-  { id: 'fiery',      icon: '🎫', urgent: true,  title: 'אישור היתר Fiery Furnace',
-    detail: 'יום 3. שמרי את הקבלה במייל ובצילום מסך. התחלה ב-8:00 בבוקר חובה — איחור = ביטול ההיתר.' },
-  { id: 'kanarra',    icon: '🎫', urgent: true,  title: 'אישור היתר Kanarra Falls',
-    detail: 'יום 21. 15 דולר לאדם, 150 ביום. להזמין ב-kanarrafalls.com. בלי היתר — אין כניסה.' },
-  { id: 'redrock',    icon: '🎫', urgent: true,  title: 'הזמנת timed-entry ל-Red Rock Canyon',
-    detail: 'יום 23. חובה בין 8:00-17:00. להזמין ב-Recreation.gov. בלי הזמנה — להיכנס לפני 8:00 או אחרי 17:00.' },
-  { id: 'dreamland',  icon: '🎫', urgent: true,  title: 'אישור Dreamland Safari (White Pocket)',
-    detail: 'יום 17. אשרי שעה ומיקום איסוף. הסיור הוא הדרך היחידה ל-White Pocket בלי מיומנות נהיגת 4 על 4.' },
-  { id: 'cash',       icon: '💵', urgent: true,  title: '300-400 דולר במזומן עם שטרות קטנים',
-    detail: 'שטרות של דולר אחד, 5 ו-10 דולר. דרושים לטיפים, להיתרי Bureau of Land Management (כ-6 דולר במזומן בלבד), ותדלוק כפרי.' },
-  { id: 'meds',       icon: '💊', urgent: true,  title: '30+7 ימי תרופות יומיות',
-    detail: 'אין בית מרקחת אמיתי בין האנקסוויל/Capitol Reef ל-Escalante (~130 ק"מ). מילוי מראש.' },
-  { id: 'maps',       icon: '🗺️', urgent: true,  title: 'הורדת מפות אופליין',
-    detail: 'Mapy.com (חינם, מצוין למסלולים) + AllTrails Pro (מצוין לפארקים בארה"ב, כ-36 דולר לשנה) + Google Maps אופליין לכל אזור הטיול.' },
-  { id: 'inreach',    icon: '🛰️', urgent: false, title: 'Garmin inReach Mini 2 (אופציונלי)',
-    detail: 'השכרה כ-50-80 דולר לשבוע מ-REI Moab או Springdale. שליחת SOS לוויני באזורים בלי קליטה (Cathedral Valley, White Pocket, כביש Hole-in-the-Rock).' },
-  { id: 'hotels',     icon: '🏨', urgent: true,  title: 'אישור כתובות מלון',
-    detail: 'בייחוד "Zion\'s Most Wanted Hotel" ו-"Economy Inn Springdale" — לאמת כתובות מדויקות מאישורי ההזמנה.' },
+  { id: 'antelope',   icon: '🎫', urgent: true,  title: 'Antelope Canyon booking confirmation',
+    detail: 'Day 16. Books up 3-4 weeks ahead. Without it — no entry. Confirm operator name, time (Utah time in May), and booking number.' },
+  { id: 'fiery',      icon: '🎫', urgent: true,  title: 'Fiery Furnace permit confirmation',
+    detail: 'Day 3. Save the receipt to email and a screenshot. Start at 08:00 sharp — late = permit canceled.' },
+  { id: 'kanarra',    icon: '🎫', urgent: true,  title: 'Kanarra Falls permit confirmation',
+    detail: 'Day 21. 15 dollars per person, 150 per day. Book at kanarrafalls.com. Without a permit — no entry.' },
+  { id: 'redrock',    icon: '🎫', urgent: true,  title: 'Red Rock Canyon timed-entry reservation',
+    detail: 'Day 23. Required between 08:00-17:00. Book at Recreation.gov. Without a reservation — enter before 08:00 or after 17:00.' },
+  { id: 'dreamland',  icon: '🎫', urgent: true,  title: 'Dreamland Safari (White Pocket) confirmation',
+    detail: 'Day 17. Confirm pickup time and location. The tour is the only way to White Pocket without 4x4 driving experience.' },
+  { id: 'cash',       icon: '💵', urgent: true,  title: '300-400 dollars cash in small bills',
+    detail: 'Bills of 1, 5, and 10 dollars. Needed for tips, Bureau of Land Management permits (about 6 dollars cash only), and rural fueling.' },
+  { id: 'meds',       icon: '💊', urgent: true,  title: '30+7 days of daily medication',
+    detail: 'No real pharmacy between Hanksville/Capitol Reef and Escalante (about 130 km). Refill in advance.' },
+  { id: 'maps',       icon: '🗺️', urgent: true,  title: 'Download offline maps',
+    detail: 'Mapy.com (free, excellent for trails) + AllTrails Pro (excellent for US parks, about 36 dollars/year) + Google Maps offline for the entire trip area.' },
+  { id: 'inreach',    icon: '🛰️', urgent: false, title: 'Garmin inReach Mini 2 (optional)',
+    detail: 'Rental about 50-80 dollars per week from REI Moab or Springdale. Satellite SOS for no-signal areas (Cathedral Valley, White Pocket, Hole-in-the-Rock road).' },
+  { id: 'hotels',     icon: '🏨', urgent: true,  title: 'Confirm hotel addresses',
+    detail: "Especially 'Zion's Most Wanted Hotel' and 'Economy Inn Springdale' — verify exact addresses from booking confirmations." },
 ];
 
 function togglePretripChecklist() {
@@ -411,7 +432,7 @@ function addNearbyToDay(dayNum, itemKey, position) {
     sourceKey: itemKey,
     name: item.name,
     emoji: '✨',
-    type: item.type || 'נוסף',
+    type: item.type || 'Added',
     coordinates: (item.lat && item.lng) ? { lat: item.lat, lng: item.lng } : null,
     tip: item.desc || '',
     audit: { status: 'verified', issues: [] },
@@ -462,10 +483,19 @@ function mapsNavUrl(c) {
   // dir_action=navigate forces GPS and ignores explicit origin, so we drop it
   // in mock mode and just show the route from the mock origin instead.
   const mock = getMockOrigin();
-  if (mock) {
-    return `https://www.google.com/maps/dir/?api=1&origin=${mock.lat},${mock.lng}&destination=${c.lat},${c.lng}&travelmode=driving`;
+  const httpsUrl = mock
+    ? `https://www.google.com/maps/dir/?api=1&origin=${mock.lat},${mock.lng}&destination=${c.lat},${c.lng}&travelmode=driving`
+    : `https://www.google.com/maps/dir/?api=1&destination=${c.lat},${c.lng}&travelmode=driving&dir_action=navigate`;
+
+  // On Android, force the FULL Google Maps app (com.google.android.apps.maps)
+  // instead of Maps Go (com.google.android.apps.mapslite) which has a stripped-
+  // down navigation experience. Browsers ignore this intent URL gracefully.
+  const isAndroid = typeof navigator !== 'undefined' && /Android/i.test(navigator.userAgent || '');
+  if (isAndroid) {
+    const path = httpsUrl.replace(/^https:\/\//, '');
+    return `intent://${path}#Intent;scheme=https;package=com.google.android.apps.maps;S.browser_fallback_url=${encodeURIComponent(httpsUrl)};end`;
   }
-  return `https://www.google.com/maps/dir/?api=1&destination=${c.lat},${c.lng}&travelmode=driving&dir_action=navigate`;
+  return httpsUrl;
 }
 function mapsDirUrl(a, b) {
   return (a && b) ? `https://www.google.com/maps/dir/${a.lat},${a.lng}/${b.lat},${b.lng}` : '#';
@@ -558,21 +588,21 @@ function getSelectedVoice(forText) {
 function setVoice(name) {
   state.voiceName = name || null;
   saveState();
-  speakText("Hi mom, this is how I'll sound.", 'דוגמה לקול');
+  speakText("Hi mom, this is how I'll sound.", 'Voice sample');
 }
 function setHebrewVoice(name) {
   state.hebrewVoiceName = name || null;
   saveState();
-  speakText("שלום אמא, ככה אני נשמע.", 'דוגמה לקול');
+  speakText("Hello mom, this is how I sound.", 'Voice sample');
 }
 
 function speakText(text, label, lang) {
   if (!('speechSynthesis' in window)) {
-    showToast('הדפדפן לא תומך בקול — נסי דפדפן אחר.');
+    showToast('This browser does not support voice — try a different one.');
     return;
   }
   if (!text || !String(text).trim()) {
-    showToast('אין טקסט להקראה.');
+    showToast('No text to read.');
     return;
   }
   // Check that we have at least one voice in the right language.
@@ -581,13 +611,13 @@ function speakText(text, label, lang) {
   const enCount = englishVoices().length;
   if (wantHebrew && heCount === 0) {
     if (enCount > 0) {
-      showToast('קול עברי לא מותקן. בלחיצה — הקראה בקול אנגלי (יישמע מוזר). להתקנה: Settings → Time & Language → Speech → Add voice → Hebrew.', 8000);
+      showToast('Hebrew voice not installed. The English voice will read this (sounds odd). To install: Settings → Time & Language → Speech → Add voice → Hebrew.', 8000);
     } else {
-      showToast('אין קולות מותקנים בדפדפן. ב-Windows: Settings → Time & Language → Speech → Add voice.', 8000);
+      showToast('No voices installed in the browser. On Windows: Settings → Time & Language → Speech → Add voice.', 8000);
       return;
     }
   } else if (!wantHebrew && enCount === 0) {
-    showToast('קול אנגלי לא מותקן.', 5000);
+    showToast('English voice not installed.', 5000);
     if (heCount === 0) return;
   }
   try {
@@ -600,13 +630,13 @@ function speakText(text, label, lang) {
     u.onend   = () => hideAudioBar();
     u.onerror = (e) => {
       hideAudioBar();
-      showToast('הקול נכשל: ' + (e.error || 'שגיאה לא ידועה'));
+      showToast('Voice failed: ' + (e.error || 'unknown error'));
     };
     speechSynthesis.speak(u);
-    showAudioBar(label || 'מקשיבה...');
+    showAudioBar(label || 'Listening…');
   } catch (e) {
     hideAudioBar();
-    showToast('שגיאה בהפעלת קול: ' + e.message);
+    showToast('Voice playback error: ' + e.message);
   }
 }
 
@@ -746,7 +776,7 @@ function initRouteSegmentMap(id, fromStop, toStop) {
     iconSize: [32, 32], iconAnchor: [16, 16],
   });
   L.marker([fc.lat, fc.lng], { icon: fromIcon }).addTo(map)
-    .bindPopup(`<b>${fromStop.emoji} ${fromStop.name}</b><br>את כאן`);
+    .bindPopup(`<b>${fromStop.emoji} ${fromStop.name}</b><br>You are here`);
 
   // To marker (blue, next)
   const toIcon = L.divIcon({
@@ -755,7 +785,7 @@ function initRouteSegmentMap(id, fromStop, toStop) {
     iconSize: [32, 32], iconAnchor: [16, 16],
   });
   L.marker([tc.lat, tc.lng], { icon: toIcon }).addTo(map)
-    .bindPopup(`<b>${toStop.emoji} ${toStop.name}</b><br>התחנה הבאה`);
+    .bindPopup(`<b>${toStop.emoji} ${toStop.name}</b><br>Next stop`);
 
   // Fit both points
   map.fitBounds([[fc.lat, fc.lng], [tc.lat, tc.lng]], { padding: [30, 30] });
@@ -795,15 +825,51 @@ function initScrollShadow() {
 
 // --- Init ---
 loadState();
+// On boot, jump to today's trip-day if she hasn't manually navigated this session.
+// We track this by setting a flag the first time the user picks a day. If the flag
+// is missing or the saved currentDay is stale (today shifted to a new trip day),
+// auto-snap forward.
+function maybeAutoSelectToday() {
+  const today = todayTripDay();
+  if (!today) return;
+  if (!state.lastUserPickedAt) {
+    state.currentDay = today;
+    saveState();
+    return;
+  }
+  // If they last picked a day more than 12 hours ago, refresh to today.
+  const hours = (Date.now() - state.lastUserPickedAt) / 3600000;
+  if (hours > 12) {
+    state.currentDay = today;
+    saveState();
+  }
+}
+maybeAutoSelectToday();
+
 document.addEventListener('DOMContentLoaded', () => {
   render();
   initSwipe();
   initScrollShadow();
-  // Background-fetch weather for every trip day, re-render as each arrives so the
-  // chips populate without blocking first paint.
+  startLiveClock();
   if (typeof prefetchAllWeather === 'function') {
     prefetchAllWeather((dayNumber) => {
       if (dayNumber === state.currentDay) render();
     });
   }
 });
+
+// --- Live clock in header ---
+// Updates every 30 seconds. Uses the device's local timezone (which mom should
+// have synced to her current location automatically — she'll cross 3 zones).
+function startLiveClock() {
+  const tick = () => {
+    const el = document.getElementById('liveClock');
+    if (!el) return;
+    const d = new Date();
+    const hh = String(d.getHours()).padStart(2, '0');
+    const mm = String(d.getMinutes()).padStart(2, '0');
+    el.textContent = `${hh}:${mm}`;
+  };
+  tick();
+  setInterval(tick, 30 * 1000);
+}
