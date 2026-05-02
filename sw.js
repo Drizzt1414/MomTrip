@@ -1,7 +1,7 @@
 // Service worker for Mom's Canyon Trip PWA.
 // Offline-first for app shell + per-request caching for OSM tiles so maps work on weak signal.
 
-const APP_CACHE  = 'canyon-trip-app-v4';
+const APP_CACHE  = 'canyon-trip-app-v5';
 const TILE_CACHE = 'canyon-trip-tiles-v1';
 const TILE_CACHE_MAX = 400;
 
@@ -19,6 +19,10 @@ const APP_URLS = [
   './lib/leaflet-images/layers-2x.png',
   './js/i18n.js',
   './js/data.js',
+  './js/guides.js',
+  './js/guide-fallbacks.js',
+  './js/nearby.js',
+  './js/alltrails-slugs.js',
   './js/weather.js',
   './js/app.js',
   './js/render.js',

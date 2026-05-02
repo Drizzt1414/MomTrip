@@ -112,4 +112,93 @@ async function prefetchAllWeather(onEach) {
     if (typeof onEach === 'function') onEach(day.dayNumber, data);
   }
 }
-function getWeatherForDay(dayNumber) { return _weatherByDay[dayNumber] || null; }
+
+// Synchronous getter for already-cached weather. Used by render functions that
+// can't await. Returns null if nothing cached yet.
+function getWeatherForDay(dayNum) {
+  if (_weatherByDay[dayNum]) return _weatherByDay[dayNum];
+  const day = (window.TRIP_DATA && TRIP_DATA.days || []).find(d => d.dayNumber === dayNum);
+  if (!day) return null;
+  const coords = dayForecastCoords(day);
+  if (!coords) return null;
+  const cache = _weatherCache();
+  const cached = cache[_weatherKey(coords.lat, coords.lng, day.date)];
+  if (cached && cached.data) {
+    _weatherByDay[dayNum] = cached.data;
+    return cached.data;
+  }
+  return null;
+}
+
+// Trigger a fetch for a single day on-demand (e.g. when she taps "activate").
+// Re-renders when done so the conditions card populates.
+async function refreshWeatherForDay(dayNum) {
+  const day = (window.TRIP_DATA && TRIP_DATA.days || []).find(d => d.dayNumber === dayNum);
+  if (!day) return;
+  // Clear the per-key cache so we hit the network fresh.
+  const coords = dayForecastCoords(day);
+  if (coords) {
+    const cache = _weatherCache();
+    delete cache[_weatherKey(coords.lat, coords.lng, day.date)];
+    _saveWeatherCache(cache);
+  }
+  const data = await fetchWeatherForDay(day);
+  if (data) _weatherByDay[dayNum] = data;
+  if (typeof render === 'function') render();
+}
+
+// Auto-fetch on demand — kicks a background fetch if no data and reports back
+// (typically called once per day-render, debounced by cache).
+function ensureWeatherForDay(dayNum) {
+  if (getWeatherForDay(dayNum) !== null) return false;
+  const day = (window.TRIP_DATA && TRIP_DATA.days || []).find(d => d.dayNumber === dayNum);
+  if (!day) return false;
+  fetchWeatherForDay(day).then(data => {
+    if (data) {
+      _weatherByDay[dayNum] = data;
+      if (typeof render === 'function') render();
+    }
+  }).catch(() => {});
+  return true;
+}
+
+// Compute weather-derived warnings for a day. Each entry is {icon, text, urgent}.
+// Used by the day-prep card to surface conditions-driven risks (heat for 60+,
+// storms triggering flash floods in slot canyons, cold/wind for high-altitude).
+function getWeatherWarnings(day, w) {
+  if (!w || w.outOfRange) return [];
+  const out = [];
+  const tmaxC = w.tmax != null ? (w.tmax - 32) * 5 / 9 : null;
+  const tminC = w.tmin != null ? (w.tmin - 32) * 5 / 9 : null;
+
+  if (tmaxC !== null && tmaxC >= 32) {
+    out.push({
+      icon: '🥵', urgent: true,
+      text: `חום קיצוני היום (${Math.round(tmaxC)}°C). בגיל 60+ סימני מכת חום מופיעים מאוחר. מים כל 20 דק', כובע, מנוחה בצל. אם העור יבש וחם בלי הזעה — מיד 911.`
+    });
+  } else if (tmaxC !== null && tmaxC >= 28) {
+    out.push({
+      icon: '☀️', urgent: false,
+      text: `חם היום (${Math.round(tmaxC)}°C). שתייה כל חצי שעה גם אם לא צמאה.`
+    });
+  }
+  if (tminC !== null && tminC <= 5) {
+    out.push({
+      icon: '🥶', urgent: false,
+      text: `קר בבוקר (${Math.round(tminC)}°C). שכבות, כפפות, כובע — קל לפשוט בהמשך.`
+    });
+  }
+  if (w.code != null && w.code >= 95) {
+    out.push({
+      icon: '⛈️', urgent: true,
+      text: `סופת רעמים בתחזית. סלעים חשופים (Bryce, Canyonlands, Delicate Arch) = סכנת ברק. להוריד מהפסגות עד הצהריים.`
+    });
+  }
+  if (w.precip >= 2 || w.precipProb >= 40) {
+    out.push({
+      icon: '🌧️', urgent: true,
+      text: `סיכון גבוה לגשם (${w.precipProb}%, ${w.precip}mm). אם בתוכנית קניון צר — לבטל. שיטפון פתאומי הוא הסיכון הקטלני באזור.`
+    });
+  }
+  return out;
+}

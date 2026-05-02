@@ -25,7 +25,10 @@
       <div class="header-title" id="headerTitle">טיול הקניונים</div>
       <div class="header-sub" id="headerSub"></div>
     </div>
-    <div style="width:48px" aria-hidden="true"></div>
+    <button class="icon-btn checklist-btn" onclick="togglePretripChecklist()" aria-label="רשימת הכנות לטיול">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12l2 2 4-4"/></svg>
+      <span class="checklist-badge" id="checklistBadge" hidden></span>
+    </button>
   </div>
   <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
 </header>
@@ -50,16 +53,30 @@
 <script defer src="lib/leaflet.js"></script>
 <script defer src="js/i18n.js"></script>
 <script defer src="js/data.js"></script>
+<script defer src="js/guides.js"></script>
+<script defer src="js/guide-fallbacks.js"></script>
+<script defer src="js/nearby.js"></script>
+<script defer src="js/alltrails-slugs.js"></script>
 <script defer src="js/weather.js"></script>
 <script defer src="js/app.js"></script>
 <script defer src="js/render.js"></script>
 <script defer src="js/guide.js"></script>
 <script defer src="js/wizard.js"></script>
 <script>
+// Service worker provides offline support for mom on the trip. Skip registration
+// during local development — cache-first behavior was hiding live edits and
+// making debugging painful. Also auto-unregister any SW that previously installed
+// itself locally so a stale dev cache can't keep haunting the page.
+const isDev = /^(localhost|127\.0\.0\.1|0\.0\.0\.0)$/i.test(location.hostname);
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('sw.js').catch(() => {});
-  });
+  if (isDev) {
+    navigator.serviceWorker.getRegistrations().then(rs => rs.forEach(r => r.unregister()));
+    if ('caches' in window) caches.keys().then(ks => ks.forEach(k => caches.delete(k)));
+  } else {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js').catch(() => {});
+    });
+  }
 }
 </script>
 </body>

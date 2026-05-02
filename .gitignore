@@ -2,6 +2,16 @@ node_modules/
 .claude/
 *.output
 
+# Secrets — NEVER commit
+.env
+.env.local
+*.key
+
+# Local backup + scratch files
+*.bak
+tmp_*.json
+voice-test.html
+
 # Local backup files (created by manual saves and merge-schedule.js)
 *.bak
 *.session-backup

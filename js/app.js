@@ -10,9 +10,17 @@ let state = {
   dirOpen: {},
   expanded: {},
   recsOpen: {},
+  nearbyOpen: {},
+  pretripDone: {},          // checklist itemId -> true
+  pretripDismissed: false,
+  showPretrip: false,
+  addedStops: {},           // dayNum (string) -> [item, item, ...]; items added from nearby
+  fuelLevel: {},            // dayNum (string) -> 'full' | 'half' | 'low'
+  fuelDismissed: {},        // dayNum (string) -> true once she sets a value
   bannerDismissed: false,
   showAudit: false,
   voiceName: null,          // English voice mom picked
+  hebrewVoiceName: null,    // Hebrew voice mom picked (separate so changing one doesn't break the other)
   dayRoute: {},             // per-day route override: 'dry' | 'wet' | 'auto' (Day 14 etc.)
 };
 let coordOverrides = {};
@@ -50,7 +58,50 @@ function getCurrentDay() {
   return TRIP_DATA.days.find(d => d.dayNumber === state.currentDay) || TRIP_DATA.days[0];
 }
 function getDayStops(day) {
-  return day.stops.filter(s => !removedStops[s.id]);
+  const original = day.stops.filter(s => !removedStops[s.id]);
+  const added = (state.addedStops && state.addedStops[String(day.dayNumber)]) || [];
+  return [...original, ...added];
+}
+
+// Returns stops in CHRONOLOGICAL order — walks day.schedule and interleaves
+// added items right after their afterStopId. Used by the route map so the
+// polyline draws through added stops at the correct point.
+function getDayStopsOrdered(day) {
+  const original = day.stops.filter(s => !removedStops[s.id]);
+  const byId = {}; for (const s of original) byId[s.id] = s;
+  const added = (state.addedStops && state.addedStops[String(day.dayNumber)]) || [];
+  const addedAfter = {};
+  const addedAtEnd = [];
+  for (const a of added) {
+    if (a.afterStopId && byId[a.afterStopId]) {
+      (addedAfter[a.afterStopId] = addedAfter[a.afterStopId] || []).push(a);
+    } else {
+      addedAtEnd.push(a);
+    }
+  }
+
+  // Build the chronological order by walking day.schedule. For each scheduled
+  // stop row with a known stopId, emit the stop, then any items anchored to it.
+  const seen = new Set();
+  const out = [];
+  for (const row of (day.schedule || [])) {
+    if (!row.stopId || !byId[row.stopId] || seen.has(row.stopId)) continue;
+    out.push(byId[row.stopId]);
+    seen.add(row.stopId);
+    for (const a of (addedAfter[row.stopId] || [])) out.push(a);
+  }
+  // Any original stops not referenced in schedule (rare — orphans) — append.
+  for (const s of original) {
+    if (!seen.has(s.id)) out.push(s);
+  }
+  // Items with no/unknown afterStopId at the very end.
+  for (const a of addedAtEnd) out.push(a);
+  return out;
+}
+// Soft-removed stops that originally belonged to this day, so we can show them
+// in the "removed" subsection of nearby for revival.
+function getRemovedStopsForDay(day) {
+  return (day.stops || []).filter(s => removedStops[s.id]);
 }
 function getStopCoords(stop) {
   return coordOverrides[stop.id] || stop.coordinates;
@@ -72,20 +123,152 @@ function getTotalProgress() {
 
 // --- Actions ---
 function toggleCheck(stopId) {
+  const wasChecked = !!state.checked[stopId];
   state.checked[stopId] = !state.checked[stopId];
   saveState(); render();
+  // Newly-completed stop on the current day → ask "what's next" so she's
+  // never left wondering. Skip the modal for unchecking and for off-day clicks.
+  if (!wasChecked && state.checked[stopId]) {
+    showStopDoneModal(stopId);
+  }
+}
+
+function findStopAndDay(stopId) {
+  for (const d of TRIP_DATA.days) {
+    if ((d.stops || []).some(s => s.id === stopId)) {
+      return { stop: d.stops.find(s => s.id === stopId), day: d };
+    }
+    const added = (state.addedStops && state.addedStops[String(d.dayNumber)]) || [];
+    const a = added.find(s => s.id === stopId);
+    if (a) return { stop: a, day: d };
+  }
+  return { stop: null, day: null };
+}
+
+function showStopDoneModal(stopId) {
+  const { stop, day } = findStopAndDay(stopId);
+  if (!stop || !day) return;
+  // Detect last-stop-of-day so we lead with "done for today".
+  const stops = getDayStops(day);
+  const allDone = stops.every(s => state.checked[s.id]);
+  const escName = String(stop.name).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  overlay.innerHTML = `
+    <div class="modal-card">
+      <div class="modal-icon">✓</div>
+      <div class="modal-title">סימנת ${escName} כהושלם</div>
+      <div class="modal-sub">${allDone ? 'סיימת את כל היום! 🎉' : 'מה הלאה?'}</div>
+      <div class="modal-actions">
+        ${allDone ? '' : `<button class="modal-btn primary" onclick="closeModal()">✅ ממשיכה לפי התוכנית</button>`}
+        <button class="modal-btn" onclick="closeModal();openNearbyForDay(${day.dayNumber})">✨ הציעי מקום חדש</button>
+        <button class="modal-btn" onclick="closeModal()">🏁 ${allDone ? 'מעולה' : 'סיימתי להיום'}</button>
+      </div>
+    </div>`;
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
+  document.body.appendChild(overlay);
+}
+
+function closeModal() {
+  const o = document.querySelector('.modal-overlay');
+  if (o) o.remove();
+}
+
+function openNearbyForDay(dayNum) {
+  if (!dayNum) return;
+  state.nearbyOpen = state.nearbyOpen || {};
+  state.nearbyOpen[String(dayNum)] = true;
+  saveState(); render();
+  setTimeout(() => {
+    const el = document.querySelector('.nearby-card');
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 100);
 }
 function toggleDir(key) {
   state.dirOpen[key] = !state.dirOpen[key];
   saveState(); render();
 }
+// Stops where flash-flood-in-slot-canyon is a real risk. Expanding any of these
+// triggers a one-time-per-session warning modal so she remembers to check
+// upstream forecast.
+const SLOT_CANYON_STOPS = {
+  // Day 13 — Hole-in-the-Rock area
+  'd13-s2': true,  // Peek-a-Boo
+  'd13-s3': true,  // Spooky
+  'd13-s4': true,  // Brimstone
+  'd13-s5': true,  // Dry Fork Narrows
+  // Day 16 — Antelope (guided but still slot canyons)
+  'd16-s1': true,  // Lower Antelope
+  'd16-s2': true,  // Upper Antelope
+  'd16-s3': true,  // Belly of the Dragon (drainage tunnel)
+  // Day 21 — Kanarra
+  'd21-s1': true,  // Kanarra Falls
+  // Day 6 — Little Wild Horse
+  'd6-s2': true,
+  // Day 23 — Ice Box Canyon (mild slot)
+  'd23-s5': true,
+};
+
+let _slotWarningShown = {};
+function showSlotWarning(stopName) {
+  if (_slotWarningShown[stopName]) return;
+  _slotWarningShown[stopName] = true;
+  const safe = String(stopName).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay slot-warning';
+  overlay.innerHTML = `
+    <div class="modal-card slot-warning-card">
+      <div class="modal-icon flood">🌊</div>
+      <div class="modal-title">קניון צר — סכנת שיטפון פתאומי</div>
+      <div class="modal-sub">${safe}</div>
+      <div class="slot-warning-body">
+        <p><b>לפני שנכנסים לסלוט:</b></p>
+        <ul>
+          <li>בדקי תחזית גשם ל-24 שעות הבאות לכל אזור הניקוז של הקניון (לא רק במקום שאת בו).</li>
+          <li>אם יש <b>אפילו עננים</b> במעלה הזרם — לסגת מיד.</li>
+          <li>שיטפון יכול להגיע מגשם <b>שלא ירד עליך</b>, מ-100+ ק"מ הלאה.</li>
+          <li>סימן אזהרה: בולי עץ תקועים גבוה בקירות = כך גבוה הגיע השיטפון הקודם.</li>
+          <li>אם שומעת רעם רחוק או רואה עכירות במים — צאי <b>מיד</b> לפינה גבוהה.</li>
+        </ul>
+        <p class="slot-warning-stat">בקטעים האלה היו מקרי מוות: Buckskin (4, 2023), Lower Antelope (11, 1997).</p>
+      </div>
+      <div class="modal-actions">
+        <button class="modal-btn primary" onclick="closeModal()">הבנתי, ממשיכה</button>
+      </div>
+    </div>`;
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
+  document.body.appendChild(overlay);
+}
+
 function toggleExpanded(stopId) {
+  const wasExpanded = !!state.expanded[stopId];
   state.expanded[stopId] = !state.expanded[stopId];
   saveState(); render();
+  // Newly expanded + this is a known slot canyon → warn once per session.
+  if (!wasExpanded && state.expanded[stopId] && SLOT_CANYON_STOPS[stopId]) {
+    const { stop } = findStopAndDay(stopId);
+    if (stop) showSlotWarning(stop.name);
+  }
 }
 function toggleRecsOpen(dayNum) {
   state.recsOpen = state.recsOpen || {};
   state.recsOpen[dayNum] = !state.recsOpen[dayNum];
+  saveState(); render();
+}
+function toggleNearbyOpen(dayNum, section) {
+  state.nearbyOpen = state.nearbyOpen || {};
+  const key = section ? `${dayNum}:${section}` : `${dayNum}`;
+  // Default: closed for both top-level and sub-sections. Forces an explicit
+  // category pick rather than dumping all categories on her at once.
+  // Exception: the "removed" sub-section defaults open (so revival is visible).
+  let current;
+  if (state.nearbyOpen[key] === undefined) {
+    current = (section === 'removed');
+  } else {
+    current = state.nearbyOpen[key];
+  }
+  state.nearbyOpen[key] = !current;
   saveState(); render();
 }
 function setDayRoute(dayNum, choice) {
@@ -123,6 +306,45 @@ function dismissBanner() {
   state.bannerDismissed = true;
   saveState(); render();
 }
+
+// Pre-trip verification checklist — accessed from header. 9 items mom must
+// confirm BEFORE flying. Each persists in state.pretripDone.
+const PRETRIP_ITEMS = [
+  { id: 'antelope',   icon: '🎫', urgent: true,  title: 'אישור הזמנת Antelope Canyon',
+    detail: 'יום 16. מוכר מראש 3-4 שבועות. בלי זה — אין כניסה. אשרי שם המפעיל, שעה (זמן יוטה במאי), ומספר הזמנה.' },
+  { id: 'fiery',      icon: '🎫', urgent: true,  title: 'אישור היתר Fiery Furnace',
+    detail: 'יום 3. שמרי את הקבלה במייל ובצילום מסך. התחלה ב-8:00 בבוקר חובה — איחור = ביטול ההיתר.' },
+  { id: 'kanarra',    icon: '🎫', urgent: true,  title: 'אישור היתר Kanarra Falls',
+    detail: 'יום 21. 15 דולר לאדם, 150 ביום. להזמין ב-kanarrafalls.com. בלי היתר — אין כניסה.' },
+  { id: 'redrock',    icon: '🎫', urgent: true,  title: 'הזמנת timed-entry ל-Red Rock Canyon',
+    detail: 'יום 23. חובה בין 8:00-17:00. להזמין ב-Recreation.gov. בלי הזמנה — להיכנס לפני 8:00 או אחרי 17:00.' },
+  { id: 'dreamland',  icon: '🎫', urgent: true,  title: 'אישור Dreamland Safari (White Pocket)',
+    detail: 'יום 17. אשרי שעה ומיקום איסוף. הסיור הוא הדרך היחידה ל-White Pocket בלי מיומנות נהיגת 4 על 4.' },
+  { id: 'cash',       icon: '💵', urgent: true,  title: '300-400 דולר במזומן עם שטרות קטנים',
+    detail: 'שטרות של דולר אחד, 5 ו-10 דולר. דרושים לטיפים, להיתרי Bureau of Land Management (כ-6 דולר במזומן בלבד), ותדלוק כפרי.' },
+  { id: 'meds',       icon: '💊', urgent: true,  title: '30+7 ימי תרופות יומיות',
+    detail: 'אין בית מרקחת אמיתי בין האנקסוויל/Capitol Reef ל-Escalante (~130 ק"מ). מילוי מראש.' },
+  { id: 'maps',       icon: '🗺️', urgent: true,  title: 'הורדת מפות אופליין',
+    detail: 'Mapy.com (חינם, מצוין למסלולים) + AllTrails Pro (מצוין לפארקים בארה"ב, כ-36 דולר לשנה) + Google Maps אופליין לכל אזור הטיול.' },
+  { id: 'inreach',    icon: '🛰️', urgent: false, title: 'Garmin inReach Mini 2 (אופציונלי)',
+    detail: 'השכרה כ-50-80 דולר לשבוע מ-REI Moab או Springdale. שליחת SOS לוויני באזורים בלי קליטה (Cathedral Valley, White Pocket, כביש Hole-in-the-Rock).' },
+  { id: 'hotels',     icon: '🏨', urgent: true,  title: 'אישור כתובות מלון',
+    detail: 'בייחוד "Zion\'s Most Wanted Hotel" ו-"Economy Inn Springdale" — לאמת כתובות מדויקות מאישורי ההזמנה.' },
+];
+
+function togglePretripChecklist() {
+  state.showPretrip = !state.showPretrip;
+  saveState(); render();
+}
+function togglePretripItem(id) {
+  state.pretripDone = state.pretripDone || {};
+  state.pretripDone[id] = !state.pretripDone[id];
+  saveState(); render();
+}
+function pretripPendingCount() {
+  const done = state.pretripDone || {};
+  return PRETRIP_ITEMS.filter(it => it.urgent && !done[it.id]).length;
+}
 function toggleAuditScreen() {
   state.showAudit = !state.showAudit;
   if (state.showAudit) renderAuditScreen();
@@ -136,16 +358,130 @@ function applyCoordFix(stopId, lat, lng) {
   saveCoordOverrides(); render();
 }
 function removeStop(stopId) {
-  removedStops[stopId] = true;
+  // Soft-remove: store metadata so we can show in "removed" section and revive.
+  removedStops[stopId] = { date: new Date().toISOString(), source: 'manual' };
+  saveRemovedStops(); render();
+}
+function reviveStop(stopId) {
+  delete removedStops[stopId];
   saveRemovedStops(); render();
 }
 
+// --- Add from nearby ---
+// "Current position" = the last checked stop chronologically. Added items go
+// right after it, so when she's at stop N and adds something, the new item
+// appears between N and N+1, matching her real timeline.
+function getCurrentStopForDay(day) {
+  const stops = (day.stops || []);
+  let lastChecked = null;
+  for (const s of stops) {
+    if (state.checked[s.id] && !removedStops[s.id]) lastChecked = s;
+  }
+  return lastChecked;  // null if nothing checked → item goes at start of day
+}
+
+function addNearbyToDay(dayNum, itemKey, position) {
+  // position: 'now' (default — after current/last-checked stop) or 'end' (append)
+  if (typeof TRIP_NEARBY === 'undefined' || !TRIP_NEARBY[dayNum]) return;
+  const [section, idx] = itemKey.split(':');
+  const list = TRIP_NEARBY[dayNum][section] || [];
+  const item = list[parseInt(idx, 10)];
+  if (!item) return;
+
+  const dayKey = String(dayNum);
+  state.addedStops = state.addedStops || {};
+  state.addedStops[dayKey] = state.addedStops[dayKey] || [];
+  if (state.addedStops[dayKey].find(x => x.sourceKey === itemKey)) return;  // dedup
+
+  const day = TRIP_DATA.days.find(d => d.dayNumber === dayNum);
+  const currentStop = (position === 'end') ? null : (day ? getCurrentStopForDay(day) : null);
+
+  state.addedStops[dayKey].push({
+    id: `added-d${dayNum}-${Date.now()}`,
+    sourceKey: itemKey,
+    name: item.name,
+    emoji: '✨',
+    type: item.type || 'נוסף',
+    coordinates: (item.lat && item.lng) ? { lat: item.lat, lng: item.lng } : null,
+    tip: item.desc || '',
+    audit: { status: 'verified', issues: [] },
+    isAdded: true,
+    afterStopId: currentStop ? currentStop.id : null,
+    insertedAt: new Date().toISOString(),
+  });
+  saveState(); render();
+}
+function removeAddedFromDay(dayNum, addedId) {
+  const dayKey = String(dayNum);
+  if (!state.addedStops || !state.addedStops[dayKey]) return;
+  state.addedStops[dayKey] = state.addedStops[dayKey].filter(x => x.id !== addedId);
+  saveState(); render();
+}
+
+// --- Fuel ---
+function setFuelLevel(dayNum, level) {
+  const dayKey = String(dayNum);
+  state.fuelLevel = state.fuelLevel || {};
+  state.fuelDismissed = state.fuelDismissed || {};
+  state.fuelLevel[dayKey] = level;
+  state.fuelDismissed[dayKey] = true;
+  saveState(); render();
+}
+function clearFuelLevel(dayNum) {
+  const dayKey = String(dayNum);
+  if (state.fuelLevel) delete state.fuelLevel[dayKey];
+  if (state.fuelDismissed) delete state.fuelDismissed[dayKey];
+  saveState(); render();
+}
+
 // --- URLs ---
+// Dev-only origin override. Append `?mock=las` to the URL to test nav links
+// from somewhere other than the user's actual GPS (useful when developing
+// thousands of miles from the trip route).
+const MOCK_ORIGINS = {
+  las: { lat: 36.0840, lng: -115.1537 },  // Harry Reid Intl Airport, Las Vegas
+};
+function getMockOrigin() {
+  try {
+    const m = new URLSearchParams(location.search).get('mock');
+    return (m && MOCK_ORIGINS[m.toLowerCase()]) || null;
+  } catch (e) { return null; }
+}
 function mapsNavUrl(c) {
-  return c ? `https://www.google.com/maps/dir/?api=1&destination=${c.lat},${c.lng}&travelmode=driving` : '#';
+  if (!c) return '#';
+  // dir_action=navigate forces GPS and ignores explicit origin, so we drop it
+  // in mock mode and just show the route from the mock origin instead.
+  const mock = getMockOrigin();
+  if (mock) {
+    return `https://www.google.com/maps/dir/?api=1&origin=${mock.lat},${mock.lng}&destination=${c.lat},${c.lng}&travelmode=driving`;
+  }
+  return `https://www.google.com/maps/dir/?api=1&destination=${c.lat},${c.lng}&travelmode=driving&dir_action=navigate`;
 }
 function mapsDirUrl(a, b) {
   return (a && b) ? `https://www.google.com/maps/dir/${a.lat},${a.lng}/${b.lat},${b.lng}` : '#';
+}
+
+// Mapy.com (formerly Mapy.cz) — Czech mapping service with excellent offline
+// outdoor maps. URL is an Android App Link: opens the app if installed
+// (cz.seznam.mapy), falls back to mapy.com web. NOTE: longitude comes BEFORE
+// latitude in their URL — easy to get wrong.
+function mapyShowUrl(c) {
+  if (!c) return '#';
+  return `https://mapy.com/fnc/v1/showmap?mapset=outdoor&center=${c.lng},${c.lat}&zoom=16&marker=true`;
+}
+function mapyRouteUrl(to, from) {
+  if (!to) return '#';
+  const start = from ? `start=${from.lng},${from.lat}&` : '';
+  return `https://mapy.com/fnc/v1/route?${start}end=${to.lng},${to.lat}&routeType=car_fast_traffic&navigate=true`;
+}
+
+// AllTrails — opens specific trail page. Works as an App Link on Android,
+// opens the app if installed (com.alltrails.alltrails), web otherwise.
+// Slug must be hand-curated per trail (no public lookup API).
+function alltrailsTrailUrl(stopId) {
+  if (typeof ALLTRAILS_SLUGS === 'undefined') return null;
+  const slug = ALLTRAILS_SLUGS[stopId];
+  return slug ? `https://www.alltrails.com/trail/${slug}` : null;
 }
 function phoneUrl(p) {
   return p ? `tel:${p.replace(/[^+\d]/g, '')}` : '#';
@@ -165,47 +501,130 @@ function fmtTime(mi) {
 }
 
 // --- Audio with pause/stop ---
-// --- English voice picker ---
-// Mom found the Hebrew system voices robotic; content is narrated in English with
-// a selectable voice (she can try male/female and pick whichever she prefers).
-function englishVoices() {
+// --- Voice routing ---
+// Auto-detects the text language (Hebrew vs English) and picks an appropriate
+// system voice. Mom picks her preferred Hebrew voice and English voice
+// independently — switching one does not affect the other.
+const HEBREW_RX = /[֐-׿]/;
+function isHebrewText(text) { return HEBREW_RX.test(String(text || '')); }
+
+function allVoices() {
   if (!('speechSynthesis' in window)) return [];
-  return speechSynthesis.getVoices().filter(v => (v.lang || '').toLowerCase().startsWith('en'));
+  return speechSynthesis.getVoices() || [];
 }
-function getSelectedVoice() {
-  const voices = englishVoices();
-  if (!voices.length) return null;
-  if (state.voiceName) {
-    const found = voices.find(v => v.name === state.voiceName);
+function englishVoices() {
+  return allVoices().filter(v => (v.lang || '').toLowerCase().startsWith('en'));
+}
+function hebrewVoices() {
+  return allVoices().filter(v => (v.lang || '').toLowerCase().startsWith('he'));
+}
+function getSelectedVoice(forText) {
+  // Pick voice by text language. Falls back to any available voice if the
+  // requested language has none installed (e.g. Android without Hebrew TTS pack).
+  const wantHebrew = isHebrewText(forText);
+  const pool = wantHebrew ? hebrewVoices() : englishVoices();
+  const stored = wantHebrew ? state.hebrewVoiceName : state.voiceName;
+  if (stored) {
+    const found = pool.find(v => v.name === stored);
     if (found) return found;
   }
-  // Prefer well-known male voices if present, else first available.
+  if (!pool.length) {
+    // No matching-language voice installed — try any voice rather than going silent.
+    return allVoices()[0] || null;
+  }
+  if (wantHebrew) return pool[0];
+  // English: prefer well-known male voices if present.
   const malePreferred = /daniel|alex|fred|oliver|james|aaron|mark|david|ryan|tom|paul|arthur/i;
-  return voices.find(v => malePreferred.test(v.name)) || voices[0];
+  return pool.find(v => malePreferred.test(v.name)) || pool[0];
 }
 function setVoice(name) {
   state.voiceName = name || null;
   saveState();
-  // Play a short sample so she hears what she picked.
   speakText("Hi mom, this is how I'll sound.", 'דוגמה לקול');
+}
+function setHebrewVoice(name) {
+  state.hebrewVoiceName = name || null;
+  saveState();
+  speakText("שלום אמא, ככה אני נשמע.", 'דוגמה לקול');
 }
 
 function speakText(text, label, lang) {
-  if (!('speechSynthesis' in window)) return;
+  if (!('speechSynthesis' in window)) {
+    showToast('הדפדפן לא תומך בקול — נסי דפדפן אחר.');
+    return;
+  }
+  if (!text || !String(text).trim()) {
+    showToast('אין טקסט להקראה.');
+    return;
+  }
+  // Check that we have at least one voice in the right language.
+  const wantHebrew = isHebrewText(text);
+  const heCount = hebrewVoices().length;
+  const enCount = englishVoices().length;
+  if (wantHebrew && heCount === 0) {
+    if (enCount > 0) {
+      showToast('קול עברי לא מותקן. בלחיצה — הקראה בקול אנגלי (יישמע מוזר). להתקנה: Settings → Time & Language → Speech → Add voice → Hebrew.', 8000);
+    } else {
+      showToast('אין קולות מותקנים בדפדפן. ב-Windows: Settings → Time & Language → Speech → Add voice.', 8000);
+      return;
+    }
+  } else if (!wantHebrew && enCount === 0) {
+    showToast('קול אנגלי לא מותקן.', 5000);
+    if (heCount === 0) return;
+  }
   try {
     speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(text);
-    u.lang = lang || 'en-US';
+    const voice = getSelectedVoice(text);
+    u.lang = voice && voice.lang ? voice.lang : (lang || (wantHebrew ? 'he-IL' : 'en-US'));
     u.rate = 0.92;
-    const voice = getSelectedVoice();
-    if (voice) { u.voice = voice; u.lang = voice.lang || u.lang; }
+    if (voice) u.voice = voice;
     u.onend   = () => hideAudioBar();
-    u.onerror = () => hideAudioBar();
+    u.onerror = (e) => {
+      hideAudioBar();
+      showToast('הקול נכשל: ' + (e.error || 'שגיאה לא ידועה'));
+    };
     speechSynthesis.speak(u);
     showAudioBar(label || 'מקשיבה...');
-  } catch (_) { hideAudioBar(); }
+  } catch (e) {
+    hideAudioBar();
+    showToast('שגיאה בהפעלת קול: ' + e.message);
+  }
 }
-// Back-compat alias — any callers still using speakHebrew get the English engine too.
+
+// Escape a string so it's safe inside an inline onclick="...speakText('HERE','...')"
+// HTML attribute. Two layers needed: JS string escaping (\, ', newlines) AND
+// HTML attribute escaping (&, ", <, >). Without the HTML layer, a double quote
+// in the text breaks out of the attribute and the whole handler dies silently.
+function escForOnclick(s) {
+  const jsEsc = String(s == null ? '' : s)
+    .replace(/\\/g, '\\\\')
+    .replace(/'/g, "\\'")
+    .replace(/\r/g, '')
+    .replace(/\n/g, '\\n');
+  return jsEsc
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+// Lightweight toast — simple bottom message, auto-dismisses.
+function showToast(msg, ms) {
+  ms = ms || 4000;
+  let el = document.getElementById('appToast');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'appToast';
+    el.className = 'app-toast';
+    document.body.appendChild(el);
+  }
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.classList.remove('show'), ms);
+}
+// Back-compat alias.
 function speakHebrew(text, label) { return speakText(text, label); }
 
 // speechSynthesis populates voices asynchronously on some browsers.
