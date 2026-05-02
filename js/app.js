@@ -483,6 +483,14 @@ function alltrailsTrailUrl(stopId) {
   const slug = ALLTRAILS_SLUGS[stopId];
   return slug ? `https://www.alltrails.com/trail/${slug}` : null;
 }
+
+// Fallback: search AllTrails by name. Used when no verified slug exists.
+// Opens search results page; mom taps the right one. Less reliable than a
+// direct slug (no app-link guarantee on search URLs) but better than no button.
+function alltrailsSearchUrl(name) {
+  if (!name) return null;
+  return `https://www.alltrails.com/search?q=${encodeURIComponent(name)}`;
+}
 function phoneUrl(p) {
   return p ? `tel:${p.replace(/[^+\d]/g, '')}` : '#';
 }

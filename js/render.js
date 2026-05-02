@@ -743,7 +743,10 @@ function renderScheduleRow(row, index, stopNumber, byId, rows, hotel) {
       <button class="stop-btn listen" onclick="toggleExpanded('${stop.id}')">🎧 ${expanded ? UI.close : UI.tellMeMore}</button>
       <a class="stop-btn navigate" href="${navUrl}" target="_blank" rel="noopener noreferrer">📍 ${navTargetName ? `${UI.navigate} ל${navTargetName.substring(0, 22)}` : UI.navigate}</a>
       ${stop && coords ? `<a class="stop-btn mapy" href="${mapyShowUrl(coords)}" target="_blank" rel="noopener noreferrer" title="Open in Mapy.com (offline maps)">🗺️ Mapy</a>` : ''}
-      ${stop && alltrailsTrailUrl(stop.id) ? `<a class="stop-btn alltrails" href="${alltrailsTrailUrl(stop.id)}" target="_blank" rel="noopener noreferrer" title="Open trail in AllTrails">🥾 AllTrails</a>` : ''}
+      ${stop && alltrailsTrailUrl(stop.id)
+        ? `<a class="stop-btn alltrails" href="${alltrailsTrailUrl(stop.id)}" target="_blank" rel="noopener noreferrer" title="Open trail in AllTrails">🥾 AllTrails</a>`
+        : (stop && isHikeStop(stop) ? `<a class="stop-btn alltrails-search" href="${alltrailsSearchUrl(stop.name)}" target="_blank" rel="noopener noreferrer" title="Search AllTrails">🔍 חפשי ב-AllTrails</a>` : '')
+      }
     </div>`;
   }
 

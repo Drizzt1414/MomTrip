@@ -1703,6 +1703,7 @@ a:focus-visible,
 .nearby-item-revive { background: #FEF3C7; color: #92400E; }
 .stop-btn.mapy { background: #E0E7FF; color: #312E81; }
 .stop-btn.alltrails { background: #DCFCE7; color: #14532D; }
+.stop-btn.alltrails-search { background: #F0FDF4; color: #166534; border: 1px dashed #86EFAC; }
 .nearby-item.is-added { background: #f8fff8; border-color: #bce5bc; }
 .nearby-added-chip {
   font-size: var(--fs-xs); padding: 2px 8px; border-radius: var(--radius-full);
