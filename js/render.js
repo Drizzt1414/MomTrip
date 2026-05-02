@@ -942,22 +942,89 @@ function renderDayPrep(day) {
 // a prominent banner so she preps (offline maps loaded, told someone the route,
 // etc.). Source: research agent + NPS coverage maps.
 const DEAD_ZONE_DAYS = {
-  3:  'Fiery Furnace TH (Arches): קליטה חלשה. צילמי screenshot של ההיתר וההוראות מראש.',
-  4:  'Needles District (Canyonlands): קליטה חלשה בקניונים. הורידי מפות אופליין.',
-  5:  'Cathedral Valley loop: אפס קליטה ל-5-7 שעות. תספרי למישהו את התוכנית.',
-  10: 'Notom-Bullfrog + Burr Trail: אפס קליטה לרוב הלולאה.',
-  13: 'כביש Hole-in-the-Rock: אפס קליטה סלולרית אחרי הקילומטרים הראשונים. הקניונים הצרים מנותקים לחלוטין.',
-  14: 'Cottonwood Canyon Rd: קליטה נופלת באמצע. חוזרת בבייגוואטר.',
-  17: 'White Pocket: אפס קליטה. הסיור המודרך מצויד ברדיו.',
+  3: {
+    note: 'Fiery Furnace ראש המסלול (Arches): קליטה חלשה. צילום מסך של ההיתר וההוראות חיוני.',
+    downloads: [
+      { app: 'AllTrails', name: 'Mesa Arch + Grand View Point', url: 'https://www.alltrails.com/trail/us/utah/grand-view-trail' },
+      { app: 'Mapy.com',  name: 'אזור Moab + Arches',           url: 'https://mapy.com/fnc/v1/showmap?mapset=outdoor&center=-109.59,38.62&zoom=11' },
+    ],
+  },
+  4: {
+    note: 'Needles District (Canyonlands): קליטה חלשה בקניונים.',
+    downloads: [
+      { app: 'AllTrails', name: 'Chesler Park Loop',            url: 'https://www.alltrails.com/trail/us/utah/chesler-park-loop-via-elephant-hill' },
+      { app: 'AllTrails', name: 'Pothole Point',                url: 'https://www.alltrails.com/trail/us/utah/pothole-point-trail' },
+      { app: 'Mapy.com',  name: 'אזור Needles + Hanksville',    url: 'https://mapy.com/fnc/v1/showmap?mapset=outdoor&center=-109.78,38.16&zoom=10' },
+    ],
+  },
+  5: {
+    note: 'לולאת Cathedral Valley: אפס קליטה ל-5-7 שעות. ספרי למישהו את התוכנית.',
+    downloads: [
+      { app: 'Mapy.com',  name: 'אזור Capitol Reef + Cathedral Valley', url: 'https://mapy.com/fnc/v1/showmap?mapset=outdoor&center=-111.26,38.36&zoom=10' },
+    ],
+    note2: 'AllTrails בקושי מכסה את Cathedral Valley. תסמכי על Mapy.com למסלול הלולאה.',
+  },
+  10: {
+    note: 'Notom-Bullfrog + Burr Trail: אפס קליטה לרוב הלולאה.',
+    downloads: [
+      { app: 'Mapy.com', name: 'אזור Capitol Reef South + Burr Trail', url: 'https://mapy.com/fnc/v1/showmap?mapset=outdoor&center=-111.05,37.85&zoom=10' },
+    ],
+  },
+  13: {
+    note: 'כביש Hole-in-the-Rock: אפס קליטה אחרי הקילומטרים הראשונים. הקניונים הצרים מנותקים לחלוטין.',
+    downloads: [
+      { app: 'AllTrails', name: 'Peek-a-Boo + Spooky Slot Canyons',    url: 'https://www.alltrails.com/trail/us/utah/peek-a-boo-and-spooky-slot-canyons-via-upper-dry-fork-narrows' },
+      { app: 'Mapy.com',  name: 'אזור Escalante + Grand Staircase',    url: 'https://mapy.com/fnc/v1/showmap?mapset=outdoor&center=-111.42,37.55&zoom=10' },
+    ],
+  },
+  14: {
+    note: 'Cottonwood Canyon Road: קליטה נופלת באמצע. חוזרת ב-Big Water.',
+    downloads: [
+      { app: 'AllTrails', name: 'Toadstool Hoodoos',                   url: 'https://www.alltrails.com/trail/us/utah/toadstool-hoodoos-trail' },
+      { app: 'Mapy.com',  name: 'אזור Grand Staircase + Page',         url: 'https://mapy.com/fnc/v1/showmap?mapset=outdoor&center=-111.66,37.10&zoom=10' },
+    ],
+  },
+  17: {
+    note: 'White Pocket: אפס קליטה. הסיור המודרך מצויד ברדיו לוויני.',
+    downloads: [
+      { app: 'Mapy.com', name: 'אזור Vermilion Cliffs', url: 'https://mapy.com/fnc/v1/showmap?mapset=outdoor&center=-112.00,36.96&zoom=10' },
+    ],
+    note2: 'הסיור עם Dreamland Safari מספק ניווט. את לא צריכה להיות אחראית למפה היום.',
+  },
 };
 
 function renderDeadZoneChip(day) {
-  const note = DEAD_ZONE_DAYS[day.dayNumber];
-  if (!note) return '';
-  return `<div class="deadzone-chip">
-    <span class="deadzone-icon">📵</span>
-    <span class="deadzone-text">${escapeForText(note)}</span>
-  </div>`;
+  const dz = DEAD_ZONE_DAYS[day.dayNumber];
+  if (!dz) return '';
+  const dayKey = String(day.dayNumber);
+  const downloaded = state.deadzoneDownloaded && state.deadzoneDownloaded[dayKey];
+  const cls = downloaded ? 'ready' : '';
+
+  let h = `<div class="deadzone-chip ${cls}">
+    <div class="deadzone-row">
+      <span class="deadzone-icon">${downloaded ? '✅' : '📵'}</span>
+      <span class="deadzone-text">${escapeForText(dz.note)}</span>
+    </div>`;
+
+  if (dz.downloads && dz.downloads.length) {
+    h += `<div class="deadzone-downloads-head">${downloaded ? '✓ סימנת שהמפות מורדות' : '📥 ודאי שהמפות הבאות מורדות לפני היציאה:'}</div>`;
+    h += `<div class="deadzone-downloads">`;
+    for (const d of dz.downloads) {
+      h += `<a class="deadzone-download" href="${d.url}" target="_blank" rel="noopener noreferrer">
+        <span class="dd-app">${d.app}</span>
+        <span class="dd-name">${escapeForText(d.name)}</span>
+      </a>`;
+    }
+    h += `</div>`;
+  }
+  if (dz.note2) {
+    h += `<div class="deadzone-note2">${escapeForText(dz.note2)}</div>`;
+  }
+  h += `<button class="deadzone-toggle" onclick="toggleDeadzoneDownloaded(${day.dayNumber})">
+    ${downloaded ? '↺ סמני כלא-מוכן' : '✓ הורדתי הכל'}
+  </button>`;
+  h += `</div>`;
+  return h;
 }
 
 // Time-zone chip — surfaces which TZ today's hotel/region is on. Critical for

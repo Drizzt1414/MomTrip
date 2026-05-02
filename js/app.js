@@ -14,6 +14,7 @@ let state = {
   pretripDone: {},          // checklist itemId -> true
   pretripDismissed: false,
   showPretrip: false,
+  deadzoneDownloaded: {},   // dayNum -> true once mom confirms maps are downloaded
   addedStops: {},           // dayNum (string) -> [item, item, ...]; items added from nearby
   fuelLevel: {},            // dayNum (string) -> 'full' | 'half' | 'low'
   fuelDismissed: {},        // dayNum (string) -> true once she sets a value
@@ -344,6 +345,15 @@ function togglePretripItem(id) {
 function pretripPendingCount() {
   const done = state.pretripDone || {};
   return PRETRIP_ITEMS.filter(it => it.urgent && !done[it.id]).length;
+}
+
+// Mom toggles "✓ I've downloaded the offline maps for this day" on a dead-zone day.
+// Persists in state so the chip turns green and the warning softens.
+function toggleDeadzoneDownloaded(dayNum) {
+  const key = String(dayNum);
+  state.deadzoneDownloaded = state.deadzoneDownloaded || {};
+  state.deadzoneDownloaded[key] = !state.deadzoneDownloaded[key];
+  saveState(); render();
 }
 function toggleAuditScreen() {
   state.showAudit = !state.showAudit;
