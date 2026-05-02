@@ -417,21 +417,17 @@ function renderStop(s, nextStop, index, total) {
   const checked = state.checked[s.id];
   const expanded = state.expanded[s.id];
   const coords = getStopCoords(s);
-  const nextCoords = nextStop ? getStopCoords(nextStop) : null;
   const audit = sAudit(s);
   const hasIssues = audit.issues.length > 0;
 
-  // Navigate button: destination is the next stop (so tapping נווטי launches
-  // turn-by-turn nav to where mom is going next, not the spot she's at).
+  // Navigate button always targets the CURRENT stop. The inter-stop drive chip
+  // (renderDirCard) handles next-stop nav separately.
   const isHike = isHikeStop(s);
   let navUrl = '#';
   let navLabel = UI.navigate;
-  if (nextCoords) {
-    navUrl = mapsNavUrl(nextCoords);
-    navLabel = isHike ? `🅿️ Navigate to trailhead` : `📍 Navigate to ${nextStop.name.substring(0, 20)}`;
-  } else if (coords) {
+  if (coords) {
     navUrl = mapsNavUrl(coords);
-    navLabel = isHike ? `🅿️ Navigate to trailhead` : `📍 ${UI.navigate}`;
+    navLabel = isHike ? `🅿️ Navigate to trailhead` : `📍 Navigate to ${s.name.substring(0, 22)}`;
   }
 
   let cls = 'stop-card';
@@ -720,23 +716,11 @@ function renderScheduleRow(row, index, stopNumber, byId, rows, hotel) {
   const audit = stop ? sAudit(stop) : null;
   const hasIssues = audit && audit.issues.length > 0;
 
-  // Nav target = next coord-bearing stop after this row, falling back to the
-  // day's hotel if this is the last stop. So tapping נווטי launches turn-by-turn
-  // nav to where mom is going next, not to the spot she's already standing at.
-  let navTarget = null, navTargetName = null;
-  if (stop && coords) {
-    for (let j = index + 1; j < rows.length; j++) {
-      const r = rows[j];
-      const ns = r.stopId ? byId[r.stopId] : null;
-      const nc = ns ? getStopCoords(ns) : null;
-      if (nc) { navTarget = nc; navTargetName = ns.name; break; }
-    }
-    if (!navTarget && hotel && hotel.coordinates) {
-      navTarget = hotel.coordinates;
-      navTargetName = `🏨 ${hotel.name}`;
-    }
-  }
-  const navUrl = navTarget ? mapsNavUrl(navTarget) : (coords ? mapsNavUrl(coords) : null);
+  // Nav target = the CURRENT stop on this row. Tapping Navigate opens turn-by-turn
+  // to the place mom is looking at on the card. The inter-stop drive chip
+  // (renderDirCard) handles the next-stop case separately.
+  const navUrl = coords ? mapsNavUrl(coords) : null;
+  const navTargetName = stop ? stop.name : null;
 
   // Title line: activity chip + time + duration.
   let cls = `sched-row ${meta.cls}`;

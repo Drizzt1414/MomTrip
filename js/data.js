@@ -53,7 +53,7 @@ const TRIP_DATA = {
           "duration": "~1.5 hrs",
           "durationMin": 90,
           "kind": "note",
-          "text": "נחיתה בשדה התעופה של סולט לייק סיטי (SLC) בשעה 9:35 בבוקר. תכנני כשעה וחצי לירידה מהמטוס, לקבלת המזוודות ולקיחת הרכב השכור לפני היציאה לדרך.",
+          "text": "Land at Salt Lake City airport (SLC) at 09:35. Plan about 1.5 hours to deplane, collect bags, and pick up the rental car before heading out.",
           "route": null
         },
         {
@@ -61,7 +61,7 @@ const TRIP_DATA = {
           "duration": "~3.5 hrs",
           "durationMin": 210,
           "kind": "driving",
-          "text": "לקיחת הרכב השכור בשדה התעופה של סולט לייק סיטי, ויציאה לדרך — נסיעה של כשלוש וחצי שעות דרומה למואב שביוטה. הכביש עובר דרך הרים וקניונים יפהפיים — תיהני מהנוף בדרך.",
+          "text": "Pick up the rental car at Salt Lake City airport and head out — about a 3.5 hour drive south to Moab, Utah. The road passes through beautiful mountains and canyons. Enjoy the scenery on the way.",
           "route": null
         },
         {
@@ -69,7 +69,7 @@ const TRIP_DATA = {
           "duration": null,
           "durationMin": null,
           "kind": "sleep",
-          "text": "Sun Outdoor Arches Gateway — מואב, יוטה",
+          "text": "Sun Outdoor Arches Gateway — Moab, Utah",
           "route": null
         },
         {
@@ -558,7 +558,7 @@ const TRIP_DATA = {
           "duration": "15 min",
           "durationMin": 15,
           "kind": "driving",
-          "text": "נסיעה של 15 דקות מהמלון אל הכניסה לפארק Arches.",
+          "text": "A 15 minute drive from the hotel to the entrance of Arches National Park.",
           "route": null
         },
         {
@@ -566,15 +566,16 @@ const TRIP_DATA = {
           "duration": "10 min",
           "durationMin": 10,
           "kind": "stop",
-          "text": "עצירה ב-Arches Visitor Center לקבלת כרטיס הכניסה לפארק ומפה.",
-          "route": null
+          "text": "Stop at the Arches Visitor Center to pick up the park entry pass and a map.",
+          "route": null,
+          "stopId": "d2-s1"
         },
         {
           "time": "7:35 AM",
           "duration": "1.5 hrs",
           "durationMin": 90,
           "kind": "hike",
-          "text": "Park Avenue Trail — הליכה בין חומות אבן חול גבוהות, כמו פרוזדור טבעי שנחצב ע\"י הטבע. שטוח וקל.",
+          "text": "Park Avenue Trail — walk between tall sandstone walls, like a natural corridor carved by nature. Flat and easy.",
           "route": null,
           "stopId": "d2-s2"
         },
@@ -583,7 +584,7 @@ const TRIP_DATA = {
           "duration": "5 min",
           "durationMin": 5,
           "kind": "driving",
-          "text": "ממשיכים לעומק הפארק, הרי La Sal מופיעים מימין — להישאר ברכב וליהנות מהנוף דרך החלון.",
+          "text": "Continue deeper into the park. The La Sal Mountains appear on the right — stay in the car and enjoy the view through the window.",
           "route": null
         },
         {
@@ -591,7 +592,7 @@ const TRIP_DATA = {
           "duration": "10 min",
           "durationMin": 10,
           "kind": "stop",
-          "text": "Courthouse Towers — לעצור בצד הדרך, להסתכל על מגדלי הסלע האדומים העצומים שעולים מהמדבר, ולצלם.",
+          "text": "Courthouse Towers — pull over by the road, look at the huge red rock towers rising from the desert, and take photos.",
           "route": null,
           "stopId": "d2-s5"
         },
@@ -600,7 +601,7 @@ const TRIP_DATA = {
           "duration": "20 min",
           "durationMin": 20,
           "kind": "walk",
-          "text": "Balanced Rock — לולאה קצרה וקלה סביב סלע ענק מפורסם המאוזן בצורה מושלמת על בסיס דק.",
+          "text": "Balanced Rock — a short, easy loop around a famous huge rock balanced perfectly on a thin base.",
           "route": null,
           "stopId": "d2-s6"
         },
@@ -609,7 +610,7 @@ const TRIP_DATA = {
           "duration": "1.5 hrs",
           "durationMin": 90,
           "kind": "walk",
-          "text": "אזור ה-Windows — מחניה אחת הולכים לשלוש קשתות שונות: Turret Arch, ה-Windows Loop, ו-Double Arch. אפשר לעמוד מתחת לכמה מהן — הן ענקיות.",
+          "text": "The Windows section — from one parking lot you can walk to three different arches: Turret Arch, the Windows Loop, and Double Arch. You can stand under several of them — they are huge.",
           "route": null,
           "stopId": "d2-s8"
         },
@@ -618,7 +619,7 @@ const TRIP_DATA = {
           "duration": "2.5–3 hrs",
           "durationMin": 165,
           "kind": "hike",
-          "text": "Delicate Arch Trail — הקשת המפורסמת בעולם. הליכה תלולה על סלע חשוף בשמש. לקחת מים נוספים. שווה כל צעד.",
+          "text": "Delicate Arch Trail — the world-famous arch. A steep walk on open slickrock in the sun. Bring extra water. Worth every step.",
           "route": null,
           "stopId": "d2-s10"
         },
@@ -627,7 +628,7 @@ const TRIP_DATA = {
           "duration": "10 min",
           "durationMin": 10,
           "kind": "stop",
-          "text": "Fiery Furnace Viewpoint — לעצור בצד הדרך ולהסתכל מגדר אל המבוך הצר של סנפירי הסלע. בלי סיור מודרך אסור להיכנס.",
+          "text": "Fiery Furnace Viewpoint — pull over and look from the railing into the narrow maze of rock fins. Entry without a guided tour or permit is not allowed.",
           "route": null,
           "stopId": "d2-s11"
         },
@@ -636,7 +637,7 @@ const TRIP_DATA = {
           "duration": "5 min",
           "durationMin": 5,
           "kind": "stop",
-          "text": "Skyline Arch — נראית מהכביש. לעצור לרגע לצילום.",
+          "text": "Skyline Arch — visible from the road. Stop for a quick photo.",
           "route": null,
           "stopId": "d2-s14"
         },
@@ -645,7 +646,7 @@ const TRIP_DATA = {
           "duration": "45 min",
           "durationMin": 45,
           "kind": "walk",
-          "text": "Sand Dune Arch + Broken Arch — שתי קשתות על שביל צד קצר ליד הכביש. Sand Dune היא הליכה של 0.4 מייל דרך חול עמוק אל קשת קטנה החבויה בין סנפירי סלע (קריר ומוצל — הילדים אוהבים את החול). Broken Arch היא עוד 0.4 מייל על סלע חשוף אל קשת גדולה. בדרך כלל משלבים את שתיהן בעצירה אחת.",
+          "text": "Sand Dune Arch + Broken Arch — two arches on a short side trail by the road. Sand Dune is about 0.6 km through deep sand to a small arch hidden between rock fins (cool and shaded — kids love the sand). Broken Arch is another 0.6 km on open slickrock to a large arch. Most people combine the two into one stop.",
           "route": null,
           "stopId": "d2-s12"
         },
@@ -654,7 +655,7 @@ const TRIP_DATA = {
           "duration": "2–4 hrs",
           "durationMin": 180,
           "kind": "hike",
-          "text": "Devils Garden — המסלול הטוב ביותר בכל Arches. בדרך פנימה עוברים על-יד Tunnel Arch ו-Pine Tree Arch, ואז מגיעים ל-Landscape Arch (הקשת הטבעית הארוכה בעולם). משם המסלול הפרימיטיבי ממשיך עמוק יותר אל Partition Arch, Navajo Arch, Double O Arch, Dark Angel ו-Private Arch — כל קשת בצורה שונה, והמסלול נעשה שקט ומבודד יותר ככל שמתקדמים.",
+          "text": "Devils Garden — the best trail in all of Arches. On the way in you pass Tunnel Arch and Pine Tree Arch, then reach Landscape Arch (the longest natural arch in the world). From there the primitive trail continues deeper to Partition Arch, Navajo Arch, Double O Arch, Dark Angel, and Private Arch — each arch a different shape, and the trail gets quieter and more remote the further you go.",
           "route": null,
           "stopId": "d2-s15"
         },
@@ -663,17 +664,8 @@ const TRIP_DATA = {
           "duration": null,
           "durationMin": null,
           "kind": "sleep",
-          "text": "Sun Outdoors Arches Gateway — מואב, יוטה (אותו מלון)",
+          "text": "Sun Outdoors Arches Gateway — Moab, Utah (same hotel)",
           "route": null
-        },
-        {
-          "time": null,
-          "duration": null,
-          "durationMin": null,
-          "kind": "stop",
-          "text": null,
-          "stopId": "d2-s1",
-          "orphan": true
         },
         {
           "time": null,
@@ -1001,8 +993,8 @@ const TRIP_DATA = {
             "lat": 38.7507,
             "lng": -109.5558
           },
-          "tip": "היתר Recreation.gov שמור במייל ובצילום מסך. התחלה ב-8:00 בבוקר, 2 מבוגרים. קליטה סלולרית חלשה בראש המסלול — צילום מסך חיוני.",
-          "difficulty": "מאתגר (מציאת דרך, טיפוס על סלע חשוף, מעברים צרים, קפיצות קטנות)",
+          "tip": "Recreation.gov permit is saved in your email and as a screenshot. Start at 08:00, 2 adults. Cell signal is weak at the trailhead — the screenshot is essential.",
+          "difficulty": "Challenging (route-finding, climbing on open slickrock, narrow passages, small jumps)",
           "audit": {
             "status": "needs-recheck",
             "issues": [],
@@ -1022,7 +1014,7 @@ const TRIP_DATA = {
           "duration": "35 min",
           "durationMin": 35,
           "kind": "driving",
-          "text": "נסיעה של 35 דקות מהמלון לתוך פארק Arches עד לחניה של Fiery Furnace. הכרטיס לפארק כבר ברשותך מאתמול — אין צורך לעצור ב-Visitor Center. לצלם screenshot לכרטיס מ-Recreation.gov לפני הנסיעה פנימה (קליטה סלולרית חלשה בראש המסלול).",
+          "text": "A 35 minute drive from the hotel into Arches National Park to the Fiery Furnace parking lot. You already have the park entry pass from yesterday — no need to stop at the Visitor Center. Take a screenshot of the Recreation.gov permit before driving in (cell signal is weak at the trailhead).",
           "route": null
         },
         {
@@ -1030,7 +1022,7 @@ const TRIP_DATA = {
           "duration": "3.5 hrs",
           "durationMin": 210,
           "kind": "hike",
-          "text": "Self-Guided Fiery Furnace Exploration — היתר מאושר ל-2 מבוגרים, התחלה ב-8:00 בבוקר. מציאת דרך עצמאית במבוך של סנפירי אבן חול על סלע חשוף. אין שביל מסומן — מעברים צרים בין קירות, קפיצות קטנות בין סלעים, מדרגות סלע. כשני מייל הלוך-חזור, אבל לוקח הרבה יותר זמן ממה שהמרחק מרמז כי מנווטים בעיניים. לתכנן 3.5 שעות מלאות. לקחת מים, חטיפים ונעליים עם אחיזה טובה. לא טיול קליל — זה האתגרי שאמא ביקשה.",
+          "text": "Self-Guided Fiery Furnace Exploration — permit approved for 2 adults, start at 08:00. You navigate the maze of sandstone fins on open slickrock on your own. There is no marked trail — narrow passages between walls, small jumps between rocks, rock steps. About 3 km round-trip, but it takes far longer than the distance suggests because you find your own way. Plan a full 3.5 hours. Bring water, snacks, and shoes with good grip. This is not an easy walk — it is the challenging hike Mom asked for.",
           "route": null,
           "stopId": "d3-s12"
         },
@@ -1039,7 +1031,7 @@ const TRIP_DATA = {
           "duration": "55 min",
           "durationMin": 55,
           "kind": "driving",
-          "text": "נסיעה של כ-55 דקות מ-Fiery Furnace ל-Dead Horse Point — יציאה מ-Arches דרומה בכביש הפארק, מקטע קצר צפונה בכביש 191, ואז מערבה בכביש 313 לרוחב המֵסָה.",
+          "text": "About a 55 minute drive from Fiery Furnace to Dead Horse Point — exit Arches south on the park road, a short stretch north on Highway 191, then west on Highway 313 across the mesa.",
           "route": null
         },
         {
@@ -1047,7 +1039,7 @@ const TRIP_DATA = {
           "duration": "60 min",
           "durationMin": 60,
           "kind": "stop",
-          "text": "Dead Horse Point — הליכה לשפת הקניון. נהר הקולורדו זורם 2,000 רגל למטה בעיקול בצורת פרסה. אחת הנקודות העוצרות נשימה ביוטה. ארוחת צהריים קצרה מהקולמן על ספסל בשפת הקניון.",
+          "text": "Dead Horse Point — walk to the canyon rim. The Colorado River flows 600 meters below in a horseshoe bend. One of the most striking viewpoints in Utah. A short lunch from the cooler on a bench at the canyon edge.",
           "route": null,
           "stopId": "d3-s2"
         },
@@ -1056,7 +1048,7 @@ const TRIP_DATA = {
           "duration": "15 min",
           "durationMin": 15,
           "kind": "driving",
-          "text": "נסיעה של 15 דקות מ-Dead Horse Point לכניסה של Canyonlands Island in the Sky.",
+          "text": "A 15 minute drive from Dead Horse Point to the entrance of Canyonlands Island in the Sky.",
           "route": null
         },
         {
@@ -1064,7 +1056,7 @@ const TRIP_DATA = {
           "duration": "10 min",
           "durationMin": 10,
           "kind": "stop",
-          "text": "Shafer Canyon Overlook — לעצור בצד ולהסתכל למטה על הכביש שמתפתל אל תוך הקניון הרחק מתחת.",
+          "text": "Shafer Canyon Overlook — pull over and look down at the road that switchbacks far into the canyon below.",
           "route": null,
           "stopId": "d3-s3"
         },
@@ -1073,7 +1065,7 @@ const TRIP_DATA = {
           "duration": "10 min",
           "durationMin": 10,
           "kind": "stop",
-          "text": "Gooseneck Overlook — נהר הקולורדו מתפתל ב-270 מעלות ללולאה צרה למטה. דרמטי מאוד.",
+          "text": "Gooseneck Overlook — the Colorado River bends 270 degrees into a tight loop below. Very dramatic.",
           "route": null,
           "stopId": "d3-s4"
         },
@@ -1082,7 +1074,7 @@ const TRIP_DATA = {
           "duration": "20 min",
           "durationMin": 20,
           "kind": "driving",
-          "text": "נסיעה של 20 דקות לרוחב המֵסָה אל Upheaval Dome בקצה השני של הפארק.",
+          "text": "A 20 minute drive across the mesa to Upheaval Dome at the far side of the park.",
           "route": null
         },
         {
@@ -1090,7 +1082,7 @@ const TRIP_DATA = {
           "duration": "45 min",
           "durationMin": 45,
           "kind": "walk",
-          "text": "Upheaval Dome — הליכה קצרה אל שפת מכתש מסתורי. מדענים לא בטוחים אם מטאוריט יצר אותו או כיפת מלח — כך או כך, זה נראה כמו משהו מכוכב לכת אחר.",
+          "text": "Upheaval Dome — a short walk to the rim of a mysterious crater. Scientists are not sure whether a meteorite made it or a salt dome — either way, it looks like something from another planet.",
           "route": null,
           "stopId": "d3-s5"
         },
@@ -1099,7 +1091,7 @@ const TRIP_DATA = {
           "duration": "45 min",
           "durationMin": 45,
           "kind": "walk",
-          "text": "Whale Rock — כיפת אבן חול גדולה בצורת לוויתן ממש ליד Upheaval Dome. שביל קצר של מייל אחד עם טיפוס קל על סלע חשוף. מהפסגה רואים את Upheaval Dome מלמעלה — הנוף הטוב ביותר.",
+          "text": "Whale Rock — a large whale-shaped sandstone dome right next to Upheaval Dome. A short 1.6 km trail with an easy climb on open slickrock. From the top you see Upheaval Dome from above — the best view of it.",
           "route": null
         },
         {
@@ -1107,7 +1099,7 @@ const TRIP_DATA = {
           "duration": "20 min",
           "durationMin": 20,
           "kind": "driving",
-          "text": "חזרה לרוחב המֵסָה לכיוון נקודות התצפית הראשיות.",
+          "text": "Drive back across the mesa toward the main viewpoints.",
           "route": null
         },
         {
@@ -1115,7 +1107,7 @@ const TRIP_DATA = {
           "duration": "25 min",
           "durationMin": 25,
           "kind": "walk",
-          "text": "Mesa Arch — הליכה קלה של חצי מייל אל קשת אבן חול שמסגרת את הקניון 1,000 רגל למטה.",
+          "text": "Mesa Arch — an easy 0.8 km walk to a sandstone arch that frames the canyon 300 meters below.",
           "route": null,
           "stopId": "d3-s1"
         },
@@ -1124,7 +1116,7 @@ const TRIP_DATA = {
           "duration": "10–15 min each",
           "durationMin": 13,
           "kind": "stop",
-          "text": "Green River Overlook, Murphy Point ו-Buck Canyon Overlook — לעצור בכל אחת משלוש הנקודות לתצפיות על הקניון. כל אחת היא הליכה קצרה מהרכב.",
+          "text": "Green River Overlook, Murphy Point and Buck Canyon Overlook — stop at each of the three viewpoints for canyon views. Each one is a short walk from the car.",
           "route": null,
           "stopId": "d3-s6"
         },
@@ -1133,7 +1125,7 @@ const TRIP_DATA = {
           "duration": "30 min",
           "durationMin": 30,
           "kind": "stop",
-          "text": "White Rim Overlook — הליכה קלה של 0.9 מייל אל נקודה עם תצפית ישרה למטה אל White Rim Road שמתפתלת בקניון. מקום טוב לשבת ולראות עד כמה הקניון עמוק.",
+          "text": "White Rim Overlook — an easy 1.5 km walk to a viewpoint that looks straight down at White Rim Road winding through the canyon. A good place to sit and see how deep the canyon really is.",
           "route": null,
           "stopId": "d3-s10"
         },
@@ -1142,7 +1134,7 @@ const TRIP_DATA = {
           "duration": null,
           "durationMin": null,
           "kind": "note",
-          "text": "Musselman Arch — קשת ארוכה ושטוחה ומפורסמת שאולי קראת עליה. היא נמצאת על White Rim Road כ-1,000 רגל מתחתייך. נסיעה אליה דורשת רכב 4X4 והיתר — לא אפשרי ברכב השכור שלכם. ביום צלול אפשר לראות את הצד העליון שלה מחלק מנקודות התצפית.",
+          "text": "Musselman Arch — a long flat famous arch you may have read about. It sits on White Rim Road about 300 meters below you. Reaching it requires a 4-by-4 vehicle and a permit — not possible in your rental car. On a clear day you can see the top of it from some of the overlooks.",
           "route": null
         },
         {
@@ -1150,7 +1142,7 @@ const TRIP_DATA = {
           "duration": "45 min",
           "durationMin": 45,
           "kind": "walk",
-          "text": "Grand View Point — סוף הכביש הראשי. הליכה לאורך שפת הקניון לכל הכיוונים. התצפיות הפנורמיות הטובות ביותר ב-Canyonlands.",
+          "text": "Grand View Point — the end of the main park road. Walk along the canyon rim in any direction. The best panoramic views in Canyonlands.",
           "route": null,
           "stopId": "d3-s8"
         },
@@ -1159,7 +1151,7 @@ const TRIP_DATA = {
           "duration": "30 min",
           "durationMin": 30,
           "kind": "driving",
-          "text": "נסיעה של כ-30 דקות דרומה בכבישים 313/191 חזרה למואב.",
+          "text": "About a 30 minute drive south on Highways 313 and 191 back to Moab.",
           "route": null
         },
         {
@@ -1167,7 +1159,7 @@ const TRIP_DATA = {
           "duration": null,
           "durationMin": null,
           "kind": "sleep",
-          "text": "The Bowen Motel — מואב, יוטה",
+          "text": "The Bowen Motel — Moab, Utah",
           "route": null
         },
         {
@@ -1416,16 +1408,16 @@ const TRIP_DATA = {
           "emoji": "🥾",
           "type": "Park Sight",
           "coordinates": {
-            "lat": 38.40646,
-            "lng": -110.7918
+            "lat": 38.4196,
+            "lng": -110.9101
           },
           "tip": "באדלנדס מפוספסים על קרקע BLM צפונית להאנקסוויל לאורך Cow Dung Road, סמוך ל-MDRS. נוף מאדים. אין שבילים מסומנים — יש ללכת היכן שאחרים הלכו. (לא לבלבל עם 'Rainbow Hills' שזה מקום אחר ~87 מייל מערבה ליד Glenwood.)",
           "difficulty": "Easy",
           "audit": {
-            "status": "verified",
+            "status": "needs-recheck",
             "issues": [],
             "suggestedCoords": null,
-            "note": "Coords initially pinned at MDRS as anchor for the bentonite badlands. Adjust to the exact pullout if needed."
+            "note": "Coords updated 2026-05-02: previously identical to MDRS (copy-paste bug). New pin is the Cathedral Valley Loop entrance from SR-24, the most-cited Bentonite Hills viewpoint. Verify in person on May 9 — adjust to the exact pullout mom drives to."
           }
         },
         {
@@ -2003,8 +1995,8 @@ const TRIP_DATA = {
       "hotel": {
         "name": "Dukes Slickrock Campground & Rv",
         "coordinates": {
-          "lat": 38.593504367961735,
-          "lng": -109.56866043918693
+          "lat": 38.3753607848067,
+          "lng": -110.70839880413514
         },
         "address": "United States of America, Hanksville, 275 E Highway 24, Hanksville",
         "phone": "14355423235",
@@ -6234,7 +6226,7 @@ const TRIP_DATA = {
       "when": "Day 19\nשבת 23 במאי\n(הגעה דרך Hwy 9)",
       "name": "Canyon Overlook Trail",
       "why": "מסלול קצר של מייל אחד עם תצפית מרהיבה על הקניון. חימום טוב. בלי שאטל.",
-      "action": "ראש המסלול בצד המזרחי של מנהרת Zion-Mt Carmel ב-Hwy 9.",
+      "action": "טרילהד בצד המזרחי של מנהרת Zion-Mt Carmel ב-Hwy 9.",
       "lat": 37.22,
       "lng": -112.943
     },
@@ -6310,7 +6302,7 @@ const TRIP_DATA = {
       "kind": "Removed",
       "when": "Day 21 — שני 25 במאי",
       "name": "הוסר: Seven Wonders Kanarra Falls",
-      "why": "Seven Wonders הוא מסלול אמיתי — אבל ב-Valley of Fire (ליד ראש המסלול Fire Wave), לא ב-Kanarra Falls.",
+      "why": "Seven Wonders הוא מסלול אמיתי — אבל ב-Valley of Fire (ליד טרילהד Fire Wave), לא ב-Kanarra Falls.",
       "action": "✅ הוסר מהמסלול ב-2026-05-01. עצירת Fire Wave ביום 21 כבר עוברת באזור הזה — אין צורך בשינוי תוכנית, רק שינוי שם.",
       "lat": null,
       "lng": null
@@ -6333,7 +6325,7 @@ const TRIP_DATA = {
       "when": "Day 15 — שלישי 19 במאי",
       "name": "לתקן: Spencer Trail — להוסיף קואורדינטות",
       "why": "מסלול אמיתי וכדאי ב-Lees Ferry. הקואורדינטות פשוט חסרות.",
-      "action": "קואורדינטות ראש המסלול Spencer Trail: (36.864, -111.586). 3.5 מייל הלוך-חזור.",
+      "action": "קואורדינטות טרילהד Spencer Trail: (36.864, -111.586). 3.5 מייל הלוך-חזור.",
       "lat": 36.864,
       "lng": -111.586
     },
