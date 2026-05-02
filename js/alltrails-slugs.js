@@ -36,17 +36,19 @@ const ALLTRAILS_SLUGS = {
   'd4-s3':  'us/utah/chesler-park-loop-via-elephant-hill',
   'd4-s4':  'us/utah/chesler-park-loop-via-elephant-hill',
 
-  // ─── Day 6 — Goblin Valley + Little Wild Horse ────────────────────────────
-  'd6-s2':  'us/utah/little-wild-horse-canyon-and-bell-canyon-loop',
+  // ─── Day 6 — Goblin Valley ────────────────────────────────────────────────
   'd6-s3':  'us/utah/three-sisters-via-curtis-bench-trail',
+
+  // ─── Day 7 — Little Wild Horse Canyon ─────────────────────────────────────
+  'd7-s2':  'us/utah/little-wild-horse-canyon-and-bell-canyon-loop',
 
   // ─── Day 8-9 — Capitol Reef ───────────────────────────────────────────────
   'd8-s6':  'us/utah/hickman-bridge-trail',
   'd9-s6':  'us/utah/old-wagon-trail',
   'd10-s1': 'us/utah/cassidy-arch-trail',
 
-  // ─── Day 11 — Lower Calf Creek ────────────────────────────────────────────
-  'd11-s2': 'us/utah/lower-calf-creek-falls-trail',
+  // ─── Day 12 — Lower Calf Creek ────────────────────────────────────────────
+  'd12-s5': 'us/utah/lower-calf-creek-falls-trail',
 
   // ─── Day 13 — Hole-in-the-Rock slot canyons ───────────────────────────────
   'd13-s2': 'us/utah/peek-a-boo-and-spooky-slot-canyons-via-upper-dry-fork-narrows',

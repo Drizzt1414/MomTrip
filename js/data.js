@@ -158,35 +158,14 @@ const TRIP_DATA = {
           }
         },
         {
-          "id": "d2-s4",
-          "name": "Courthouse Towers Viewpoint",
-          "nameOriginal": "courthouse towers viewpoint",
-          "emoji": "👀",
-          "type": "Park Sight",
-          "coordinates": {
-            "lat": 38.637181422611604,
-            "lng": -109.60019415637797
-          },
-          "tip": "",
-          "difficulty": "Easy (viewpoint)",
-          "audit": {
-            "status": "verified",
-            "issues": [],
-            "suggestedCoords": null,
-            "distFromPrev": 0.9,
-            "distSanity": "ok",
-            "note": "Promoted warning → verified 2026-05-01. Original warning was only a cosmetic spelling correction."
-          }
-        },
-        {
           "id": "d2-s5",
           "name": "Courthouse Towers",
           "nameOriginal": "courthouse towers",
           "emoji": "🪨",
           "type": "Park Sight",
           "coordinates": {
-            "lat": 38.63255185237323,
-            "lng": -109.60238356697269
+            "lat": 38.637181422611604,
+            "lng": -109.60019415637797
           },
           "tip": "",
           "difficulty": "",
@@ -674,15 +653,6 @@ const TRIP_DATA = {
           "kind": "stop",
           "text": null,
           "stopId": "d2-s3",
-          "orphan": true
-        },
-        {
-          "time": null,
-          "duration": null,
-          "durationMin": null,
-          "kind": "stop",
-          "text": null,
-          "stopId": "d2-s4",
           "orphan": true
         },
         {

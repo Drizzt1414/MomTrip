@@ -13,9 +13,6 @@ const TRIP_GUIDE_FALLBACKS = {
   "d2-s3": {
     "blurb": "Roadside viewpoint toward the snow-capped La Sal Mountains, on the other side of the Moab Valley. These peaks rise above 3,700 meters and are sometimes snow-covered into early summer. The name was given by Spanish explorers who searched here for salt. The contrast between the snowy peaks and the red ground of the park is part of what makes this landscape memorable."
   },
-  "d2-s4": {
-    "blurb": "Quick roadside viewpoint over the Courthouse Towers area — a cluster of giant freestanding sandstone towers. The name comes from the main formation, which looks like a large courthouse with columns. The rock here is Entrada Sandstone, the same material as most arches in the park."
-  },
   "d2-s5": {
     "blurb": "Courthouse Towers area — a cluster of standalone rock towers rising from flat ground. You stand under towers tens of meters tall, each a remnant of a long ridge that eroded away leaving only the strongest parts. Names like The Three Gossips, Sheep Rock, and The Organ were given by Frank Beckwith during the 1933-34 scientific expedition.",
     "lookFor": "Look for the three towers standing close together — that's The Three Gossips. The name comes from how they look like they're leaning toward each other and whispering."

@@ -221,7 +221,6 @@ for (const r of xrows) {
 // ─── TEST 6: Mapy URL uses the same coords passed in (no cross-pollination) ──
 {
   const appSrc = fs.readFileSync(APP_PATH, 'utf8');
-  // Find the function and the next 5 lines after `function mapyShowUrl(c)`
   const idx = appSrc.indexOf('function mapyShowUrl(');
   const ok = idx >= 0 &&
              /center=\$\{c\.lng\},\$\{c\.lat\}/.test(appSrc.slice(idx, idx + 400));
@@ -229,13 +228,21 @@ for (const r of xrows) {
       ok ? 'PASS' : 'FAIL',
       ok ? `mapyShowUrl(c) -> https://mapy.com/...?center=\${c.lng},\${c.lat}` : 'mapyShowUrl signature missing or wrong');
 
-  // Also check: in render.js, mapyShowUrl is called with the CURRENT stop's coords
   const renderSrc = fs.readFileSync(RENDER_PATH, 'utf8');
-  // Look for mapyShowUrl(coords) pattern (where coords is the current stop's coords variable)
   const callsCorrect = (renderSrc.match(/mapyShowUrl\(coords\)/g) || []).length >= 1;
   log('T6b Mapy button passes current stop coords',
       callsCorrect ? 'PASS' : 'FAIL',
       callsCorrect ? 'render.js: mapyShowUrl(coords) where coords = current stop' : 'mapyShowUrl call site not using current coords');
+
+  // T6c — both mapsNavUrl and mapsDirUrl wrap in Android intent for full Google Maps
+  const navIdx = appSrc.indexOf('function mapsNavUrl(');
+  const dirIdx = appSrc.indexOf('function mapsDirUrl(');
+  const intentRx = /Intent;.*package=com\.google\.android\.apps\.maps/;
+  const navOk = navIdx >= 0 && intentRx.test(appSrc.slice(navIdx, navIdx + 1500));
+  const dirOk = dirIdx >= 0 && intentRx.test(appSrc.slice(dirIdx, dirIdx + 1500));
+  log('T6c maps URLs use Android intent (forces full Google Maps, not Maps Go)',
+      (navOk && dirOk) ? 'PASS' : 'FAIL',
+      `mapsNavUrl=${navOk?'OK':'MISSING'} mapsDirUrl=${dirOk?'OK':'MISSING'}`);
 }
 
 // ─── TEST 7: AllTrails slug uniqueness + correctness ─────────────────────────

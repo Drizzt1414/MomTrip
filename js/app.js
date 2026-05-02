@@ -498,7 +498,16 @@ function mapsNavUrl(c) {
   return httpsUrl;
 }
 function mapsDirUrl(a, b) {
-  return (a && b) ? `https://www.google.com/maps/dir/${a.lat},${a.lng}/${b.lat},${b.lng}` : '#';
+  if (!a || !b) return '#';
+  const httpsUrl = `https://www.google.com/maps/dir/${a.lat},${a.lng}/${b.lat},${b.lng}`;
+  // Same Android-intent wrap as mapsNavUrl so the drive chip opens in the FULL
+  // Google Maps app, not Maps Go, on mom's Xiaomi phone.
+  const isAndroid = typeof navigator !== 'undefined' && /Android/i.test(navigator.userAgent || '');
+  if (isAndroid) {
+    const path = httpsUrl.replace(/^https:\/\//, '');
+    return `intent://${path}#Intent;scheme=https;package=com.google.android.apps.maps;S.browser_fallback_url=${encodeURIComponent(httpsUrl)};end`;
+  }
+  return httpsUrl;
 }
 
 // Mapy.com (formerly Mapy.cz) — Czech mapping service with excellent offline
