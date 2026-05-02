@@ -366,8 +366,9 @@ for (const r of xrows) {
 }
 
 // ─── TEST 12: lint baseline ─────────────────────────────────────────────────
-// Baseline = pre-existing violations on Days 4-24 + pre-trip wizard. My English
-// translations should add 0 new violations. Total should be ≤ 73.
+// Tightened to current count after the 2026-05-02 Hebrew sweep dropped many
+// Hebrew-era rule triggers (e.g., "UT" was flagged in Hebrew context). New
+// edits should add 0 violations; tighten this number after any successful sweep.
 {
   const { execSync } = require('child_process');
   let out;
@@ -378,10 +379,10 @@ for (const r of xrows) {
   }
   const m = out.match(/(\d+)\s+style violation/);
   const count = m ? Number(m[1]) : null;
-  const baseline = 73;
+  const baseline = 64;
   log('T12 lint violations vs baseline',
       count == null ? 'WARN' : (count <= baseline ? 'PASS' : 'FAIL'),
-      count == null ? 'could not parse lint output' : `${count} violations (baseline ${baseline}; my edits should add 0)`);
+      count == null ? 'could not parse lint output' : `${count} violations (baseline ${baseline}; tighten after future cleanup)`);
 }
 
 // ─── TEST 13: day-boundary sanity (last stop -> hotel, first stop -> prev hotel) ───
@@ -415,6 +416,66 @@ for (const r of xrows) {
   log('T13 day-boundary distances (Day 1 arrival exempt)',
       fails.length ? 'WARN' : 'PASS',
       fails.length ? fails.slice(0,5).join(' | ') : 'all last-stop->hotel ≤110 km AND hotel->next-first-stop ≤150 km');
+}
+
+// ─── TEST 14: weather hazard alerts cross-reference the day's stops ─────────
+// Loads js/hazards.js + js/weather.js into a synthetic browser-ish context,
+// fires getWeatherWarnings against canned forecasts, asserts that:
+//  - rainy forecast on Day 13 → names Peek-a-Boo / Spooky / Brimstone (slot canyons)
+//  - rainy forecast on Day 5  → names Bentonite Hills (dirt-clay road)
+//  - thunderstorm on Day 18   → names Bryce viewpoints (exposed-rim)
+//  - hot forecast on Day 12   → names Lower Calf Creek (strenuous)
+//  - clear forecast on Day 13 → no urgent slot-canyon warning
+{
+  const fs = require('fs');
+  const ctx = {
+    window: {},
+    module: { exports: {} },
+    TRIP_DATA: dataModule,
+  };
+  // Evaluate hazards.js then weather.js in a shared scope.
+  const hazSrc = fs.readFileSync(path.join(ROOT, 'js/hazards.js'), 'utf8');
+  const weaSrc = fs.readFileSync(path.join(ROOT, 'js/weather.js'), 'utf8');
+  const sandbox = {};
+  // Use Function to evaluate in a controlled scope; expose window/module.
+  const runner = new Function('window', 'module', 'TRIP_DATA',
+    hazSrc + '\n' + weaSrc + '\nreturn {getWeatherWarnings, stopsWithHazard, STOP_HAZARDS};'
+  );
+  const api = runner(ctx.window, ctx.module, ctx.TRIP_DATA);
+  const day = (n) => DAYS.find(d => d.dayNumber === n);
+  const includes = (warns, snippet) => warns.some(w => w.text.toLowerCase().includes(snippet.toLowerCase()));
+
+  const cases = [
+    { name: 'Day 13 + 70% rain → names slot canyons',
+      day: day(13), w: { tmax: 70, tmin: 50, precip: 5, precipProb: 70, code: 65 },
+      expect: w => includes(w, 'peek-a-boo') && includes(w, 'spooky') && w.some(p => p.urgent && p.icon === '🚨') },
+    { name: 'Day 5 + 50% rain → names Bentonite Hills (dirt-clay)',
+      day: day(5), w: { tmax: 65, tmin: 45, precip: 3, precipProb: 50, code: 63 },
+      expect: w => includes(w, 'bentonite') && w.some(p => p.urgent) },
+    { name: 'Day 18 + thunderstorm → names Bryce rim viewpoints',
+      day: day(18), w: { tmax: 60, tmin: 35, precip: 1, precipProb: 30, code: 95 },
+      expect: w => (includes(w, 'bryce') || includes(w, 'sunset point') || includes(w, 'inspiration')) && w.some(p => p.icon === '⛈️') },
+    { name: 'Day 12 + 35°C heat → names Lower Calf Creek (strenuous)',
+      day: day(12), w: { tmax: 95, tmin: 65, precip: 0, precipProb: 5, code: 0 },
+      expect: w => includes(w, 'calf creek') && w.some(p => p.urgent && p.icon === '🥵') },
+    { name: 'Day 13 + clear sky → NO slot-canyon urgent warning',
+      day: day(13), w: { tmax: 70, tmin: 50, precip: 0, precipProb: 5, code: 0 },
+      expect: w => !w.some(p => p.icon === '🚨') },
+    { name: 'Day 7 + 40% rain → names Little Wild Horse (slot)',
+      day: day(7), w: { tmax: 75, tmin: 55, precip: 2, precipProb: 40, code: 63 },
+      expect: w => includes(w, 'little wild horse') && w.some(p => p.icon === '🚨') },
+  ];
+
+  const fails = [];
+  for (const c of cases) {
+    const warns = api.getWeatherWarnings(c.day, c.w);
+    if (!c.expect(warns)) {
+      fails.push(`${c.name} — got: [${warns.map(w => w.icon + ' ' + w.text.substring(0, 60)).join(' | ')}]`);
+    }
+  }
+  log('T14 weather hazard alerts cross-reference day stops',
+      fails.length ? 'FAIL' : 'PASS',
+      fails.length ? `${fails.length}/${cases.length} cases failed: ${fails[0]}` : `${cases.length}/${cases.length} hazard scenarios pass`);
 }
 
 // ─── Print report ────────────────────────────────────────────────────────────

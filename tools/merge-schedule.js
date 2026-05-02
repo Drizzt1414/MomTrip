@@ -169,6 +169,7 @@ TRIP.recommendations = recommendations;
 
 // Serialize. TRIP_DATA is an object literal; preserve top-level keys and day shape.
 const out = 'const TRIP_DATA = ' + JSON.stringify(TRIP, null, 2) + ';\n\n' +
+            "if (typeof window !== 'undefined') window.TRIP_DATA = TRIP_DATA;\n" +
             "if (typeof module !== 'undefined') module.exports = TRIP_DATA;\n";
 fs.writeFileSync(DATA_PATH, out);
 

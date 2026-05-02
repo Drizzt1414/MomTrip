@@ -2,9 +2,11 @@
 // One forecast per trip day, coords default to the day's hotel.
 // Cached in localStorage for 6 hours so we don't hammer the API on every render.
 
-const WEATHER_CACHE_KEY = 'canyon_trip_weather_v1';
+const WEATHER_CACHE_KEY = 'canyon_trip_weather_v2';
 const WEATHER_TTL_MS = 6 * 60 * 60 * 1000; // 6 hours
-const WEATHER_FORECAST_HORIZON_DAYS = 16; // Open-Meteo max free forecast window.
+// Open-Meteo's free forecast covers today + 15 days (16-day window inclusive).
+// Day delta of 16 (= today + 16 days) is outside the window and returns 400.
+const WEATHER_FORECAST_HORIZON_DAYS = 15;
 
 function _weatherCache() {
   try {
@@ -53,7 +55,17 @@ async function fetchWeatherForDay(day) {
     `&start_date=${day.date}&end_date=${day.date}`;
   try {
     const resp = await fetch(url);
-    if (!resp.ok) return cached ? cached.data : null;
+    if (!resp.ok) {
+      // 400 typically = date past Open-Meteo's horizon. Cache as outOfRange so
+      // we don't keep re-fetching the same dead query on every render.
+      if (resp.status === 400) {
+        const data = { outOfRange: true };
+        cache[key] = { fetchedAt: Date.now(), data };
+        _saveWeatherCache(cache);
+        return data;
+      }
+      return cached ? cached.data : null;
+    }
     const json = await resp.json();
     const d = json.daily;
     if (!d || !d.time || !d.time.length) return cached ? cached.data : null;
@@ -84,17 +96,19 @@ function weatherEmoji(code) {
   if (code <= 99) return '⛈️';
   return '🌤️';
 }
-function weatherShortHe(code) {
+function weatherShort(code) {
   if (code == null) return '—';
-  if (code === 0) return 'בהיר';
-  if (code <= 3) return 'מעונן חלקית';
-  if (code <= 48) return 'ערפל';
-  if (code <= 67) return 'גשום';
-  if (code <= 77) return 'שלג';
-  if (code <= 82) return 'ממטרים';
-  if (code <= 99) return 'סופת רעמים';
-  return 'משתנה';
+  if (code === 0) return 'Clear';
+  if (code <= 3) return 'Partly cloudy';
+  if (code <= 48) return 'Fog';
+  if (code <= 67) return 'Rain';
+  if (code <= 77) return 'Snow';
+  if (code <= 82) return 'Showers';
+  if (code <= 99) return 'Thunderstorm';
+  return 'Mixed';
 }
+// Back-compat alias — render.js calls weatherShortHe in places.
+const weatherShortHe = weatherShort;
 function isRainyForecast(w) {
   if (!w || w.outOfRange) return null; // unknown
   // Rain threshold: ≥40% probability or ≥2mm expected accumulation.
@@ -163,42 +177,112 @@ function ensureWeatherForDay(dayNum) {
 }
 
 // Compute weather-derived warnings for a day. Each entry is {icon, text, urgent}.
-// Used by the day-prep card to surface conditions-driven risks (heat for 60+,
-// storms triggering flash floods in slot canyons, cold/wind for high-altitude).
+// Cross-references the day's actual stops (via STOP_HAZARDS) so warnings name
+// the specific places at risk — mom doesn't have to translate "if a slot
+// canyon is on the plan" into "is one on TODAY's plan."
 function getWeatherWarnings(day, w) {
   if (!w || w.outOfRange) return [];
   const out = [];
   const tmaxC = w.tmax != null ? (w.tmax - 32) * 5 / 9 : null;
   const tminC = w.tmin != null ? (w.tmin - 32) * 5 / 9 : null;
+  const rainProb = w.precipProb || 0;
+  const rainMm = w.precip || 0;
+  const isStorm = w.code != null && w.code >= 95;
+  const isWet = rainProb >= 30 || rainMm >= 1;
 
-  if (tmaxC !== null && tmaxC >= 32) {
-    out.push({
-      icon: '🥵', urgent: true,
-      text: `חום קיצוני היום (${Math.round(tmaxC)}°C). בגיל 60+ סימני מכת חום מופיעים מאוחר. מים כל 20 דק', כובע, מנוחה בצל. אם העור יבש וחם בלי הזעה — מיד 911.`
-    });
-  } else if (tmaxC !== null && tmaxC >= 28) {
+  // Helper: query stop hazards (from js/hazards.js).
+  const stopsOf = (cat) => (typeof stopsWithHazard === 'function')
+    ? stopsWithHazard(day, cat)
+    : [];
+  const namesList = (stops, max = 3) => {
+    const names = stops.map(s => s.name);
+    if (names.length <= max) return names.join(', ');
+    return names.slice(0, max).join(', ') + ` +${names.length - max} more`;
+  };
+
+  // ── CRITICAL: slot canyon + any wet forecast = flash flood risk ─────────────
+  if (isWet || isStorm) {
+    const slots = stopsOf('slot-canyon');
+    if (slots.length) {
+      out.push({
+        icon: '🚨', urgent: true,
+        text: `CANCEL the slot canyons today: ${namesList(slots)}. Forecast ${rainProb}% rain. Flash floods are the deadliest risk in this region — water from rain hours away upstream can hit the slot with no warning.`
+      });
+    }
+    const guided = stopsOf('guided-tour');
+    if (guided.length && (rainProb >= 50 || isStorm)) {
+      out.push({
+        icon: '⚠️', urgent: true,
+        text: `${namesList(guided)} is a slot canyon — your tour operator monitors weather and will reschedule if unsafe. Confirm with them before driving over: ${rainProb}% rain forecast.`
+      });
+    }
+  }
+
+  // ── CRITICAL: dirt-clay road + rain = stuck/impassable ──────────────────────
+  if (isWet) {
+    const roads = stopsOf('dirt-road-clay');
+    if (roads.length) {
+      out.push({
+        icon: '🚨', urgent: true,
+        text: `SKIP these stops today — clay dirt roads become impassable when wet (${rainProb}% rain): ${namesList(roads)}. Even a 4-by-4 gets stuck. Choose paved alternatives or move the day.`
+      });
+    }
+  }
+
+  // ── HIGH: thunderstorm + exposed rim/summit = lightning ─────────────────────
+  if (isStorm) {
+    const rims = stopsOf('exposed-rim');
+    if (rims.length) {
+      out.push({
+        icon: '⛈️', urgent: true,
+        text: `Thunderstorms forecast — get OFF exposed rock by midday at: ${namesList(rims)}. Lightning hits the highest point. Drop down into the canyon or the car.`
+      });
+    } else {
+      out.push({
+        icon: '⛈️', urgent: true,
+        text: `Thunderstorms forecast. Exposed rock = lightning risk. Stay off open slickrock and rim viewpoints between 12:00 and 18:00 if you hear thunder.`
+      });
+    }
+  }
+
+  // ── HIGH: heat + strenuous hike = heat-stroke risk for 60+ ──────────────────
+  if (tmaxC !== null && tmaxC >= 30) {
+    const hikes = stopsOf('strenuous-hike');
+    if (hikes.length) {
+      out.push({
+        icon: '🥵', urgent: true,
+        text: `Hot day (${Math.round(tmaxC)}°C) + strenuous hikes: ${namesList(hikes)}. Start by 07:00 or skip. At 60+, heat-stroke signs (dry hot skin, no sweating, confusion) appear late. Drink every 20 minutes. If those signs appear — call 911 immediately.`
+      });
+    } else {
+      out.push({
+        icon: '🥵', urgent: true,
+        text: `Extreme heat today (${Math.round(tmaxC)}°C). At 60+, heat-stroke signs appear late. Drink water every 20 minutes, wear a hat, rest in shade.`
+      });
+    }
+  } else if (tmaxC !== null && tmaxC >= 26) {
     out.push({
       icon: '☀️', urgent: false,
-      text: `חם היום (${Math.round(tmaxC)}°C). שתייה כל חצי שעה גם אם לא צמאה.`
+      text: `Hot today (${Math.round(tmaxC)}°C). Drink every half hour even if you're not thirsty.`
     });
   }
+
+  // ── INFO: cold morning ──────────────────────────────────────────────────────
   if (tminC !== null && tminC <= 5) {
     out.push({
       icon: '🥶', urgent: false,
-      text: `קר בבוקר (${Math.round(tminC)}°C). שכבות, כפפות, כובע — קל לפשוט בהמשך.`
+      text: `Cold morning (${Math.round(tminC)}°C). Layers, gloves, hat — easy to peel off later.`
     });
   }
-  if (w.code != null && w.code >= 95) {
+
+  // ── INFO: generic rain (no specific hazard match) ───────────────────────────
+  // Only show if no other rain-driven warnings already fired for this day.
+  const alreadyFlagged = out.some(p => p.urgent && (p.icon === '🚨' || p.icon === '⛈️'));
+  if (isWet && !alreadyFlagged) {
     out.push({
-      icon: '⛈️', urgent: true,
-      text: `סופת רעמים בתחזית. סלעים חשופים (Bryce, Canyonlands, Delicate Arch) = סכנת ברק. להוריד מהפסגות עד הצהריים.`
+      icon: '🌧️', urgent: false,
+      text: `Rain expected (${rainProb}%, ${rainMm} mm). No high-risk activity on the day's plan, but bring rain layer and check road conditions before driving dirt sections.`
     });
   }
-  if (w.precip >= 2 || w.precipProb >= 40) {
-    out.push({
-      icon: '🌧️', urgent: true,
-      text: `סיכון גבוה לגשם (${w.precipProb}%, ${w.precip}mm). אם בתוכנית קניון צר — לבטל. שיטפון פתאומי הוא הסיכון הקטלני באזור.`
-    });
-  }
+
   return out;
 }

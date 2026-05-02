@@ -19,7 +19,7 @@ const TRIP_DATA = {
           "lat": 38.60098979827827,
           "lng": -109.575940784487
         },
-        "address": "1773 North Highway 191, מואב, UT 84532, ארצות הברית",
+        "address": "1773 North Highway 191, Moab, UT 84532, USA",
         "phone": "+1 248 742 5990",
         "bookingLink": "https://secure.booking.com/confirmation.he.html?label=gen173nr-10CAEoggI46AdIM1gEaGqIAQGYATO4ARfIAQzYAQPoAQH4AQGIAgGoAgG4AujZiM8GwAIB0gIkN2I3ODNmMTAtNWYwNi00MjI0LWE5MjAtMDg2NDM0NzNiN2Ni2AIB4AIB & sid=ddb95183e9cf14a374cd6f8de0cafd48&aid=304142&auth_key=J4FTwRY8aZtgE2a7&source=mytrips"
       },
@@ -95,7 +95,7 @@ const TRIP_DATA = {
           "lat": 38.601089143151064,
           "lng": -109.57587591035177
         },
-        "address": "1773 North Highway 191, מואב, UT 84532, ארצות הברית",
+        "address": "1773 North Highway 191, Moab, UT 84532, USA",
         "phone": "+1 248 742 5990",
         "bookingLink": "https://secure.booking.com/confirmation.he.html?label=gen173nr-10CAEoggI46AdIM1gEaGqIAQGYATO4ARfIAQzYAQPoAQH4AQGIAgGoAgG4AujZiM8GwAIB0gIkN2I3ODNmMTAtNWYwNi00MjI0LWE5MjAtMDg2NDM0NzNiN2Ni2AIB4AIB & sid=ddb95183e9cf14a374cd6f8de0cafd48&aid=304142&auth_key=J4FTwRY8aZtgE2a7&source=mytrips"
       },
@@ -1164,7 +1164,7 @@ const TRIP_DATA = {
           "lat": 38.334739449022436,
           "lng": -111.01486669869622
         },
-        "address": "25 East SR 24, Caineville, UT 84775, ארצות הברית",
+        "address": "25 East SR 24, Caineville, UT 84775, USA",
         "phone": "+1 435 456 9900",
         "bookingLink": "https://secure.booking.com/confirmation.he.html?label=gen173nr-10CAEoggI46AdIM1gEaGqIAQGYATO4ARfIAQzYAQPoAQH4AQGIAgGoAgG4Au7jiM8GwAIB0gIkZDI5MWZlY2UtMjU2ZC00ZGQwLTllMjktMzdmYzc0ZjlmMmMw2AIB4AIB & sid=ddb95183e9cf14a374cd6f8de0cafd48&aid=304142&auth_key=T5xSljrHxwLYrPHt & source=mytrips"
       },
@@ -1381,7 +1381,7 @@ const TRIP_DATA = {
             "lat": 38.4196,
             "lng": -110.9101
           },
-          "tip": "באדלנדס מפוספסים על קרקע BLM צפונית להאנקסוויל לאורך Cow Dung Road, סמוך ל-MDRS. נוף מאדים. אין שבילים מסומנים — יש ללכת היכן שאחרים הלכו. (לא לבלבל עם 'Rainbow Hills' שזה מקום אחר ~87 מייל מערבה ליד Glenwood.)",
+          "tip": "Striped badlands on Bureau of Land Management land north of Hanksville along Cow Dung Road, near MDRS. Mars-like landscape. No marked trails — walk where others have walked. (Don't confuse with 'Rainbow Hills', a different place ~140 km west near Glenwood.)",
           "difficulty": "Easy",
           "audit": {
             "status": "needs-recheck",
@@ -1420,7 +1420,7 @@ const TRIP_DATA = {
             "lat": 38.3725,
             "lng": -110.7144
           },
-          "tip": "מנקודת Hanksville, להסתכל דרומה ולראות את הנוף — לא יעד נסיעה, אלא נקודת תצפית באזור.",
+          "tip": "From Hanksville, look south to take in the landscape — not a driving destination, just a viewpoint in the area.",
           "difficulty": "",
           "audit": {
             "status": "verified",
@@ -1439,7 +1439,7 @@ const TRIP_DATA = {
             "lat": 38.40645923045217,
             "lng": -110.79180263255053
           },
-          "tip": "תחנת מחקר אמיתית שבה מדענים מדמים משימות למאדים. אי אפשר להיכנס — אפשר לעצור על הכביש ולהסתכל מבחוץ. נמצאת באזור הבנטוניט הילס.",
+          "tip": "A real research station where scientists simulate Mars missions. You can't go inside — pull over on the road and look from outside. Located in the Bentonite Hills area.",
           "difficulty": "Easy (drive-by)",
           "audit": {
             "status": "verified",
@@ -1458,7 +1458,7 @@ const TRIP_DATA = {
             "lat": 38.37012250912668,
             "lng": -110.83202470821679
           },
-          "tip": "פסגת סלע סולו בגובה ~350 רגל (ידועה גם כ-Blue Valley Spire). מערבית להאנקסוויל בכביש עפר. עצירה לצילום.",
+          "tip": "A solo rock spire about 110 meters tall (also known as Blue Valley Spire). West of Hanksville on a dirt road. Photo stop.",
           "difficulty": "Easy (photo stop)",
           "audit": {
             "status": "verified",
@@ -1796,7 +1796,7 @@ const TRIP_DATA = {
             "lat": 38.56551937060913,
             "lng": -110.70258437430195
           },
-          "tip": "ראש המסלול של מסלול Carmel Canyon — לולאה קצרה דרך גבעות הודו אפורות-כחולות סמוך לחניון של Goblin Valley.",
+          "tip": "Trailhead for the Carmel Canyon trail — a short loop through bluish-grey hoodoo hills next to the Goblin Valley parking area.",
           "difficulty": "Moderate",
           "audit": {
             "status": "verified",
@@ -2171,7 +2171,7 @@ const TRIP_DATA = {
           "lat": 38.34135630066015,
           "lng": -111.5492186454746
         },
-        "address": "292 West Main Street, Bicknell, UT 84715, ארצות הברית",
+        "address": "292 West Main Street, Bicknell, UT 84715, USA",
         "phone": "+1 435 287 5813",
         "bookingLink": "https://secure.booking.com/confirmation.he.html?label=gen173nr-10CAEoggI46AdIM1gEaGqIAQGYATO4ARfIAQzYAQPoAQH4AQGIAgGoAgG4Au7jiM8GwAIB0gIkZDI5MWZlY2UtMjU2ZC00ZGQwLTllMjktMzdmYzc0ZjlmMmMw2AIB4AIB & sid=ddb95183e9cf14a374cd6f8de0cafd48&aid=304142&auth_key=xgdljGHpvqIwBIgP & source=mytrips"
       },
@@ -2240,7 +2240,7 @@ const TRIP_DATA = {
             "lat": 38.2996325807529,
             "lng": -111.29809514585106
           },
-          "tip": "תצפית על נחל מתפתל הרחק למטה — הגוסנקס של Capitol Reef ליד כניסת המערב של הפארק על כביש 24 (לא הגוסנקס של Canyonlands).",
+          "tip": "View of a winding river far below — the Capitol Reef Goosenecks near the park's west entrance on Highway 24 (not the Canyonlands Goosenecks).",
           "difficulty": "Easy (viewpoint)",
           "audit": {
             "status": "verified",
@@ -2442,7 +2442,7 @@ const TRIP_DATA = {
           "lat": 38.34135630066015,
           "lng": -111.5492186454746
         },
-        "address": "292 West Main Street, Bicknell, UT 84715, ארצות הברית",
+        "address": "292 West Main Street, Bicknell, UT 84715, USA",
         "phone": "+1 435 287 5813",
         "bookingLink": "https://secure.booking.com/confirmation.he.html?label=gen173nr-10CAEoggI46AdIM1gEaGqIAQGYATO4ARfIAQzYAQPoAQH4AQGIAgGoAgG4Au7jiM8GwAIB0gIkZDI5MWZlY2UtMjU2ZC00ZGQwLTllMjktMzdmYzc0ZjlmMmMw2AIB4AIB & sid=ddb95183e9cf14a374cd6f8de0cafd48&aid=304142&auth_key=xgdljGHpvqIwBIgP & source=mytrips"
       },
@@ -2718,7 +2718,7 @@ const TRIP_DATA = {
             "lat": 38.20973584589977,
             "lng": -111.16926426267037
           },
-          "tip": "נקודת ההתחלה של מסלול Capitol Gorge — הליכה קצרה (~1 מייל RT) לאורך הקניון, עוברת על-יד 'Pioneer Register' (חקיקות חלוצים בסלע) ומגיעה למאגרי מים טבעיים בקצה.",
+          "tip": "Start of the Capitol Gorge trail — a short walk (~1.6 km round-trip) through the canyon, past the Pioneer Register (pioneer-era rock inscriptions), to natural water pockets at the end.",
           "difficulty": "Easy (~1 mi RT from the trailhead)",
           "audit": {
             "status": "verified",
@@ -2737,7 +2737,7 @@ const TRIP_DATA = {
             "lat": 38.317424297282884,
             "lng": -111.30907007431108
           },
-          "tip": "מסלול לאורך נחל רדוד עם מים — הליכה נחמדה וקרירה בקיץ. אפשר להתחיל גם מהראש המסלול של Chimney Rock (38.31592, -111.30395) שאולי נוח יותר.",
+          "tip": "A trail along a shallow flowing creek — a pleasant cool walk in summer. You can also start from the Chimney Rock trailhead (38.31592, -111.30395), which may be more convenient.",
           "difficulty": "Moderate (~5–6 mi RT, may walk in shallow water)",
           "audit": {
             "status": "verified",
@@ -2861,7 +2861,7 @@ const TRIP_DATA = {
           "lat": 37.90959375527462,
           "lng": -111.50837891029828
         },
-        "address": "Hell's Backbone Road, עיירת בולדר, UT 84716, ארצות הברית",
+        "address": "Hell's Backbone Road, Boulder, UT 84716, USA",
         "phone": "+1 435 513 1240",
         "bookingLink": "https://secure.booking.com/confirmation.he.html?label=gen173nr-10CAEoggI46AdIM1gEaGqIAQGYATO4ARfIAQzYAQPoAQH4AQGIAgGoAgG4Au7jiM8GwAIB0gIkZDI5MWZlY2UtMjU2ZC00ZGQwLTllMjktMzdmYzc0ZjlmMmMw2AIB4AIB & sid=ddb95183e9cf14a374cd6f8de0cafd48&aid=304142&auth_key=MVGNTPqXLXwPJ6sk & source=mytrips"
       },
@@ -2966,7 +2966,7 @@ const TRIP_DATA = {
             "lat": 37.84706788499814,
             "lng": -111.02515747247934
           },
-          "tip": "סדרת סיבובים דרמטית בעלייה במסלול Burr Trail מצידו המערבי של ה-Waterpocket Fold. מסלול עפר תלול — אבל הנוף מהפסגה מדהים.",
+          "tip": "A dramatic series of switchbacks climbing the western side of the Waterpocket Fold on the Burr Trail. Steep dirt road — but the view from the top is amazing.",
           "difficulty": "Drive (paved/dirt)",
           "audit": {
             "status": "verified",
@@ -2995,7 +2995,7 @@ const TRIP_DATA = {
         }
       ],
       "optionB": null,
-      "comments": "לא יודעת לבחור את שם המקום המתאים",
+      "comments": "Mom doesn't know which place name is the right one",
       "_addingToOptionB": false,
       "wakeup": "6:00 AM",
       "depart": "7:00 AM",
@@ -3125,7 +3125,7 @@ const TRIP_DATA = {
       "dayNumber": 12,
       "date": "2026-05-16",
       "title": "Escalante & Highway 12",
-      "titleHe": "אסקלנטה וכביש 12",
+      "titleHe": "Escalante וכביש 12",
       "region": "",
       "hotel": {
         "name": "Escalante Outfitters",
@@ -3133,7 +3133,7 @@ const TRIP_DATA = {
           "lat": 37.770816345590966,
           "lng": -111.60643208782416
         },
-        "address": "310 West Main Street, אסקלנטה, UT 84726, ארצות הברית",
+        "address": "310 West Main Street, Escalante, UT 84726, USA",
         "phone": "+1 435 215 7953",
         "bookingLink": "https://secure.booking.com/confirmation.he.html?label=gen173nr-10CAEoggI46AdIM1gEaGqIAQGYATO4ARfIAQzYAQPoAQH4AQGIAgGoAgG4Au7jiM8GwAIB0gIkZDI5MWZlY2UtMjU2ZC00ZGQwLTllMjktMzdmYzc0ZjlmMmMw2AIB4AIB & sid=ddb95183e9cf14a374cd6f8de0cafd48&aid=304142&auth_key=IO1sTPiLwtgLpYm8&source=mytrips"
       },
@@ -3186,7 +3186,7 @@ const TRIP_DATA = {
             "lat": 37.83502554643478,
             "lng": -111.41392231906174
           },
-          "tip": "Vista point על Hwy 12 — נקודת תצפית מצידי הכביש על הקניון של Calf Creek. עצירה קצרה.",
+          "tip": "A vista point on Highway 12 — a roadside lookout over the Calf Creek canyon. Quick stop.",
           "difficulty": "Easy (roadside vista point)",
           "audit": {
             "status": "verified",
@@ -3325,7 +3325,7 @@ const TRIP_DATA = {
             "lat": 37.7729121443554,
             "lng": -111.61539472830422
           },
-          "tip": "מרכז המבקרים של Grand Staircase-Escalante National Monument — תצוגות, מפות, ומידע על הפארקים. עצירה קצרה לקבלת הקשר על האזור.",
+          "tip": "Visitor center for Grand Staircase-Escalante National Monument — exhibits, maps, and information about the parks. A short stop to get oriented to the area.",
           "difficulty": "Easy (visitor center)",
           "audit": {
             "status": "verified",
@@ -3477,7 +3477,7 @@ const TRIP_DATA = {
           "lat": 37.770816345590966,
           "lng": -111.60643208782416
         },
-        "address": "310 West Main Street, אסקלנטה, UT 84726, ארצות הברית",
+        "address": "310 West Main Street, Escalante, UT 84726, USA",
         "phone": "+1 435 215 7953",
         "bookingLink": "https://secure.booking.com/confirmation.he.html?label=gen173nr-10CAEoggI46AdIM1gEaGqIAQGYATO4ARfIAQzYAQPoAQH4AQGIAgGoAgG4Au7jiM8GwAIB0gIkZDI5MWZlY2UtMjU2ZC00ZGQwLTllMjktMzdmYzc0ZjlmMmMw2AIB4AIB & sid=ddb95183e9cf14a374cd6f8de0cafd48&aid=304142&auth_key=IO1sTPiLwtgLpYm8&source=mytrips"
       },
@@ -3510,7 +3510,7 @@ const TRIP_DATA = {
             "lat": 37.481968311865984,
             "lng": -111.2166064008536
           },
-          "tip": "קניון צר בקצה הצפוני של הליכת Dry Fork. נכנסים אליו ראשון מראש המסלול התחתון. קירות אדומים מפותלים.",
+          "tip": "A narrow canyon at the north end of the Dry Fork hike. You enter it first from the lower trailhead. Twisting red walls.",
           "difficulty": "Moderate-Hard (slot canyon scramble)",
           "audit": {
             "status": "verified",
@@ -3528,7 +3528,7 @@ const TRIP_DATA = {
             "lat": 37.48242005031257,
             "lng": -111.20861592180059
           },
-          "tip": "הסלוט הצר ביותר מבין הארבעה — קירות במרחק של ~10 ס\"מ במקומות מסוימים.",
+          "tip": "The narrowest of the four slots — walls about 10 cm apart in places.",
           "difficulty": "Moderate-Hard (slot canyon scramble)",
           "audit": {
             "status": "verified",
@@ -3645,7 +3645,7 @@ const TRIP_DATA = {
             "lat": 37.584068596938295,
             "lng": -111.41219468050313
           },
-          "tip": "אזור 'Outstanding Natural Area' של Grand Staircase — הודו, קשתות ופסליות סלע. עצירה קצרה לאורך Hole-in-the-Rock Road. שונה לחלוטין מ-Devil's Garden ב-Arches!",
+          "tip": "The Grand Staircase 'Outstanding Natural Area' — hoodoos, arches, and rock sculptures. A short stop along Hole-in-the-Rock Road. Completely different from Devils Garden in Arches!",
           "difficulty": "Easy (~30 min walk-around)",
           "audit": {
             "status": "verified",
@@ -3812,7 +3812,7 @@ const TRIP_DATA = {
           "lat": 36.99638331605468,
           "lng": -111.48659036816393
         },
-        "address": "100 Lakeshore Drive, פייג', AZ 86040, ארצות הברית",
+        "address": "100 Lakeshore Drive, Page, AZ 86040, USA",
         "phone": "+1 866 601 2017",
         "bookingLink": "https://secure.booking.com/confirmation.he.html?label=gen173nr-10CAEoggI46AdIM1gEaGqIAQGYATO4ARfIAQzYAQPoAQH4AQGIAgGoAgG4Au7jiM8GwAIB0gIkZDI5MWZlY2UtMjU2ZC00ZGQwLTllMjktMzdmYzc0ZjlmMmMw2AIB4AIB & sid=ddb95183e9cf14a374cd6f8de0cafd48&aid=304142&auth_key=LguB6bMJJHW1SWRH & source=mytrips"
       },
@@ -3945,7 +3945,7 @@ const TRIP_DATA = {
             "lat": 37.10152886782861,
             "lng": -111.87318743913386
           },
-          "tip": "ממש ליד ה-toadstools נמצא pedestal alley זה עדיין ביוטה, עברנו לאריזונה",
+          "tip": "Right next to the toadstools is Pedestal Alley. Still in Utah — you cross into Arizona later.",
           "difficulty": "",
           "audit": {
             "status": "verified",
@@ -3963,7 +3963,7 @@ const TRIP_DATA = {
             "lat": 37.08256880387282,
             "lng": -111.66426684288724
           },
-          "tip": "עיירה קטנה ביוטה לאורך הדרך — לא יעד, אלא נקודה לראות מהדרך כשעוברים בכביש 89.",
+          "tip": "A small Utah town along the route — not a destination, just a place to notice from the road as you pass on Highway 89.",
           "difficulty": "Drive-by (no stop required)",
           "audit": {
             "status": "verified",
@@ -4001,7 +4001,7 @@ const TRIP_DATA = {
             "lat": 37.01400071630982,
             "lng": -111.59519531900762
           },
-          "tip": "נקודה לראות מהדרך לאורך כביש 89 — לא יעד נסיעה, אלא ציון על המפה למשהו שעוברים על-ידו.",
+          "tip": "A point to notice from the road along Highway 89 — not a driving destination, just a marker on the map for something you pass.",
           "difficulty": "Drive-by (no stop required)",
           "audit": {
             "status": "verified",
@@ -4448,7 +4448,7 @@ const TRIP_DATA = {
             "lat": 36.86928544969862,
             "lng": -111.58036747437292
           },
-          "tip": "מסלול רים מעל Lees Ferry — מסלול קשה ~9 מייל הלוך ושוב עם 1500 רגל עלייה. מומלץ לעשות את החלק הראשון בלבד (~1-1.5 שעות) לתצפיות הראשונות.",
+          "tip": "Rim trail above Lees Ferry — a hard ~14.5 km round-trip with 460 meters of elevation gain. Recommended to do only the first section (~1-1.5 hours) for the first viewpoints.",
           "difficulty": "Hard (full ~9 mi RT, ~1500 ft elev) — recommended PARTIAL only for senior",
           "audit": {
             "status": "verified",
@@ -4467,7 +4467,7 @@ const TRIP_DATA = {
             "lat": 36.969910076284144,
             "lng": -111.49513352291316
           },
-          "tip": "תצפית פנורמית על אגם פאוול והמצוקים האדומים מסביב. גישה סלולה, נגיש מאוד.",
+          "tip": "Panoramic view of Lake Powell and the surrounding red cliffs. Paved access, very accessible.",
           "difficulty": "Easy (paved overlook)",
           "audit": {
             "status": "verified",
@@ -4486,7 +4486,7 @@ const TRIP_DATA = {
             "lat": 37.0200653917453,
             "lng": -111.53897872685029
           },
-          "tip": "חוף חולי על אגם פאוול עם הסלע המבודד 'Lone Rock' עומד במים. הליכה קלה לאורך החוף, לשבת וליהנות.",
+          "tip": "A sandy beach on Lake Powell with the isolated 'Lone Rock' standing in the water. Easy walk along the shore — sit and enjoy.",
           "difficulty": "Easy (sandy beach access)",
           "audit": {
             "status": "verified",
@@ -4497,7 +4497,7 @@ const TRIP_DATA = {
         }
       ],
       "optionB": null,
-      "comments": "לא קיים",
+      "comments": "Doesn't exist",
       "_addingToOptionB": false,
       "wakeup": "7:00 AM",
       "depart": "8:00 AM",
@@ -4643,7 +4643,7 @@ const TRIP_DATA = {
           "lat": 37.04301557999967,
           "lng": -112.52020808969887
         },
-        "address": "386 East 300 South, קנאב, UT 84741, ארצות הברית",
+        "address": "386 East 300 South, Kanab, UT 84741, USA",
         "phone": "+1 435 644 5373",
         "bookingLink": "https://secure.booking.com/confirmation.he.html?label=gen173nr-10CAEoggI46AdIM1gEaGqIAQGYATO4ARfIAQzYAQPoAQH4AQGIAgGoAgG4Au7jiM8GwAIB0gIkZDI5MWZlY2UtMjU2ZC00ZGQwLTllMjktMzdmYzc0ZjlmMmMw2AIB4AIB & sid=ddb95183e9cf14a374cd6f8de0cafd48&aid=304142&auth_key=GwOACCLPrdwyC2wy & source=mytrips"
       },
@@ -4657,7 +4657,7 @@ const TRIP_DATA = {
             "lat": 36.90319399578852,
             "lng": -111.41321192650997
           },
-          "tip": "קניון צר תת-קרקעי בשמורת Navajo. הסיור יורד 5 מדרגות לחדרים פנימיים, ועולה החוצה דרך סולמות. סיור מודרך בלבד.",
+          "tip": "A narrow underground canyon on the Navajo reservation. The tour descends 5 staircases into the chambers and exits via ladders. Guided tour only.",
           "difficulty": "Moderate (stairs + ladders, no bags allowed)",
           "audit": {
             "status": "verified",
@@ -4675,7 +4675,7 @@ const TRIP_DATA = {
             "lat": 36.86229823326669,
             "lng": -111.37180353270888
           },
-          "tip": "קניון צר מפורסם בקרני האור הזהובות שנכנסות בצהריים. הסיור מגיע ברכב 4 על 4, מצלמים בקירות הסלע, ויוצאים דרך 150 מדרגות. סיור מודרך בלבד.",
+          "tip": "A narrow canyon famous for the golden light beams that come down at midday. The tour arrives by 4-by-4 vehicle; you photograph the rock walls and exit through 150 steps. Guided tour only.",
           "difficulty": "Moderate (4x4 ride + 150 stairs, no bags allowed)",
           "audit": {
             "status": "verified",
@@ -4694,7 +4694,7 @@ const TRIP_DATA = {
             "lat": 37.21181255214057,
             "lng": -112.68500907250186
           },
-          "tip": "מעבר טבעי קצר בסלע אבן-חול על US-89 בין הר כרמל לקנאב — נטיל קצר וצינני. עצירה כיפית בדרך לקנאב.",
+          "tip": "A short natural sandstone tunnel on US-89 between Mt. Carmel and Kanab — a short cool walk. A fun stop on the way to Kanab.",
           "difficulty": "Easy (~30 min walk through a sandstone tunnel)",
           "audit": {
             "status": "verified",
@@ -4713,7 +4713,7 @@ const TRIP_DATA = {
             "lat": 37.04312571654538,
             "lng": -112.52791448840178
           },
-          "tip": "רחוב Main היסטורי של קנאב — חנויות, גלריות, מסעדות. סטרול אחר הצהריים + ארוחת ערב.",
+          "tip": "Kanab's historic Main Street — shops, galleries, restaurants. An afternoon stroll plus dinner.",
           "difficulty": "Easy (downtown stroll)",
           "audit": {
             "status": "verified",
@@ -4827,7 +4827,7 @@ const TRIP_DATA = {
           "lat": 37.04301557999967,
           "lng": -112.52020808969887
         },
-        "address": "386 East 300 South, קנאב, UT 84741, ארצות הברית",
+        "address": "386 East 300 South, Kanab, UT 84741, USA",
         "phone": "+1 435 644 5373",
         "bookingLink": "(see Day 16 booking — second night at the same hotel)"
       },
@@ -4842,7 +4842,7 @@ const TRIP_DATA = {
             "lat": 36.92030228571634,
             "lng": -111.9089489102921
           },
-          "tip": "אזור פסלי אבן-חול לבנה ב-Vermilion Cliffs National Monument. דורש 4WD ולכן רק עם סיור מודרך — Dreamland Safari Tours.",
+          "tip": "An area of white sandstone formations in Vermilion Cliffs National Monument. Requires a 4-by-4 vehicle, so only accessible with a guided tour — Dreamland Safari Tours.",
           "difficulty": "Guided 4WD tour required (mom can't drive there in rental)",
           "audit": {
             "status": "verified",
@@ -4913,7 +4913,7 @@ const TRIP_DATA = {
           "lat": 37.00391940049248,
           "lng": -112.96847156078152
         },
-        "address": "240 E Utah Avenue #1945, Hildale, UT 84784, ארצות הברית",
+        "address": "240 E Utah Avenue #1945, Hildale, UT 84784, USA",
         "phone": "+1 800 968 3682",
         "bookingLink": "https://secure.booking.com/confirmation.he.html?label=gen173nr-10CAEoggI46AdIM1gEaGqIAQGYATO4ARfIAQzYAQPoAQH4AQGIAgGoAgG4Au7jiM8GwAIB0gIkZDI5MWZlY2UtMjU2ZC00ZGQwLTllMjktMzdmYzc0ZjlmMmMw2AIB4AIB & sid=ddb95183e9cf14a374cd6f8de0cafd48&aid=304142&auth_key=hKJUyo2YRMibcpup & source=mytrips"
       },
@@ -5103,7 +5103,7 @@ const TRIP_DATA = {
             "lat": 37.51580509206351,
             "lng": -112.219127364648
           },
-          "tip": "תצפית על קניון מיוער עם עצי פונדרוסה — בין Agua Canyon ל-Natural Bridge בכביש הפארק.",
+          "tip": "View of a forested canyon with ponderosa pine trees — between Agua Canyon and Natural Bridge along the park road.",
           "difficulty": "Easy (viewpoint)",
           "audit": {
             "status": "verified",
@@ -5335,7 +5335,7 @@ const TRIP_DATA = {
           "lat": 37.11157851257571,
           "lng": -113.57237851593129
         },
-        "address": "525 East Saint George Boulevard, סנט ג'ורג', UT 84770, ארצות הברית",
+        "address": "525 East Saint George Boulevard, St. George, UT 84770, USA",
         "phone": "1 435 673 6137",
         "bookingLink": "https://secure.booking.com/confirmation.he.html?label=gen173nr-10CAEoggI46AdIM1gEaGqIAQGYATO4ARfIAQzYAQPoAQH4AQGIAgGoAgG4Au7jiM8GwAIB0gIkZDI5MWZlY2UtMjU2ZC00ZGQwLTllMjktMzdmYzc0ZjlmMmMw2AIB4AIB & sid=ddb95183e9cf14a374cd6f8de0cafd48&aid=304142&auth_key=jCOhJDxfFJRdXoTZ & source=mytrips"
       },
@@ -5420,7 +5420,7 @@ const TRIP_DATA = {
           "lat": 37.11157851257571,
           "lng": -113.57237851593129
         },
-        "address": "525 East Saint George Boulevard, סנט ג'ורג', UT 84770, ארצות הברית",
+        "address": "525 East Saint George Boulevard, St. George, UT 84770, USA",
         "phone": "1 435 673 6137",
         "bookingLink": "https://secure.booking.com/confirmation.he.html?label=gen173nr-10CAEoggI46AdIM1gEaGqIAQGYATO4ARfIAQzYAQPoAQH4AQGIAgGoAgG4Au7jiM8GwAIB0gIkZDI5MWZlY2UtMjU2ZC00ZGQwLTllMjktMzdmYzc0ZjlmMmMw2AIB4AIB & sid=ddb95183e9cf14a374cd6f8de0cafd48&aid=304142&auth_key=jCOhJDxfFJRdXoTZ & source=mytrips"
       },
@@ -5489,7 +5489,7 @@ const TRIP_DATA = {
       "dayNumber": 21,
       "date": "2026-05-25",
       "title": "Kanarra Falls + Valley of Fire → Las Vegas",
-      "titleHe": "קנארה פולס + עמק האש ← לאס וגאס",
+      "titleHe": "קנארה פולס + עמק האש ← Las Vegas",
       "region": "",
       "hotel": {
         "name": "Tuscany Suites & Casino",
@@ -5497,7 +5497,7 @@ const TRIP_DATA = {
           "lat": 36.113615614702766,
           "lng": -115.16020753432069
         },
-        "address": "255 East Flamingo Road, לאס וגאס, NV 89169, ארצות הברית",
+        "address": "255 East Flamingo Road, Las Vegas, NV 89169, USA",
         "phone": "+1 877 887 2261",
         "bookingLink": "https://secure.booking.com/confirmation.he.html?label=gen173nr-10CAEoggI46AdIM1gEaGqIAQGYATO4ARfIAQzYAQPoAQH4AQGIAgGoAgG4Au7jiM8GwAIB0gIkZDI5MWZlY2UtMjU2ZC00ZGQwLTllMjktMzdmYzc0ZjlmMmMw2AIB4AIB & sid=ddb95183e9cf14a374cd6f8de0cafd48&aid=304142&auth_key=cOBwZAosSdnlgwWY & source=mytrips"
       },
@@ -5592,7 +5592,7 @@ const TRIP_DATA = {
             "lat": 36.44971864339128,
             "lng": -114.51088228472503
           },
-          "tip": "תצפית פנורמית של מצוקי אבן חול בכל צבעי הקשת — אחת התצפיות האייקוניות של עמק האש. פתוח כל השנה (לא בעונת הסגירה).",
+          "tip": "Panoramic view of sandstone cliffs in every color of the rainbow — one of the iconic viewpoints of Valley of Fire. Open year-round (not affected by the seasonal closure).",
           "difficulty": "Easy (1 mile RT, mostly flat)",
           "audit": {
             "status": "verified",
@@ -5611,7 +5611,7 @@ const TRIP_DATA = {
             "lat": 36.42266,
             "lng": -114.5413
           },
-          "tip": "🎲 גמבל — לא אומת בגוגל מפות. הקואורדינטות מ-americansouthwest.net ו-hikespeak.com (1.5.2026). השביל בצד הדרום-מערבי של הפארק. חפשי שלט 'Petrified Logs' על הכביש הראשי, ופני לדרך עפר קצרה (כ-0.3 ק\"מ) עד הראש המסלול. אם לא מוצאים, דלגו על העצירה הזו — היא לא הכרחית.",
+          "tip": "🎲 Gamble — not verified on Google Maps. Coordinates from americansouthwest.net and hikespeak.com (2026-05-01). The trail is on the southwestern side of the park. Look for the 'Petrified Logs' sign on the main road, then turn onto a short dirt road (~0.3 km) to the trailhead. If you can't find it, skip this stop — it's not essential.",
           "difficulty": "Easy (~15 min loop, fenced petrified wood)",
           "audit": {
             "status": "needs-recheck",
@@ -5770,7 +5770,7 @@ const TRIP_DATA = {
       "dayNumber": 22,
       "date": "2026-05-26",
       "title": "Las Vegas",
-      "titleHe": "לאס וגאס",
+      "titleHe": "Las Vegas",
       "region": "",
       "hotel": {
         "name": "Tuscany Suites & Casino",
@@ -5778,7 +5778,7 @@ const TRIP_DATA = {
           "lat": 36.113615614702766,
           "lng": -115.16020753432069
         },
-        "address": "255 East Flamingo Road, לאס וגאס, NV 89169, ארצות הברית",
+        "address": "255 East Flamingo Road, Las Vegas, NV 89169, USA",
         "phone": "+1 877 887 2261",
         "bookingLink": "https://secure.booking.com/confirmation.he.html?label=gen173nr-10CAEoggI46AdIM1gEaGqIAQGYATO4ARfIAQzYAQPoAQH4AQGIAgGoAgG4Au7jiM8GwAIB0gIkZDI5MWZlY2UtMjU2ZC00ZGQwLTllMjktMzdmYzc0ZjlmMmMw2AIB4AIB & sid=ddb95183e9cf14a374cd6f8de0cafd48&aid=304142&auth_key=cOBwZAosSdnlgwWY & source=mytrips"
       },
@@ -5847,7 +5847,7 @@ const TRIP_DATA = {
           "lat": 36.113615614702766,
           "lng": -115.16020753432069
         },
-        "address": "255 East Flamingo Road, לאס וגאס, NV 89169, ארצות הברית",
+        "address": "255 East Flamingo Road, Las Vegas, NV 89169, USA",
         "phone": "+1 877 887 2261",
         "bookingLink": "https://secure.booking.com/confirmation.he.html?label=gen173nr-10CAEoggI46AdIM1gEaGqIAQGYATO4ARfIAQzYAQPoAQH4AQGIAgGoAgG4Au7jiM8GwAIB0gIkZDI5MWZlY2UtMjU2ZC00ZGQwLTllMjktMzdmYzc0ZjlmMmMw2AIB4AIB & sid=ddb95183e9cf14a374cd6f8de0cafd48&aid=304142&auth_key=cOBwZAosSdnlgwWY & source=mytrips"
       },
@@ -6065,7 +6065,7 @@ const TRIP_DATA = {
       "dayNumber": 24,
       "date": "2026-05-28",
       "title": "Departure — Las Vegas",
-      "titleHe": "יציאה — לאס וגאס",
+      "titleHe": "יציאה — Las Vegas",
       "region": "",
       "hotel": null,
       "stops": [
@@ -6124,193 +6124,194 @@ const TRIP_DATA = {
   },
   "recommendations": [
     {
-      "section": "⚠️  עצירות חסרות — חשובות מאוד",
+      "section": "⚠️  Missing stops — high impact",
       "priority": "HIGH",
       "kind": "Add Stop",
-      "when": "Day 4 or 5\nשישי 8 במאי / שבת 9 במאי\n(Cathedral Valley Inn)",
+      "when": "Day 4 or 5\nFri May 8 / Sat May 9\n(Cathedral Valley Inn)",
       "name": "Temple of the Sun\nCathedral Valley",
-      "why": "את ישנה 3 לילות ב-Cathedral Valley Inn ואין שום עצירה מתוכננת ב-Cathedral Valley. מונולית בודד של אבן חול אדומה בגובה 120 מטר בצפון Capitol Reef. כמעט אף אחד לא מגיע לכאן.",
-      "action": "דרך Hartnet Road צפונה מ-Caineville. כביש עפר, עביר כשיבש. שלוש העצירות של Cathedral Valley באותה לולאה של 4-5 שעות.",
+      "why": "Mom is sleeping 3 nights at Cathedral Valley Inn but has no Cathedral Valley stops planned. A 120-meter solo red sandstone monolith in northern Capitol Reef. Almost no one comes here.",
+      "action": "Via Hartnet Road north from Caineville. Dirt road, passable when dry. The three Cathedral Valley stops are on the same 4-5 hour loop.",
       "lat": 38.298,
       "lng": -111.122
     },
     {
-      "section": "⚠️  עצירות חסרות — חשובות מאוד",
+      "section": "⚠️  Missing stops — high impact",
       "priority": "HIGH",
       "kind": "Add Stop",
-      "when": "Day 4 or 5\nשישי 8 במאי / שבת 9 במאי",
+      "when": "Day 4 or 5\nFri May 8 / Sat May 9",
       "name": "Temple of the Moon\nCathedral Valley",
-      "why": "תצורה תאומה ל-Temple of the Sun באותה לולאת כביש.",
-      "action": "באותה לולאה של Hartnet Road. לבקר יחד עם Temple of the Sun ו-Gypsum Sinkhole.",
+      "why": "Twin formation to Temple of the Sun on the same loop road.",
+      "action": "Same Hartnet Road loop. Visit together with Temple of the Sun and Gypsum Sinkhole.",
       "lat": 38.297,
       "lng": -111.12
     },
     {
-      "section": "⚠️  עצירות חסרות — חשובות מאוד",
+      "section": "⚠️  Missing stops — high impact",
       "priority": "HIGH",
       "kind": "Add Stop",
-      "when": "Day 4 or 5\nשישי 8 במאי / שבת 9 במאי",
+      "when": "Day 4 or 5\nFri May 8 / Sat May 9",
       "name": "Gypsum Sinkhole\nCathedral Valley",
-      "why": "מכתש ענקי בקרקעית העמק השטוח — מאוד מוזר ומיוחד.",
-      "action": "באותה לולאת כביש כמו ה-Temples.",
+      "why": "A massive crater in the floor of the flat valley — very strange and unusual.",
+      "action": "On the same loop road as the Temples.",
       "lat": 38.305,
       "lng": -111.1
     },
     {
-      "section": "⚠️  ZION — ימים 19 ו-20 ריקים מתוכן",
+      "section": "⚠️  ZION — Days 19 and 20 have no content planned",
       "priority": "HIGH",
       "kind": "Fill Empty Day",
-      "when": "Day 19\nשבת 23 במאי\n(Zion)",
+      "when": "Day 19\nSat May 23\n(Zion)",
       "name": "Angels Landing Trail",
-      "why": "אחד המסלולים המפורסמים בעולם. שרשראות בקטע הסופי לרכס פסגה צר. בכלל לא מתוכנן.",
-      "action": "דרוש היתר — להזמין ב-recreation.gov > Zion NP > Angels Landing. חלופה: Observation Point (בלי היתר, נוף אפילו טוב יותר).",
+      "why": "One of the most famous trails in the world. Chains on the final section to a narrow summit ridge. Not in the itinerary at all.",
+      "action": "Permit required — book at recreation.gov > Zion NP > Angels Landing. Alternative: Observation Point (no permit, even better view).",
       "lat": 37.269,
       "lng": -112.948
     },
     {
-      "section": "⚠️  ZION — ימים 19 ו-20 ריקים מתוכן",
+      "section": "⚠️  ZION — Days 19 and 20 have no content planned",
       "priority": "HIGH",
       "kind": "Fill Empty Day",
       "when": "Day 19 or 20\n(Zion)",
       "name": "The Narrows\n(Temple of Sinawava)",
-      "why": "הליכה בנהר Virgin River בין קירות קניון צרים — חוויה ייחודית. בלי היתר.",
-      "action": "לשכור wetsuit בספרינגדייל — מים במאי כ-7°C, קרים מאוד. שאטל לתחנה האחרונה (Temple of Sinawava). לתכנן 4-6 שעות.",
+      "why": "Walk in the Virgin River between narrow canyon walls — a unique experience. No permit needed.",
+      "action": "Rent a wetsuit in Springdale — water in May is about 7°C, very cold. Take the shuttle to the last stop (Temple of Sinawava). Plan 4-6 hours.",
       "lat": 37.298,
       "lng": -112.948
     },
     {
-      "section": "⚠️  ZION — ימים 19 ו-20 ריקים מתוכן",
+      "section": "⚠️  ZION — Days 19 and 20 have no content planned",
       "priority": "HIGH",
       "kind": "Fill Empty Day",
-      "when": "Day 20\nראשון 24 במאי\n(Zion)",
+      "when": "Day 20\nSun May 24\n(Zion)",
       "name": "Emerald Pools Trails",
-      "why": "שלוש בריכות מדורגות עם מפלים. יפהפה ונגיש. לא בתוכנית.",
-      "action": "Lower Pool: קל 0.6 מייל. Middle: 1.0 מייל. Upper: 1.2 מייל. שאטל לתחנת The Grotto.",
+      "why": "Three tiered pools with waterfalls. Beautiful and accessible. Not in the plan.",
+      "action": "Lower Pool: easy 1.0 km. Middle: 1.6 km. Upper: 1.9 km. Shuttle to The Grotto stop.",
       "lat": 37.255,
       "lng": -112.957
     },
     {
-      "section": "⚠️  ZION — ימים 19 ו-20 ריקים מתוכן",
+      "section": "⚠️  ZION — Days 19 and 20 have no content planned",
       "priority": "MEDIUM",
       "kind": "Fill Empty Day",
-      "when": "Day 19\nשבת 23 במאי\n(הגעה דרך Hwy 9)",
+      "when": "Day 19\nSat May 23\n(arrival via Highway 9)",
       "name": "Canyon Overlook Trail",
-      "why": "מסלול קצר של מייל אחד עם תצפית מרהיבה על הקניון. חימום טוב. בלי שאטל.",
-      "action": "טרילהד בצד המזרחי של מנהרת Zion-Mt Carmel ב-Hwy 9.",
+      "why": "A short 1.6 km trail with a stunning canyon view. Good warm-up. No shuttle needed.",
+      "action": "Trailhead on the east side of the Zion-Mt Carmel tunnel on Highway 9.",
       "lat": 37.22,
       "lng": -112.943
     },
     {
-      "section": "🏨  שינויי מלונות",
+      "section": "🏨  Hotel changes",
       "priority": "HIGH",
       "kind": "Sleeping Change",
-      "when": "Days 19–20\n23-24 במאי",
-      "name": "לבטל Economy Inn & Suites\nולהזמין מלון בספרינגדייל במקום",
-      "why": "St. George במרחק 45+ דקות מהשאטל של Zion. ספרינגדייל במרחק 5 דקות — מאפשר התחלה מוקדמת ל-Angels Landing ויום מלא בקניון.",
-      "action": "Hampton Inn Springdale או דומה. הכרחי אם משיגים היתר ל-Angels Landing (חייבים להתחיל עד 7:00).",
+      "when": "Days 19–20\nMay 23-24",
+      "name": "Cancel Economy Inn & Suites\nand book a hotel in Springdale instead",
+      "why": "St. George is 45+ minutes from the Zion shuttle. Springdale is 5 minutes — enables an early start for Angels Landing and a full day in the canyon.",
+      "action": "Hampton Inn Springdale or similar. Essential if you get the Angels Landing permit (must start by 07:00).",
       "lat": 37.199,
       "lng": -112.988
     },
     {
-      "section": "🏨  שינויי מלונות",
+      "section": "🏨  Hotel changes",
       "priority": "MEDIUM",
       "kind": "Sleeping Change",
-      "when": "Day 14 area\nשני 18 במאי",
-      "name": "אופציונלי: להוסיף לילה ב-Monument Valley\n(The View Hotel)",
-      "why": "התמונה האייקונית של ה-Mittens דורשת אור של שעת זהב. הגעה בצהריים נותנת אור שטוח וחזק.",
-      "action": "The View Hotel (שמורת Navajo) על שפת הקניון. להזמין הרבה זמן מראש. לפחות להגיע עד 18:00 בערב לתפיסת שעת הזהב.",
+      "when": "Day 14 area\nMon May 18",
+      "name": "Optional: add a night in Monument Valley\n(The View Hotel)",
+      "why": "The iconic Mittens photograph requires golden-hour light. Arriving at midday gives flat harsh light.",
+      "action": "The View Hotel (Navajo reservation) on the canyon rim. Book well in advance. At least arrive by 18:00 to catch golden hour.",
       "lat": 36.999,
       "lng": -110.113
     },
     {
-      "section": "🔧  שגיאות בנתונים — לתקן או להסיר לפני הטיול",
+      "section": "🔧  Data errors — fix or remove before the trip",
       "priority": "FIX",
       "kind": "Remove",
-      "when": "Day 5 — שבת 9 במאי",
-      "name": "להסיר: Cosmic Ash Hills Walk Utah",
-      "why": "מסלול כזה לא קיים בשום מקום.",
-      "action": "להסיר מהמסלול.",
+      "when": "Day 5 — Sat May 9",
+      "name": "Remove: Cosmic Ash Hills Walk Utah",
+      "why": "A trail by this name doesn't exist anywhere.",
+      "action": "Remove from the itinerary.",
       "lat": null,
       "lng": null
     },
     {
-      "section": "🔧  שגיאות בנתונים — לתקן או להסיר לפני הטיול",
+      "section": "🔧  Data errors — fix or remove before the trip",
       "priority": "FIX",
       "kind": "Fix Coords",
-      "when": "Day 5 — שבת 9 במאי",
-      "name": "לתקן: קואורדינטות שגויות ב-Rainbow Hills Loop",
-      "why": "הקואורדינטות מוטעות בכ-130 ק\"מ (מצביעות ליד St. George).",
-      "action": "לבקש מאמא למצוא את הכתבה שקראה — צריך לאמת את המיקום המדויק.",
+      "when": "Day 5 — Sat May 9",
+      "name": "Fix: wrong coordinates on Rainbow Hills Loop",
+      "why": "The coordinates are off by about 130 km (they point near St. George).",
+      "action": "Ask Mom to find the article she read — the exact location needs verification.",
       "lat": null,
       "lng": null
     },
     {
-      "section": "🔧  שגיאות בנתונים — לתקן או להסיר לפני הטיול",
+      "section": "🔧  Data errors — fix or remove before the trip",
       "priority": "FIX",
       "kind": "Fix Coords",
-      "when": "Day 6 — ראשון 10 במאי",
-      "name": "לתקן: Carmel Canyon Loop Utah",
-      "why": "הקואורדינטות מצביעות ל-St. George — 270 ק\"מ הרחק. ישבור את הניווט.",
-      "action": "קואורדינטות נכונות: בערך (38.570, -110.710) ב-Goblin Valley.",
+      "when": "Day 6 — Sun May 10",
+      "name": "Fix: Carmel Canyon Loop Utah",
+      "why": "The coordinates point to St. George — 270 km away. Will break navigation.",
+      "action": "Correct coordinates: about (38.570, -110.710) in Goblin Valley.",
       "lat": 38.57,
       "lng": -110.71
     },
     {
-      "section": "🔧  שגיאות בנתונים — לתקן או להסיר לפני הטיול",
+      "section": "🔧  Data errors — fix or remove before the trip",
       "priority": "DONE",
       "kind": "Removed",
-      "when": "Day 21 — שני 25 במאי",
-      "name": "הוסר: Petrified Logs Kanarra Falls",
-      "why": "Petrified Logs קיימים — אבל ב-Escalante Petrified Forest State Park, לא ב-Kanarra Falls. ChatGPT בלבל בין שני מקומות.",
-      "action": "✅ הוסר מהמסלול ב-2026-05-01. Petrified Logs לא יבוקרו בטיול הזה.",
+      "when": "Day 21 — Mon May 25",
+      "name": "Removed: Petrified Logs Kanarra Falls",
+      "why": "Petrified Logs do exist — but at Escalante Petrified Forest State Park, not at Kanarra Falls. ChatGPT confused two places.",
+      "action": "✅ Removed from the itinerary on 2026-05-01. Petrified Logs will not be visited on this trip.",
       "lat": null,
       "lng": null
     },
     {
-      "section": "🔧  שגיאות בנתונים — לתקן או להסיר לפני הטיול",
+      "section": "🔧  Data errors — fix or remove before the trip",
       "priority": "DONE",
       "kind": "Removed",
-      "when": "Day 21 — שני 25 במאי",
-      "name": "הוסר: Seven Wonders Kanarra Falls",
-      "why": "Seven Wonders הוא מסלול אמיתי — אבל ב-Valley of Fire (ליד טרילהד Fire Wave), לא ב-Kanarra Falls.",
-      "action": "✅ הוסר מהמסלול ב-2026-05-01. עצירת Fire Wave ביום 21 כבר עוברת באזור הזה — אין צורך בשינוי תוכנית, רק שינוי שם.",
+      "when": "Day 21 — Mon May 25",
+      "name": "Removed: Seven Wonders Kanarra Falls",
+      "why": "Seven Wonders is a real trail — but in Valley of Fire (near the Fire Wave trailhead), not at Kanarra Falls.",
+      "action": "✅ Removed from the itinerary on 2026-05-01. The Fire Wave stop on Day 21 already covers this area — no schedule change needed, just a renaming.",
       "lat": null,
       "lng": null
     },
     {
-      "section": "🔧  שגיאות בנתונים — לתקן או להסיר לפני הטיול",
+      "section": "🔧  Data errors — fix or remove before the trip",
       "priority": "DONE",
       "kind": "Renamed",
-      "when": "Day 21 — שני 25 במאי",
-      "name": "שונה שם: Elephant Rock — Valley of Fire\n(היה: \"Elephant Rock Kanarra Falls\")",
-      "why": "Elephant Rock נמצא ב-Valley of Fire, לא ב-Kanarra Falls. השם הישן בלבל בין שני מקומות.",
-      "action": "✅ שונה ב-2026-05-01. אמא עוברת על-יד Elephant Rock שנראה מהכביש בשעה 15:00 בנסיעה מ-Atlatl Rock ל-Fire Wave.",
+      "when": "Day 21 — Mon May 25",
+      "name": "Renamed: Elephant Rock — Valley of Fire\n(was: \"Elephant Rock Kanarra Falls\")",
+      "why": "Elephant Rock is in Valley of Fire, not at Kanarra Falls. The old name confused two places.",
+      "action": "✅ Renamed on 2026-05-01. Mom passes Elephant Rock visible from the road at 15:00 driving from Atlatl Rock to Fire Wave.",
       "lat": 36.43,
       "lng": -114.46
     },
     {
-      "section": "🔧  שגיאות בנתונים — לתקן או להסיר לפני הטיול",
+      "section": "🔧  Data errors — fix or remove before the trip",
       "priority": "FIX",
       "kind": "Add Coords",
-      "when": "Day 15 — שלישי 19 במאי",
-      "name": "לתקן: Spencer Trail — להוסיף קואורדינטות",
-      "why": "מסלול אמיתי וכדאי ב-Lees Ferry. הקואורדינטות פשוט חסרות.",
-      "action": "קואורדינטות טרילהד Spencer Trail: (36.864, -111.586). 3.5 מייל הלוך-חזור.",
+      "when": "Day 15 — Tue May 19",
+      "name": "Fix: Spencer Trail — add coordinates",
+      "why": "A real worthwhile trail at Lees Ferry. The coordinates are simply missing.",
+      "action": "Spencer Trail trailhead coordinates: (36.864, -111.586). 5.6 km round-trip.",
       "lat": 36.864,
       "lng": -111.586
     },
     {
-      "section": "🔧  שגיאות בנתונים — לתקן או להסיר לפני הטיול",
+      "section": "🔧  Data errors — fix or remove before the trip",
       "priority": "FIX",
       "kind": "Fix Coords",
-      "when": "Day 12 — שבת 16 במאי",
-      "name": "לתקן: Devil's Garden Hoodoos Utah",
-      "why": "הקואורדינטות מצביעות ל-Arches National Park. ה-Devil's Garden של Escalante הוא מקום אחר לחלוטין.",
-      "action": "קואורדינטות נכונות ליד Escalante: בערך (37.787, -111.396).",
+      "when": "Day 12 — Sat May 16",
+      "name": "Fix: Devil's Garden Hoodoos Utah",
+      "why": "The coordinates point to Arches National Park. The Escalante Devil's Garden is a completely different place.",
+      "action": "Correct coordinates near Escalante: about (37.787, -111.396).",
       "lat": 37.787,
       "lng": -111.396
     }
   ]
 };
 
+if (typeof window !== 'undefined') window.TRIP_DATA = TRIP_DATA;
 if (typeof module !== 'undefined') module.exports = TRIP_DATA;

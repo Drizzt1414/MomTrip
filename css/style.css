@@ -93,7 +93,7 @@
 
 /* === Reset === */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; direction: rtl; -webkit-text-size-adjust: 100%; }
+html { scroll-behavior: smooth; direction: ltr; -webkit-text-size-adjust: 100%; }
 body {
   font-family: var(--font);
   font-size: var(--fs-base);
@@ -616,7 +616,7 @@ a { color: var(--primary); text-decoration: none; }
 }
 .guide-text {
   font-size: var(--fs-base); line-height: 1.7;
-  color: var(--text-primary); direction: rtl;
+  color: var(--text-primary);
   margin-bottom: var(--sp-12);
 }
 .guide-text.placeholder {
@@ -667,10 +667,10 @@ a { color: var(--primary); text-decoration: none; }
 .guide-block-listen:active { transform: scale(0.95); }
 .guide-block-body {
   font-size: var(--fs-base); line-height: 1.65;
-  color: var(--text-primary); direction: rtl;
+  color: var(--text-primary);
 }
 .guide-look-for {
-  margin: 0; padding-right: var(--sp-20);
+  margin: 0; padding-left: var(--sp-20);
 }
 .guide-look-for li {
   margin-bottom: var(--sp-6);
@@ -681,7 +681,6 @@ a { color: var(--primary); text-decoration: none; }
   padding: 16px;
   max-width: 640px;
   margin: 0 auto;
-  direction: rtl;
 }
 .pretrip-head {
   display: flex; align-items: center; gap: 12px;
@@ -749,7 +748,6 @@ a { color: var(--primary); text-decoration: none; }
   background: #fff; border-radius: 16px; padding: 24px;
   max-width: 420px; width: 100%; text-align: center;
   box-shadow: 0 12px 40px rgba(0,0,0,0.3);
-  direction: rtl;
 }
 .modal-icon {
   width: 60px; height: 60px; margin: 0 auto 16px;
@@ -770,10 +768,10 @@ a { color: var(--primary); text-decoration: none; }
 .modal-btn:active { transform: scale(0.98); }
 
 /* Slot canyon flash flood warning modal */
-.modal-overlay.slot-warning .modal-card.slot-warning-card { max-width: 480px; text-align: right; direction: rtl; }
+.modal-overlay.slot-warning .modal-card.slot-warning-card { max-width: 480px; text-align: left; }
 .modal-icon.flood { background: #1976D2; }
-.slot-warning-body { font-size: 15px; line-height: 1.6; color: #1e293b; margin-bottom: 16px; text-align: right; }
-.slot-warning-body ul { margin: 8px 0; padding-right: 20px; }
+.slot-warning-body { font-size: 15px; line-height: 1.6; color: #1e293b; margin-bottom: 16px; text-align: left; }
+.slot-warning-body ul { margin: 8px 0; padding-left: 20px; }
 .slot-warning-body li { margin-bottom: 6px; }
 .slot-warning-body p { margin: 8px 0; }
 .slot-warning-stat { background: #FEE2E2; padding: 8px 12px; border-radius: 8px; color: #7F1D1D; font-size: 14px; font-weight: 600; }
@@ -788,7 +786,6 @@ a { color: var(--primary); text-decoration: none; }
   box-shadow: 0 4px 16px rgba(0,0,0,0.25);
   opacity: 0; pointer-events: none; z-index: 9999;
   transition: opacity 0.25s ease, transform 0.25s ease;
-  direction: rtl;
 }
 .app-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); pointer-events: auto; }
 
@@ -1193,7 +1190,7 @@ a { color: var(--primary); text-decoration: none; }
 .wizard-explain {
   font-size: var(--fs-base); line-height: 1.75;
   color: var(--text-secondary);
-  text-align: right;
+  text-align: left;
   margin-bottom: var(--sp-16);
 }
 .wizard-recommendation {
