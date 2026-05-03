@@ -1608,17 +1608,20 @@ a:focus-visible,
 .live-clock {
   font-family: ui-monospace, "SF Mono", Menlo, monospace;
   font-size: 14px; font-weight: 700;
-  background: rgba(255,255,255,0.18); color: #fff;
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  border: 1px solid var(--border-light);
   padding: 2px 8px; border-radius: 8px;
   margin-inline-end: 6px;
 }
 .today-btn {
-  background: rgba(255,255,255,0.18); color: #fff;
+  background: #B54A32; color: #fff;
   padding: 2px 10px; border-radius: 8px;
   font-size: 12px; font-weight: 700;
   margin-inline-end: 6px;
+  border: none;
 }
-.today-btn:active { background: rgba(255,255,255,0.3); }
+.today-btn:active { background: #9b3e2a; }
 
 /* Hotel head row: title + arrival check button on the right */
 .hotel-head-row {
